@@ -33,7 +33,17 @@ const schema = z.object({
   // Hosted logo for the email header, replacing the inlined base64 image.
   MAIL_LOGO_URL: z.string().optional(),
 
-  CORS_ORIGINS: z.string().default('http://localhost:4200'),
+  /**
+   * Browsers block the frontend outright when this does not list its exact
+   * origin, and the symptom looks like the API being down. The default covers
+   * production and local development, so the deployment keeps working even if
+   * the environment variable is unset or left pointing at an old host.
+   *
+   * Set CORS_ORIGINS explicitly to override, as a comma-separated list.
+   */
+  CORS_ORIGINS: z
+    .string()
+    .default('https://bigbisort.com,https://www.bigbisort.com,http://localhost:4200'),
 });
 
 const parsed = schema.safeParse(process.env);
