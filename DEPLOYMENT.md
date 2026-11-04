@@ -17,17 +17,25 @@ of the original Java queries depends on it.
 
 hPanel → Websites → your site → add a Node.js app from the GitHub repository.
 
-| Setting | Value |
+| Field | Value |
 | --- | --- |
 | Repository | `AKWEBIZE/BBNode_Angular_mysql` |
 | Branch | `main` |
+| Application type | Express |
+| Node.js version | 22 |
 | Root directory | `backend` |
-| Build command | `npm run build` |
-| Start command | `npm start` |
-| Node version | 22 |
+| Build script | `build` |
+| Output directory | *leave empty* — Express serves no static build |
+| Entry file | `dist/server.js` |
 
-`npm start` runs `prisma migrate deploy` before the server, so the schema is
-created and updated on each deploy. Nothing needs running by hand.
+There is no "start command" field; Hostinger runs the **Entry file** directly.
+That is why `prisma migrate deploy` is part of the **build** script rather than
+the start script — it would otherwise never run, and the database would stay
+empty of tables.
+
+If the build fails at the migration step with a connection error, the panel is
+not passing `DATABASE_URL` to the build. Set the variables first, redeploy, and
+if it still fails, run `npx prisma migrate deploy` once over SSH.
 
 Environment variables, set in the panel and **not** in the repository:
 
@@ -61,13 +69,16 @@ Commit the change before deploying.
 
 ## 4. Deploy the frontend
 
-| Setting | Value |
+| Field | Value |
 | --- | --- |
 | Repository | `AKWEBIZE/BBNode_Angular_mysql` |
 | Branch | `main` |
+| Application type | Angular |
+| Node.js version | 22 |
 | Root directory | `frontend` |
-| Build command | `npm run build` |
+| Build script | `build` |
 | Output directory | `dist` |
+| Entry file | *leave empty* — a static build has no server |
 
 `angular.json` flattens the build to `dist/`, so `dist/index.html` exists. An
 output directory pointing at `dist/bigbisort-frontend` or `dist/browser` gives

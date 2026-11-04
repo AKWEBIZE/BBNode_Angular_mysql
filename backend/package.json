@@ -7,8 +7,8 @@
   "engines": { "node": ">=22" },
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "prisma generate && tsc -p tsconfig.json",
-    "start": "prisma migrate deploy && node dist/server.js",
+    "build": "prisma generate && tsc -p tsconfig.json && prisma migrate deploy",
+    "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "seed": "tsx prisma/seed.ts",
