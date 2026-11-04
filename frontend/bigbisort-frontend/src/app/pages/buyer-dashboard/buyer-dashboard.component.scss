@@ -1,0 +1,258 @@
+.dashboard-wrapper {
+  font-family: 'Segoe UI', sans-serif;
+  padding: 16px;
+  background: #f4fdf4;
+
+
+  .welcome-banner {
+    background: #2cc84d;
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+
+
+    .shop-now-btn {
+      background: #fddb3a;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-top: 12px;
+    }
+  }
+
+  .quick-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 24px;
+
+    .action-btn {
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 14px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 100px;
+    }
+  }
+
+  .recommended-products,
+  .seller-spotlight {
+    margin-top: 24px;
+
+    h3 {
+      margin-bottom: 12px;
+    }
+
+    .product-cards,
+    .seller-cards {
+      display: flex;
+      gap: 12px;
+
+      .product-card,
+      .seller-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        flex: 1;
+        text-align: center;
+      }
+    }
+
+    .category-tags {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+
+      span {
+        background: #eee;
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.quick-actions {
+  .action-box {
+    background-color: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-icon {
+      font-size: 28px;
+      color: #388e3c;
+    }
+
+    .action-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+}
+
+.action-row {
+  padding-bottom: 1rem;
+
+  .action-box {
+    min-width: 150px; // width of each box
+    background-color: #fff;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+  }
+
+  .action-box:hover {
+    transform: translateY(-5px);
+  }
+
+  .action-icon {
+    font-size: 28px;
+    color: #4caf50;
+  }
+
+  .action-label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.quick-row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 1rem;
+}
+
+.action-box {
+  flex: 0 0 auto;
+  width: 150px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.action-box:hover {
+  transform: translateY(-5px);
+}
+
+.action-icon {
+  font-size: 28px;
+  color: #4caf50;
+  margin-bottom: 0.5rem;
+}
+
+.action-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+
+.color1{
+  background-color: #04bd73;
+  color: white;
+}
+.color2{
+  background-color: #ffd32c;
+}
+.color3{
+  background-color: #beda38;
+}
+.color4{
+  background-color: #fed341;
+}
+.color5{
+  background-color: #fd6b38;
+}
+.color6{
+  background-color: rgb(128, 122, 0);
+}
+.color7{
+  background-color: yellow;
+}
+.color8{
+  background-color: green;
+}
+.color9{
+  background-color: green;
+}
+.color10{
+  background-color: green;
+}
+
+
+.featured-products {
+  padding: 1rem;
+
+  .section-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .product-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding-bottom: 1rem;
+
+    // Force horizontal behavior
+    flex-wrap: nowrap;
+    scroll-behavior: smooth;
+
+    // Optional: Hide scrollbars
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .product-card {
+    flex: 0 0 auto;
+    width: 200px;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+    .product-image {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .product-description {
+      font-size: 13px;
+      color: #666;
+    }
+  }
+}
+
+a.action-box {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}

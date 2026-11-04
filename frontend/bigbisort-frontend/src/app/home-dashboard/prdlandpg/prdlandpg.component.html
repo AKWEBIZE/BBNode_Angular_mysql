@@ -1,0 +1,46 @@
+<section class="hero-section">
+  <div class="top-bar-placeholder">
+    <div class="logo">Bigbisort</div>
+    <div class="search-box">
+      <input type="text" placeholder="Search..." />
+      <button><i class="fas fa-search">Search</i></button>
+    </div>
+  </div>
+
+  
+</section>
+
+
+<div class="prdlandpg-container">
+  <!-- Filter buttons -->
+  <div class="filter-bar">
+    <button
+      *ngFor="let category of categories"
+      (click)="filterProducts(category)"
+      [class.active]="selectedCategory === category">
+      {{ category }}
+    </button>
+  </div>
+
+  <!-- Product cards -->
+ <div class="card-container">
+  <div
+    class="card"
+    *ngFor="let product of filteredProducts"
+    [routerLink]="product.link"
+    [class.clickable]="product.link">
+
+    <img [src]="product.image" [alt]="product.name" />
+    <div class="card-content">
+      <h3>{{ product.name }}</h3>
+      <p class="category">{{ product.category }}</p>
+
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+
+

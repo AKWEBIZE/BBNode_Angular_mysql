@@ -1,0 +1,69 @@
+<div class="page-header">
+  <div class="breadcrumb">Home / Dashboard / <strong>My Orders</strong></div>
+  <h2>My Orders</h2>
+</div>
+
+<div class="stats-container">
+  <div class="stat-card total">
+    Total Orders<br />
+    <strong>{{ totalOrders }}</strong>
+  </div>
+
+  <div class="stat-card in-transit">
+    In-Transit<br />
+    <strong>{{ orderStatusCounts['IN_TRANSIT'] || 0 }}</strong>
+  </div>
+
+  <div class="stat-card delivered">
+    Delivered<br />
+    <strong>{{ orderStatusCounts['DELIVERED'] || 0 }}</strong>
+  </div>
+
+  <div class="stat-card cancelled">
+    Cancelled/Returned<br />
+    <strong>
+      {{
+        (orderStatusCounts['CANCELLED'] || 0) +
+        (orderStatusCounts['RETURNED'] || 0)
+      }}
+    </strong>
+  </div>
+</div>
+
+
+
+<div class="search-bar">
+  <input type="text" placeholder="Search" [(ngModel)]="searchTerm" />
+</div>
+
+
+<div class="table-wrapper" *ngIf="buyerOrderList.length > 0">
+  <table class="order-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Order Date</th>
+        <th>Payment</th>
+        <th>Billing Company</th>
+        <th>Shipping Name</th>
+        <th>Buyer Name</th>
+        <th>Buyer Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of filteredOrders()">
+        <td>{{ order.orderId }}</td>
+        <td>{{ order.orderDate | date: 'medium' }}</td>
+        <td>{{ order.paymentMethod }}</td>
+        <td>{{ order.billingCompanyName }}</td>
+        <td>{{ order.shippingName }}</td>
+        <td>{{ order.buyerInfoBean?.name }}</td>
+        <td>{{ order.buyerInfoBean?.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p *ngIf="buyerOrderList.length === 0">No orders found.</p>
+
+

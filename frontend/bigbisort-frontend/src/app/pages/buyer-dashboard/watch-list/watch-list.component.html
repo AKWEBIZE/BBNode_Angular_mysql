@@ -1,0 +1,18 @@
+<div class="watchlist-container" *ngIf="watchListItems.length > 0">
+  <h2>Your Watchlist</h2>
+  <div class="watchlist-grid">
+    <div class="watch-card" *ngFor="let item of watchListItems">
+      <h3>{{ item.productResponseBeans.productName }}</h3>
+      <p>{{ item.productResponseBeans.description }}</p>
+      <div *ngIf="item.productResponseBeans.varietiesList?.length > 0">
+        <h4>Varieties:</h4>
+        <ul>
+          <li *ngFor="let variety of item.productResponseBeans.varietiesList">
+            <strong>{{ variety.varietyName }}</strong> - {{ variety.origin }} | {{ variety.quality }}
+            <div><em>{{ variety.description }}</em></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

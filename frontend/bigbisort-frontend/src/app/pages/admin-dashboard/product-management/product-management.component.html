@@ -1,0 +1,227 @@
+<section class="pm-page">
+
+  <header class="pm-header">
+    <div>
+      <h1>Product Management</h1>
+      <p>Review, approve, and manage products listed on the platform.</p>
+    </div>
+    <button class="btn btn-refresh" (click)="refresh()" [disabled]="loadingList">
+      <i class="bi bi-arrow-clockwise"></i> Refresh
+    </button>
+  </header>
+
+  <nav class="pm-tabs">
+    <button [class.active]="activeTab === 'queue'" (click)="setTab('queue')">Product Review Queue</button>
+    <button [class.active]="activeTab === 'approved'" (click)="setTab('approved')">Approved Products</button>
+    <button [class.active]="activeTab === 'media'" (click)="setTab('media')">Product Media Review</button>
+    <button [class.active]="activeTab === 'categorization'" (click)="setTab('categorization')">Product Categorization</button>
+  </nav>
+
+  <div class="pm-body" *ngIf="activeTab === 'queue' || activeTab === 'approved'">
+
+    <div class="pm-queue-card">
+      <div class="pm-queue-card-head">
+        <h2>{{ activeTab === 'queue' ? 'Product Review Queue' : 'Approved Products' }} ({{ totalElements }})</h2>
+        <div class="pm-queue-card-controls">
+          <input
+            class="pm-search"
+            type="text"
+            placeholder="Search product or seller..."
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="page = 0; loadQueue()"
+          />
+          <select class="pm-category-select" [(ngModel)]="categoryFilter">
+            <option value="">All Categories</option>
+            <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="pm-queue-subtitle">
+        {{ activeTab === 'queue' ? 'Review and manage newly submitted products pending admin approval.' : 'Live to buyers. Editable by admin only.' }}
+      </p>
+
+      <table class="pm-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Listed By</th>
+            <th>Quantity</th>
+            <th>Date Added</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="loadingList">
+            <td colspan="5" class="pm-empty">Loading…</td>
+          </tr>
+          <tr *ngIf="!loadingList && displayedProducts.length === 0">
+            <td colspan="5" class="pm-empty">No products found.</td>
+          </tr>
+          <tr
+            *ngFor="let p of displayedProducts"
+            (click)="selectProduct(p)"
+            [class.selected]="selectedProduct?.id === p.id"
+          >
+            <td>
+              <div class="pm-product-name">{{ p.productName }}</div>
+              <div class="pm-product-seller">{{ p.sellerName }}</div>
+            </td>
+            <td>{{ p.sellerName }}</td>
+            <td>{{ p.quantitySummary }}</td>
+            <td>
+              <span
+                class="pm-status-pill"
+                [attr.data-status]="p.status"
+                *ngIf="p.status === 'PENDING_UPDATES' || p.status === 'REJECTED'; else plainDate"
+              >{{ statusLabel(p.status) }}</span>
+              <ng-template #plainDate>{{ p.createdAt | date:'MMM d, y' }}</ng-template>
+            </td>
+            <td>
+              <button class="pm-row-action" (click)="$event.stopPropagation(); selectProduct(p)">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pm-table-footer">
+        <span>Displaying {{ rangeStart }}–{{ rangeEnd }} of {{ totalElements }}</span>
+        <div class="pm-page-sizes">
+          <button
+            *ngFor="let s of pageSizeOptions"
+            [class.active]="size === s"
+            (click)="setPageSize(s)"
+          >{{ s }}</button>
+          <button class="pm-export" (click)="exportCsv()">Export</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="pm-detail-card" *ngIf="selectedProduct as prod">
+      <div class="pm-detail-head">
+        <div class="pm-detail-avatar">{{ prod.productName.charAt(0) }}</div>
+        <div>
+          <h3>{{ prod.productName }}</h3>
+          <p>{{ prod.productCode }} · Seller: {{ prod.sellerName }}</p>
+        </div>
+      </div>
+
+      <nav class="pm-detail-tabs">
+        <button [class.active]="detailTab === 'submission'" (click)="detailTab = 'submission'">Submission Details</button>
+        <button [class.active]="detailTab === 'notes'" (click)="detailTab = 'notes'">Notes</button>
+        <button [class.active]="detailTab === 'history'" (click)="detailTab = 'history'">Last History</button>
+      </nav>
+
+      <div class="pm-detail-content" *ngIf="loadingDetail">Loading…</div>
+
+      <ng-container *ngIf="!loadingDetail">
+
+        <div class="pm-detail-content" *ngIf="detailTab === 'submission'">
+          <div class="pm-info-grid">
+            <div><span>Category</span><strong>{{ prod.category }}<span *ngIf="prod.subcategory"> / {{ prod.subcategory }}</span></strong></div>
+            <div><span>Country</span><strong>{{ prod.country }}</strong></div>
+            <div><span>Quality Grade</span><strong>{{ prod.qualityGrade || '—' }}</strong></div>
+            <div><span>Moisture Limit</span><strong>{{ prod.moistureLimit || '—' }}</strong></div>
+            <div><span>Harvest</span><strong>{{ prod.harvestSummary || '—' }}</strong></div>
+            <div><span>Varieties</span><strong>{{ prod.varietiesCount }}</strong></div>
+          </div>
+
+          <p class="pm-description" *ngIf="prod.description">{{ prod.description }}</p>
+
+          <label class="pm-notes-label">Notes for Seller</label>
+          <textarea
+            class="pm-notes-input"
+            rows="3"
+            placeholder="Add a note the seller will see with this decision..."
+            [(ngModel)]="notesDraft"
+          ></textarea>
+
+          <p class="pm-action-error" *ngIf="actionError">{{ actionError }}</p>
+
+          <div class="pm-actions">
+            <button class="btn btn-approve" [disabled]="actionInFlight" (click)="approve()">Approve</button>
+            <button class="btn btn-request" [disabled]="actionInFlight" (click)="requestChanges()">Request Changes</button>
+            <button class="btn btn-reject" [disabled]="actionInFlight" (click)="reject()">Reject</button>
+          </div>
+        </div>
+
+        <div class="pm-detail-content" *ngIf="detailTab === 'notes'">
+          <label class="pm-notes-label">Saved Admin Notes</label>
+          <p class="pm-saved-notes" *ngIf="prod.adminNotes">{{ prod.adminNotes }}</p>
+          <p class="pm-empty-inline" *ngIf="!prod.adminNotes">No notes saved yet.</p>
+
+          <textarea
+            class="pm-notes-input"
+            rows="3"
+            placeholder="Update saved notes..."
+            [(ngModel)]="notesDraft"
+          ></textarea>
+          <div class="pm-actions">
+            <button class="btn btn-save" [disabled]="actionInFlight" (click)="saveNotes()">Save Notes</button>
+          </div>
+        </div>
+
+        <div class="pm-detail-content" *ngIf="detailTab === 'history'">
+          <div class="pm-history-row">
+            <span>Status</span>
+            <strong class="pm-status-pill" [attr.data-status]="prod.status">{{ statusLabel(prod.status) }}</strong>
+          </div>
+          <div class="pm-history-row">
+            <span>Submitted</span>
+            <strong>{{ prod.createdAt | date:'medium' }}</strong>
+          </div>
+          <div class="pm-history-row">
+            <span>Last Updated</span>
+            <strong>{{ prod.updatedAt | date:'medium' }}</strong>
+          </div>
+        </div>
+
+      </ng-container>
+    </aside>
+  </div>
+
+  <div class="pm-body single" *ngIf="activeTab === 'categorization'">
+    <div class="pm-queue-card">
+      <div class="pm-queue-card-head">
+        <h2>Product Categorization</h2>
+      </div>
+      <p class="pm-queue-subtitle">Categories currently in use across submitted products.</p>
+      <ul class="pm-category-list">
+        <li *ngFor="let c of categories">{{ c }}</li>
+      </ul>
+      <p class="pm-empty-inline" *ngIf="categories.length === 0">No categories found yet.</p>
+    </div>
+  </div>
+
+  <div class="pm-body single" *ngIf="activeTab === 'media'">
+    <div class="pm-queue-card">
+      <div class="pm-queue-card-head">
+        <h2>Product Media Review</h2>
+      </div>
+      <p class="pm-empty-inline">
+        Media review isn't wired to the backend yet — there's no product image/video endpoint to check here yet.
+      </p>
+    </div>
+  </div>
+
+  <div class="pm-summary-cards" *ngIf="activeTab === 'queue'">
+    <div class="pm-summary-card">
+      <h4><i class="bi bi-check2-circle"></i> Approved Products</h4>
+      <p>Live to buyers. Editable by admin only.</p>
+      <button (click)="setTab('approved')">View All</button>
+    </div>
+    <div class="pm-summary-card">
+      <h4><i class="bi bi-camera"></i> Product Media Review</h4>
+      <p>Check images, videos, and flag poor quality.</p>
+      <button (click)="setTab('media')">Review Media</button>
+    </div>
+    <div class="pm-summary-card">
+      <h4><i class="bi bi-folder"></i> Product Categorization</h4>
+      <p>Manage categories, products, varieties, and grades.</p>
+      <button (click)="setTab('categorization')">Manage Categories</button>
+    </div>
+  </div>
+
+</section>

@@ -1,0 +1,873 @@
+.apple-page {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  background-image: url('/assets/images/Prdpage/Avo/avo.jpg');  
+
+
+ // your uploaded image
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+  padding: 40px;
+  overflow: hidden;
+
+  // overlay for better text contrast
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(0 0 0 / 0%);
+ // dark transparent layer
+    z-index: 1;
+  }
+
+  .content {
+
+    
+    
+    z-index: 2;
+    max-width: 800px;
+    margin-right: 43rem;
+    color: #d4ffa1;
+ 
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+
+    .enquire-btn {
+      background-color: #fbd020;
+      color: #000;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #ffde59;
+      }
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 20px;
+      border-radius: 12px;
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        i {
+          font-size: 1.5rem;
+          color: #fbd020;
+        }
+
+        .label {
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .value {
+          font-size: 0.85rem;
+          margin: 0;
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .content {
+      text-align: center;
+      h1 {
+        font-size: 1.7rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}
+
+
+// Section 2
+
+.cultivation-section {
+  background-color: #ffe241;
+  padding: 60px 40px;
+  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  color: #004d00;
+
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+  }
+
+  .cultivation-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+  }
+
+  /* Map section */
+  .map-container {
+    position: relative;
+    width: 400px;
+    max-width: 100%;
+
+    .map-image {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .marker {
+      position: absolute;
+      background-color: #f0544f;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    /* approximate marker positions (tweak as needed for your map image) */
+    .jk { top: 40px; left: 110px; }
+    .hp { top: 160px; left: 120px; }
+    .uk { top: 200px; left: 150px; }
+    .ap { top: 250px; right: 80px; }
+    .ng { top: 280px; right: 90px; }
+    .tn { bottom: 60px; left: 170px; }
+  }
+
+  /* States list */
+ .states-list {
+  
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: #1b5e20;
+
+  h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #2e7d32;
+  }
+
+  ol {
+    margin: 0;
+    padding-left: 20px;
+
+    li {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    b {
+      color: #1b5e20;
+    }
+  }
+
+  .smaller {
+    font-size: 0.9rem;
+    margin-top: 15px;
+    color: #33691e;
+  }
+}
+
+
+  @media (max-width: 900px) {
+    .cultivation-content {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+
+      .states-list {
+        ol {
+          padding-left: 0;
+        }
+      }
+    }
+  }
+}
+
+
+// section 3 apple veraity
+.varieties-section {
+  background-color: #fbdc59;
+  padding: 60px 40px;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  color: #004d00;
+  overflow: hidden;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+
+  .scroll-wrapper {
+    width: 100%;
+    overflow: hidden; // hide native scrollbar
+    position: relative;
+  }
+
+  .scroll-container {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  padding-bottom: 15px;
+  align-items: stretch;
+  justify-content: center; 
+  margin: 0 auto;
+}
+
+  .apple-card {
+    background-color: #fff4c5;
+    border-radius: 16px;
+    min-width: 220px;
+    max-width: 220px;
+    flex: 0 0 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 320px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    text-align: left;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .card-text {
+      padding: 15px;
+
+      h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #004d00;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: #333;
+        line-height: 1.4;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 40px 20px;
+
+    .apple-card {
+      min-width: 180px;
+      max-width: 180px;
+      height: 280px;
+
+      img {
+        height: 130px;
+      }
+    }
+  }
+}
+
+
+// section 4 for side apple img
+
+
+.benefits-section {
+  background-color: #fbdc59;
+  font-family: 'Poppins', sans-serif;
+  padding: 60px 40px;
+
+  .benefits-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  // LEFT SIDE IMAGE
+  .apple-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      max-width: 90%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  // RIGHT SIDE TEXT
+  .benefits-text {
+    color: #004d00;
+    padding: 20px 30px;
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: left;
+      color: #004d00;
+    }
+
+    .benefits-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .benefit-item {
+      color: #004d00;  
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+       box-shadow: 0 4px 12px rgba(180, 7, 7, 0.1);
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: translateY(-3px);
+      }
+
+      .icon {
+        background-color: #8bc34a;
+        color: white;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin: 0;
+      }
+    }
+  }
+
+  // MOBILE VIEW
+  @media (max-width: 992px) {
+    padding: 40px 20px;
+
+    .benefits-text {
+      text-align: center;
+
+      h2 {
+        text-align: center;
+      }
+    }
+
+    .apple-image {
+      margin-bottom: 30px;
+
+      img {
+        max-width: 300px;
+      }
+    }
+  }
+}
+
+
+.processing-section {
+  background-color: #fbdc59;
+  font-family: 'Poppins', sans-serif;
+  padding: 60px 40px;
+
+  .info-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 25px;
+  }
+
+  .process-card {
+    background-color: #fff8c4;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: #2e7d32;
+      color: #fff;
+      padding: 10px 16px;
+
+      i {
+        font-size: 1.4rem;
+        color: #fbdc59;
+      }
+
+      h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+      }
+    }
+
+    .card-body {
+      padding: 15px 16px;
+      color: #333;
+
+      p {
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+      }
+
+      small {
+        color: #444;
+        opacity: 0.8;
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  .image-side {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  @media (max-width: 992px) {
+    padding: 40px 20px;
+
+    .info-side {
+      margin-bottom: 30px;
+    }
+
+    .card-header {
+      text-align: center;
+    }
+  }
+}
+
+
+.why-choose-section {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+  color: #004d00;
+  background-color: #fbdc59;
+
+  // diagonal split background
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 55%;
+    height: 100%;
+    background: url('/assets/images/Prdpage/apple/apbk.png') center/cover no-repeat;
+
+    clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+    z-index: 1;
+  }
+
+  .content-wrapper {
+    position: relative;
+    z-index: 2;
+    padding: 70px 40px;
+  }
+
+  h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+
+  .features-grid {
+    .feature-card {
+      background: #fffbea;
+      border-radius: 12px;
+      padding: 18px 15px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+      }
+
+      .icon {
+        background: #2e7d32;
+        color: #fbdc59;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+      }
+
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #004d00;
+        margin-bottom: 5px;
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: #333;
+        margin: 0;
+      }
+    }
+  }
+
+  .enquire-btn {
+    background-color: #004d00;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    margin-top: 25px;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #2e7d32;
+    }
+  }
+
+  @media (max-width: 992px) {
+    &::after {
+      clip-path: none;
+      position: relative;
+      width: 100%;
+      height: 300px;
+      display: block;
+    }
+
+    .content-wrapper {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .enquire-btn {
+      width: 100%;
+      max-width: 260px;
+    }
+  }
+}
+
+
+
+
+// section 7 customer spot
+
+
+.seller-section {
+  background-color: #fffbea;
+  font-family: 'Poppins', sans-serif;
+  padding: 60px 40px;
+  color: #004d00;
+
+  .header {
+    h2 {
+      font-weight: 700;
+      color: #004d00;
+      margin-bottom: 5px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #333;
+      margin: 0;
+    }
+
+    .see-all {
+      color: #004d00;
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .seller-card {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .seller-image {
+      width: 100%;
+      height: 338px;
+      object-fit: cover;
+    }
+
+    .seller-details {
+      padding: 15px;
+
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #004d00;
+        margin-bottom: 4px;
+      }
+
+      .location {
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 6px;
+      }
+
+      .rating {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+
+        i {
+          color: #ffb400;
+          margin-right: 2px;
+        }
+
+        .rating-value {
+          font-weight: 600;
+          margin-left: 5px;
+          color: #004d00;
+        }
+      }
+
+      .description {
+        font-size: 0.9rem;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        span {
+          font-size: 0.8rem;
+          font-weight: 600;
+          border-radius: 8px;
+          padding: 5px 10px;
+          color: #004d00;
+        }
+
+        .verified {
+          background-color: #dcedc8;
+          border: 1px solid #8bc34a;
+        }
+
+        .graded {
+          background-color: #fff9c4;
+          border: 1px solid #fbc02d;
+        }
+
+        .traceable {
+          background-color: #fff176;
+          border: 1px solid #fdd835;
+        }
+
+        .export {
+          background-color: #c5e1a5;
+          border: 1px solid #8bc34a;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 40px 20px;
+    text-align: center;
+  }
+}
+
+
+
+// secton 8 for bulk orders
+
+.enquiry-section {
+  background-color: #f1f8e9; /* soft avocado green */
+  font-family: 'Poppins', sans-serif;
+  padding: 60px 20px;
+  text-align: center;
+
+  .enquiry-box {
+    background-color: #e8f5e9;
+    border-radius: 16px;
+    padding: 40px 30px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    margin: 0 auto;
+    border: 2px solid #a5d6a7;
+  }
+
+  h2 {
+    font-weight: 700;
+    color: #1b5e20;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    color: #2e7d32;
+    font-size: 1rem;
+    margin-bottom: 25px;
+  }
+
+  .enquiry-form {
+    justify-content: center;
+
+    .form-control {
+      border-radius: 8px;
+      border: 1px solid #a5d6a7;
+      padding: 10px;
+      font-size: 0.95rem;
+      width: 100%;
+      box-shadow: none;
+      transition: 0.2s;
+
+      &:focus {
+        border-color: #66bb6a;
+        box-shadow: 0 0 4px rgba(102, 187, 106, 0.5);
+      }
+    }
+
+    .btn-submit {
+      background-color: #2e7d32;
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      padding: 10px;
+      transition: 0.3s;
+
+      &:hover {
+        background-color: #1b5e20;
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  .contact-info {
+    margin-top: 25px;
+    color: #1b5e20;
+    font-size: 0.95rem;
+
+    p {
+      margin: 5px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    i {
+      color: #1b5e20;
+      font-size: 1rem;
+    }
+
+    span {
+      font-weight: 600;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 40px 10px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .enquiry-box {
+      padding: 30px 15px;
+    }
+  }
+}

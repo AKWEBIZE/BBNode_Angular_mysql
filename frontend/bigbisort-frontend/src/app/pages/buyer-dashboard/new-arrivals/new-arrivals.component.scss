@@ -1,0 +1,105 @@
+.new-arrivals-section {
+  background: linear-gradient(to bottom, #dfffdc, #fff9e6);
+  padding: 40px 20px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #222;
+
+  .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .product-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    width: 220px;
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 16px;
+
+    img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 10px;
+
+      h3 {
+        font-size: 18px;
+        margin: 10px 0 5px;
+      }
+
+      .price {
+        color: #1ca519;
+        font-weight: bold;
+        margin: 6px 0;
+
+        span {
+          font-weight: normal;
+          font-size: 13px;
+          color: #555;
+        }
+      }
+
+      .location,
+      .time {
+        font-size: 13px;
+        color: #666;
+      }
+
+      button {
+        margin-top: 10px;
+        background: #ffcb05;
+        color: #000;
+        padding: 6px 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .catalogue-section {
+    text-align: center;
+    padding: 40px 20px;
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+
+      .feature {
+        max-width: 200px;
+        text-align: center;
+
+        h4 {
+          font-size: 18px;
+          margin-top: 8px;
+        }
+
+        p {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

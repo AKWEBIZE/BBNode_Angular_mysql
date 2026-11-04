@@ -1,0 +1,285 @@
+<p>pineapple works!</p>
+<div class="banana-page">
+  <div class="overlay"></div>
+
+  <div class="content">
+    <h1>Pineapple – India’s Pride in Global Fruit Trade</h1>
+    <p>Directly sourced from Indian farmers, globally trusted.</p>
+
+    <button class="enquire-btn">Enquire Now</button>
+
+    
+<div class="info-grid">
+  <div class="info-item">
+    <i class="fa-solid fa-map-location-dot"></i>
+    <div>
+      <p class="label">Origin:</p>
+      <p class="value">Kerala, Tamil Nadu, Karnataka, Andhra Pradesh, Goa </p>
+    </div>
+  </div>
+
+  <div class="info-item">
+    <span class="fruit-label"> </span>
+
+    <div>
+      <p class="label">Top Varieties:</p>
+      <p class="value">Tall varieties, Dwarf varieties, Hybrid coconuts</p>
+    </div>
+  </div>
+
+  <div class="info-item">
+    <i class="fa-solid fa-temperature-low"></i>
+    <div>
+      <p class="label">Shelf Life:</p>
+      <p class="value">2–3 months (whole nut); longer for copra</p>
+    </div>
+  </div>
+
+  <div class="info-item">
+    <i class="fa-solid fa-globe"></i>
+    <div>
+      <p class="label">Export Reach:</p>
+      <p class="value">Middle East, Europe &amp;   USA (coconut products)</p>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+<!-- section 2 -->
+
+<div class="india-map-wrapper">
+
+  <img src="assets/images/Prdpage/Banana/ind.png" class="india-map" />
+
+  <div class="pin tamilnadu">Tamil Nadu</div>
+  <div class="pin maharashtra">Maharashtra</div>
+  <div class="pin gujarat">Gujarat</div>
+  <div class="pin andhrapradesh">Andhra Pradesh</div>
+  <div class="pin karnataka">Karnataka</div>
+  <div class="pin westbengal">West Bengal</div>
+
+</div>
+
+
+
+<!-- section 3 apple veraity -->
+<div class="varieties-section">
+  <h2>Varieties Showcase</h2>
+  <p class="subtitle">India's Top Avocado</p>
+
+  <div class="scroll-wrapper">
+    <div class="scroll-container" #scrollContainer>
+      <!-- Original set -->
+      <div class="apple-card" *ngFor="let ba of BananaVarieties">
+        <img [src]="ba.image" [alt]="ba.name" />
+        <div class="card-text">
+          <h3>{{ ba.name }}</h3>
+          <p>{{ ba.description }}</p>
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+<!-- section 4 -->
+<div class="benefits-section container-fluid">
+  <div class="row align-items-center benefits-content">
+    
+    <!-- Left: Apple Image -->
+    <div class="col-lg-6 col-md-12 apple-image text-center">
+      <img src="assets/images/Prdpage/Coconut/co2.jpg" alt="Pineapple" />
+         
+    </div>
+
+    <!-- Right: Benefits -->
+    <div class="col-lg-6 col-md-12 benefits-text">
+      <h2>Nutritional & Health Benefits of Avocado</h2>
+
+      <div class="row benefits-grid">
+        <div class="col-md-3 col-sm-12" *ngFor="let benefit of coconutBenefitsLeft">
+          <div class="benefit-item">
+            <div class="icon">
+              <i [class]="benefit.icon"></i>
+            </div>
+            <p>{{ benefit.text }}</p>
+          </div>
+ 
+
+
+        </div>
+
+            <div class="col-md-3 col-sm-12" *ngFor="let benefi of coconutBenefitsRight ">
+          <div class="benefit-item">
+            <div class="icon">
+              <i [class]="benefi.icon"></i>
+            </div>
+            <p>{{ benefi.text }}</p>
+          </div>
+ 
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- section 5 -->
+<div class="processing-section container-fluid">
+  <div class="row align-items-stretch">
+    
+    <!-- LEFT: Info Cards -->
+    <div class="col-lg-6 col-md-12 info-side">
+      <div class="process-card" *ngFor="let step of processingSteps">
+        <div class="card-header">
+          <i [class]="step.icon"></i>
+          <h3>{{ step.title }}</h3>
+        </div>
+        <div class="card-body">
+          <p>{{ step.description }}</p>
+          <small *ngIf="step.note">{{ step.note }}</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Image Side -->
+    <div class="col-lg-6 col-md-12 image-side">
+      <img src="assets/images/Prdpage/Coconut/cb1.png" alt="Apple Packing" />
+    </div>
+  </div>
+</div>
+
+
+<!-- Section 6 why to choose us -->
+<div class="why-choose-section container-fluid">
+  <div class="row align-items-center">
+    
+    <!-- LEFT SIDE -->
+    <div class="col-lg-6 col-md-12 left-content">
+      <h2>Why Choose Bigbisort Avocados?</h2>
+      <p class="subtitle">
+        Direct farmer sourcing, premium grading, global reach — trusted supply for importers & retailers.
+      </p>
+
+      <div class="row g-3 features-grid">
+        <div class="col-sm-6" *ngFor="let feature of features">
+          <div class="feature-card">
+            <div class="icon"><i [class]="feature.icon"></i></div>
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="enquire-btn">Enquire for Bulk Avocados</button>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="col-lg-6 col-md-12 right-image text-center">
+      <img src="assets/images/Prdpage/Coconut/cor.png" alt="Apples in basket" />
+    </div>
+  </div>
+</div>
+
+
+<!-- section 7 Seller spot for  -->
+<div class="seller-section container-fluid">
+  <div class="header d-flex justify-content-between align-items-center">
+    <div>
+      <h2>Seller Spotlight</h2>
+      <p>Verified growers & exporters from India’s prime Avocados belts.</p>
+    </div>
+    <a href="#" class="see-all">See all sellers</a>
+  </div>
+
+  <div class="row g-4 mt-3">
+    <div class="col-md-4 col-sm-12" *ngFor="let seller of sellers">
+      <div class="seller-card">
+        <img [src]="seller.image" [alt]="seller.name" class="seller-image" />
+
+        <div class="seller-details">
+          <h3>{{ seller.name }}</h3>
+          <p class="location">{{ seller.location }}</p>
+
+          <div class="rating">
+            <i class="fa-solid fa-star" *ngFor="let star of getStars(seller.rating)"></i>
+            <span class="rating-value">{{ seller.rating }}</span>
+          </div>
+
+          <p class="description">{{ seller.description }}</p>
+
+          <div class="tags mt-2">
+            <span *ngFor="let tag of seller.tags" [ngClass]="tag.class">{{ tag.label }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Section 8 for bulk enquirey -->
+
+<div class="enquiry-section container-fluid">
+  <div class="enquiry-box">
+    <h2>Enquire for Bulk Banana — Start Your Trade</h2>
+    <p class="subtitle">
+      Direct farmer-to-importer supply | Verified quality | Export-ready logistics
+    </p>
+
+    <form (ngSubmit)="onSubmit()" #enquiryForm="ngForm" class="enquiry-form row g-2">
+      <div class="col-md-3 col-sm-12">
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          class="form-control"
+          [(ngModel)]="formData.name"
+          required
+        />
+      </div>
+
+      <div class="col-md-3 col-sm-12">
+        <input
+          type="text"
+          name="email"
+          placeholder="Email / Phone"
+          class="form-control"
+          [(ngModel)]="formData.email"
+          required
+        />
+      </div>
+
+      <div class="col-md-3 col-sm-12">
+        <input
+          type="text"
+          name="quantity"
+          placeholder="Required Quantity"
+          class="form-control"
+          [(ngModel)]="formData.quantity"
+          required
+        />
+      </div>
+
+      <div class="col-md-3 col-sm-12">
+        <button type="submit" class="btn-submit">Send Enquiry</button>
+      </div>
+    </form>
+
+    <div class="contact-info mt-3">
+      <p>
+        <i class="fa-solid fa-location-dot"></i>
+        <span>Contact Office:</span> Bengaluru (KA), Coimbatore (TN), Kochi (KL)
+      </p>
+      <p>
+        <i class="fa-solid fa-envelope"></i> info&#64;bigbisort.com
+        <i class="fa-solid fa-phone ms-3"></i> +91-XXXXXXXXXX
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<!-- navigation.component.html -->
+<nav class="navbar">
+  <div class="nav-left">
+
+    <div class="logo">
+      <img src="assets/images/logo/logo.png" alt="Bigbisort Logo" />
+    </div>
+
+
+    <a routerLink="/home" routerLinkActive="active-link">Home</a>
+    <a routerLink="/about" routerLinkActive="active-link">About</a>
+    <a routerLink="/products" routerLinkActive="active-link">Products</a>
+    <a routerLink="/contact" routerLinkActive="active-link">Contact</a>
+  </div>
+  <div class="nav-right">
+    <a routerLink="/login" routerLinkActive="active-link" class="login-link">Login</a>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

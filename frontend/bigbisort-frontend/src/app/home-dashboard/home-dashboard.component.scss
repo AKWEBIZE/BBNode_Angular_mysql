@@ -1,0 +1,70 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fddb3a; /* bright yellow */
+  padding: 10px 20px;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Left side (logo + nav links) */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* space between logo and links */
+}
+
+/* Logo styling */
+.logo {
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+}
+
+.logo img {
+  height: 60px; /* adjust size */
+  width: 130px;
+}
+
+/* Navigation links */
+.navbar a {
+  color: #064105;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 27px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar a:hover {
+  background-color: #014d1f;
+  color: #fddb3a;
+  transform: scale(1.2);
+}
+
+.active-link {
+  border-bottom: 2px solid white;
+}
+
+/* Right side (login button) */
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.login-link {
+  background-color: #007d2b;
+  color: #fddb3a;
+  padding: 8px 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+}
+
+.login-link:hover {
+  background-color: white;
+  color: #2cc84d;
+  transform: scale(1.2);
+}

@@ -1,0 +1,33 @@
+.category-cards {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  .category-card {
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:hover,
+    &.selected {
+      background-color: #4caf50;
+      color: white;
+    }
+  }
+}
+
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  .product-card {
+    width: 250px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #fafafa;
+  }
+}

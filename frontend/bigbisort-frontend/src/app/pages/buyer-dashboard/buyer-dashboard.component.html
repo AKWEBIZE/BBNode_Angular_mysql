@@ -1,0 +1,103 @@
+<div class="dashboard-wrapper">
+ <app-buyer-header></app-buyer-header>
+
+
+ 
+  <!-- Welcome Banner -->
+  <section class="welcome-banner">
+   <h2>Welcome back, {{ buyerName }}!</h2>
+    <p>Ready for today’s fresh picks?</p>
+    <button class="shop-now-btn">Shop Fresh Now</button>
+  </section>
+
+
+<section class="quick-actions mt-4">
+  <div class="quick-row">
+    <a
+      *ngFor="let action of quickActions"
+      class="action-box"
+      [routerLink]="action.route"
+    >
+      <i class="bi" [ngClass]="action.icon + ' action-icon'"></i>
+      <div class="action-label">{{ action.label }}</div>
+    </a>
+  </div>
+</section>
+
+
+
+
+
+
+  <!-- Recommended Products -->
+
+
+<!-- <section class="featured-products mt-5">
+  <h4 class="section-title mb-3">Featured Products</h4>
+
+  <div class="product-scroll">
+    <div
+      class="product-card"
+      *ngFor="let product of featuredProducts"
+      [ngClass]="product.cssClass || ''"
+    >
+      <img [src]="product.image" alt="{{ product.name }}" class="product-image" />
+      <div class="product-info">
+        <h5 class="product-name">{{ product.name }}</h5>
+        <p class="product-description">{{ product.description }}</p>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<!-- <section class="featured-products  mt-5">
+  <h4 class="section-title">Featured Products</h4>
+
+  <div class="product-scroll" #scrollContainer>
+    <div class="product-card" *ngFor="let product of featuredProducts">
+      <img [src]="product.image" alt="{{ product.name }}" class="product-image" />
+      <h5 class="product-name">{{ product.name }}</h5>
+      <p class="product-description">{{ product.description }}</p>
+    </div>
+  </div>
+</section> -->
+
+<section class="featured-products mt-5">
+  <h4 class="section-title mb-3">Featured Products</h4>
+
+  <div class="product-scroll" #scrollContainer>
+    <div
+      class="product-card"
+      *ngFor="let product of featuredProducts"
+      [ngClass]="product.cssClass || ''"
+    >
+      <img [src]="product.image" alt="{{ product.name }}" class="product-image" />
+      <div class="product-info">
+        <h5 class="product-name">{{ product.name }}</h5>
+        <p class="product-description">{{ product.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+  <!-- Seller Spotlight -->
+  <section class="seller-spotlight">
+    <h3>Seller Spotlight</h3>
+    <div class="category-tags">
+      <span>🍎 Fruits</span>
+      <span>🥦 Vegetables</span>
+      <span>🌱 Herbs</span>
+      <span>🌶️ Spices</span>
+    </div>
+    <div class="seller-cards">
+      <div class="seller-card">🏪 Seller Name & SPA</div>
+      <div class="seller-card">🧑‍🌾 Seller 1</div>
+      <div class="seller-card">🌽 Seller 2</div>
+    </div>
+  </section>
+</div>

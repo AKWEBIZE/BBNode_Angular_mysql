@@ -1,0 +1,96 @@
+
+
+
+
+<section class="hero-section" >
+  <div class="hero-carousel">
+    <div class="carousel-container" [style.transform]="'translateX(-' + currentSlide * 100 + '%)'">
+      <div style="max-width: 100%;" class="carousel-slide" *ngFor="let image of images">
+        <img [src]="image" alt="Hero Image" />
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <h1>Welcome to Bigbisort</h1>
+    <p>Your trusted marketplace for fruits, vegetables & spices</p>
+    <a routerLink="/products" class="btn-primary">Shop Now</a>
+  </div>
+</section>
+
+
+
+
+<section class="features-section">
+  <h2>Why Choose Bigbisort?</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <i class="bi bi-truck"></i>
+      <h3>Fast Delivery</h3>
+      <p>Get your orders quickly with our reliable delivery partners.</p>
+    </div>
+    <div class="feature-card">
+      <i class="bi bi-shield-check"></i>
+      <h3>Secure Transactions</h3>
+      <p>Shop confidently with end-to-end payment protection.</p>
+    </div>
+    <div class="feature-card">
+      <i class="bi bi-box-seam"></i>
+      <h3>Quality Products</h3>
+      <p>All products are verified and sourced from trusted sellers.</p>
+    </div>
+  </div>
+</section>
+
+<section class="about-preview">
+  <h2>About Us</h2>
+  <p>Bigbisort connects buyers and sellers across India to ensure transparent, efficient, and fast trade of fruits, vegetables and spices. Join us and grow together!</p>
+  <a routerLink="/about" class="btn-secondary">Learn More</a>
+</section>
+
+<section class="categories-section">
+  <h2>Explore Categories</h2>
+  <div class="categories-grid">
+    <a routerLink="/category/vegetables" class="category-card">
+      <img src="assets/images/Prdimg/veg.jpg" alt="Vegetables">
+      <h3>Farm Vegetables</h3>
+    </a>
+    <a routerLink="/category/fruits" class="category-card">
+      <img src="assets/images/Prdimg/apple.jpg" alt="Fruits">
+      <h3>Fresh Fruits</h3>
+    </a>
+    <a routerLink="/category/spices" class="category-card">
+      <img src="assets/images/Prdimg/pep.jpg" alt="Spices">
+      <h3>Spices</h3>
+    </a>
+  </div>
+</section>
+
+
+
+<section class="testimonials-section">
+  <h2>What Our Users Say</h2>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <p>"Bigbisort helped me sell my produce faster than ever before!"</p>
+      <h4>- John D., Seller</h4>
+    </div>
+    <div class="testimonial-card">
+      <p>"The freshness and quality of products here is unbeatable."</p>
+      <h4>- Sarah L., Buyer</h4>
+    </div>
+    <div class="testimonial-card">
+      <p>"Secure transactions give me peace of mind every time."</p>
+      <h4>- Mark T., Seller</h4>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Join Bigbisort Today</h2>
+  <p>Start buying and selling fresh products with ease and security.</p>
+  <a routerLink="/register" class="cta-btn">Get Started</a>
+</section>
+
+
+

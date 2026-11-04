@@ -1,0 +1,212 @@
+<section class="hero-section">
+  <div class="top-bar-placeholder">
+    <div class="logo">Bigbisort</div>
+    <div class="search-box">
+      <input type="text" placeholder="Search..." />
+      <button><i class="fas fa-search">Search</i></button>
+    </div>
+  </div>
+
+  
+</section>
+
+<section class="hero-section">
+
+
+
+<section class="section-two">
+  <div class="section-content">
+    <!-- Left Side: Text -->
+    <div class="section-text">
+      <h1>Welcome to <span>Bigbisort 🌍</span></h1>
+      <p>Connecting Farmers, Sellers & Buyers with <br />Trust & Transparency</p>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" routerLink="/prdland">Explore Products</button>
+        <button class="btn btn-secondary">Post Requirement</button>
+      </div>
+    </div>
+
+    <!-- Right Side: Image -->
+    <div class="section-image">
+      <img src="assets/images/Prdpage/Prdsec1.png" alt="Farmer with vegetables" />
+
+   
+      
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section class="products-section">
+   <h2 class="section-title">categories</h2>
+  <div class="products-container">
+    <!-- Section Heading -->
+  
+
+    <!-- Top Categories -->
+    <div class="categories">
+      <div class="category-card"
+           *ngFor="let category of categories"
+           [ngStyle]="{'background-color': category.color, 'color': category.fontColor}">
+        <img [src]="category.icon" [alt]="category.name" />
+        <h3 [style.color]="category.fontColor">{{ category.name }}</h3>
+        <p [style.color]="category.fontColor">{{ category.description }}</p>
+        <span [style.color]="category.fontColor">{{ category.count }} Products</span>
+        <button class="explore-btn">Explore</button>
+      </div>
+    </div>
+
+    <!-- New Arrivals -->
+    <div class="new-arrivals">
+      <h2>New Arrivals</h2>
+    </div>
+
+    <!-- Example Product Highlight -->
+    <div class="highlight">
+      <img src="assets/images/Prdimg/cof2.jpg" alt="Coffee" />
+      <div class="highlight-info">
+        <h3>Coffee</h3>
+        <p><strong>Origin:</strong> India, Ethiopia</p>
+        <p><strong>Lead Time:</strong> 2.4 weeks</p>
+        <p><strong>Availability:</strong> Year-round</p>
+      </div>
+
+
+        <div class="highlight-extra">
+    
+    <p><strong>Grade:</strong> Premium</p>
+    <p><strong>Moisture:</strong> 12%</p>
+    <p><strong>Packaging:</strong> 60kg Bags</p>
+    <p><strong>Export Quality:</strong> Yes</p>
+  </div>
+
+
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+     
+      <div class="filter-cards">
+        <div class="product-card" *ngFor="let product of product">
+          <img [src]="product.image" [alt]="product.name" />
+          <h4>{{ product.name }}</h4>
+          <p>{{ product.grade }}</p>
+          <p>₹{{ product.price }}/kg</p>
+          <div class="actions">
+            <button class="btn-add">Add now</button>
+            <button class="btn-enquire">Enquire</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="filter-buttons">
+  <button 
+    *ngFor="let btn of filterButtons"
+    [ngClass]="{ 'active': selectedFilter === btn.value }"
+    (click)="setFilter(btn.value)">
+    {{ btn.label }}
+  </button>
+</div>
+
+<div class="product-carousel-container">
+  <!-- Left Arrow -->
+  <button class="arrow left" (click)="scrollLeft()">&#10094;</button>
+
+  <!-- Scrollable Product List -->
+  <div class="product-carousel" #carousel>
+    <div 
+      *ngFor="let prod of filteredProducts" 
+      class="product-cards">
+
+      <!-- Product Image -->
+      <div class="product-logo">
+        <img [src]="prod.image" alt="{{ prod.name }}" />
+      </div>
+
+      <!-- Product Name -->
+      <h3 class="seller-name">{{ prod.name }}</h3>
+
+      <!-- Product Info -->
+      <div class="rating">
+        <span class="stars">★</span> Grade: {{ prod.grade }}
+      </div>
+
+      <div class="price">
+        ₹{{ prod.price }}
+      </div>
+
+      <!-- Badges -->
+      <div class="badges">
+        <span 
+          class="badge" 
+          *ngFor="let tag of prod.tags" 
+          [ngClass]="{ 'verified': tag === 'verified', 'trending': tag === 'trending' }">
+          {{ tag | titlecase }}
+        </span>
+      </div>
+
+      <!-- Enquiry Button -->
+      <button class="enquire-btn">Enquire</button>
+    </div>
+  </div>
+
+  <!-- Right Arrow -->
+  <button class="arrow right" (click)="scrollRight()">&#10095;</button>
+</div>
+
+<section class="why-choose-section">
+  <div class="section-wrapper"> 
+    <h2>Why Choose Bigbisort?</h2>
+
+    <div class="features-container">
+
+      <div class="feature-box">
+        <div class="icon">
+
+            <img style=" width: 250px; 
+      height: 170px; " src="assets/images/Prdimg/wtcbbshield.png" alt="Trust Icon" />
+        </div>
+        <h3>Trust & Transparency</h3>
+        <p>Building trust and fostering transparent trade.</p>
+
+      </div>
+
+      <div class="feature-box">
+        <div class="icon">
+      <img style=" width: 250px; 
+      height: 170px; " src="assets/images/Prdimg/glob.png" alt="Trust Icon" />
+        </div>
+        <h3>Traceability</h3>
+        <p>Tracking every product from farm to market.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="icon">
+           <img style=" width: 250px; 
+      height: 170px; " src="assets/images/Prdimg/ship.png" alt="Trust Icon" />
+        </div>
+        <h3>Global Trade</h3>
+        <p>Connecting farmers and buyers worldwide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dynamic-insights-section">
+  <img src="assets/images/Prdimg/ingsight.png" 
+       alt="Dynamic Insights: Pricing Trends, Traceability, Logistics Integration" 
+       class="insights-image">
+</section>
+
+
+
+ 
+

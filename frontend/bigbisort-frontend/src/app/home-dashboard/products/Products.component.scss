@@ -1,0 +1,558 @@
+.hero-section {
+  background-color: #08732d; /* Dark green background */
+  padding: 20px; /* Overall padding */
+  color: #806e6e; /* White text color for contrast */
+  font-family: 'Segoe UI', sans-serif; /* Consistent font */
+  position: relative; /* For the top-bar-placeholder positioning */
+  overflow: hidden; /* Ensures globe image doesn't cause scroll issues */
+}
+
+.top-bar-placeholder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto 30px auto; /* Center with bottom margin */
+  background-color: #fddb3a; /* Yellow background for the bar */
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional shadow */
+  color: #044d00; /* Dark green text for contrast on yellow */
+}
+
+.top-bar-placeholder .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.top-bar-placeholder .search-box {
+  display: flex;
+  align-items: center;
+}
+
+.top-bar-placeholder .search-box input {
+  border: 1px solid #686161;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin-right: 5px;
+  font-size: 16px;
+  width: 60rem; /* Adjust as needed */
+}
+
+.top-bar-placeholder .search-box button {
+  background-color: #044d00; /* Dark green button */
+  color: rgb(60, 234, 11);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+
+
+.section-two {
+  background: #138a36; /* green background */
+  padding: 60px 20px;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.section-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: auto;
+  flex-wrap: wrap; /* responsive */
+}
+
+.section-text {
+  flex: 1 1 500px;
+}
+
+.section-text h1 {
+  font-size: 54px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.section-text span {
+  color: #fddb3a; /* yellow highlight */
+}
+
+.section-text p {
+  font-size: 30px;  
+  margin-bottom: 30px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  padding: 15px 34px;
+  border: none;
+  border-radius: 6px;
+  font-size: 26px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary {
+  background-color: #fddb3a;
+  color: #044d00;
+}
+
+.btn-primary:hover {
+  background-color: #fff176;
+}
+
+.btn-secondary {
+  background-color: #fddb3a;
+  color: #044d00;
+}
+
+.btn-secondary:hover {
+  background-color: #fff176;
+}
+
+.section-image {
+  flex: 1 1 400px;
+  text-align: center;
+}
+
+.section-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+.products-section {
+  background: #25bc52; /* your green background */
+  padding: 60px 140px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* The inner box */
+.products-container {
+
+  background: linear-gradient(to bottom,#25bc52 0%,#25bc52 20%,#fcfcd0 20%,#fcfcd0 100% );
+
+
+  border-radius: 15px;
+  padding: 40px 60px;
+  border: 2px solid #d2a679;
+}
+
+
+
+
+
+.section-title {
+  font-size: 52px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+
+/* Categories */
+.categories {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.category-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 150px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  
+}
+
+.category-card h3 {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #044d00;
+}
+
+.category-card p {
+  font-size: 14px;
+  color: #555;
+}
+
+.category-card span {
+  display: block;
+  margin: 8px 0;
+  font-size: 13px;
+  color: gray;
+}
+
+.explore-btn {
+  background: #fddb3a;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* New Arrivals */
+.new-arrivals {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ 
+}
+
+.sort-options select {
+  margin-left: 10px;
+  padding: 5px 10px;
+}
+
+/* Highlight Product */
+.highlight {
+  display: flex;
+  align-items: center;
+  background: #fcfcd0;
+  padding: 20px;
+ 
+  margin-bottom: 40px;
+}
+
+.highlight img {
+  width: 200px;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+.highlight-info h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+.highlight-extra {
+  flex: 1;
+  margin-left: 30px;
+  background-color: #fcfcd0;
+  padding:  20px;
+
+}
+
+
+/* Filter Section */
+.filter-section h3 {
+  margin-bottom: 20px;
+}
+
+.filter-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+
+//product card
+.product-card {
+  background: #fcfcd0;
+  padding: 15px;
+  border-radius: 10px;
+  width: 200px;
+  
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.product-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-add {
+  background: #2cc84d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-enquire {
+  background: #fddb3a;
+  color: #044d00;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.filter-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ffeb3b; /* yellow */
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.filter-buttons button:hover {
+  background-color: #fdd835; /* darker yellow */
+}
+
+.filter-buttons button.active {
+  background-color: #4caf50; /* green */
+  color: white;
+}
+
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.product-card {
+  width: 200px;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: white;
+}
+
+.product-carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+}
+
+.product-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 16px;
+  padding: 10px;
+}
+
+.product-cards {
+  min-width: 240px;
+  background-color: #fcfcd0; /* soft yellow */
+  color: black;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.product-logo img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.seller-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.stars {
+  color: gold;
+  font-size: 18px;
+  margin-right: 4px;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.badge {
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 4px;
+  color: white;
+}
+
+.badge.verified {
+  background-color: green;
+}
+
+.badge.trusted {
+  background-color: darkorange;
+}
+
+.stock {
+  margin: 8px 0;
+  font-weight: 500;
+}
+
+.enquire-btn {
+  background-color: black;
+  color: #fcfcd0;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.enquire-btn:hover {
+  background-color: #333;
+}
+
+.why-choose-section {
+  background-color: #fdf8e3; /* Outer section background */
+  padding: 60px 20px;
+  text-align: center;
+
+  .section-wrapper {
+    /* 🟢 NEW: The Green Box Container */
+    max-width: 1200px; 
+    margin: 0 auto; /* Center the box */
+    padding: 40px;
+    background-color: #267b3f; /* Green Background */
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Optional shadow for depth */
+  }
+
+  
+
+  h2 {
+    /* Title is now inside the green box, so change color to white/yellow for contrast */
+    color: #fdf8e3; 
+    font-size: 4rem;
+    margin-bottom: 40px;
+    font-weight: 700;
+  }
+
+  .features-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .feature-box {
+    /* Keep the feature box background consistent (or change if desired) */
+    background-color: #fdf8e3; /* Darker green for card background */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 300px;
+    font-size: 3rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon {
+      font-size: 40px;
+      color: #fddb3a; /* Changed icon color to bright yellow for contrast on dark green */
+      margin-bottom: 15px;
+      
+      img {
+      // Set fixed, smaller dimensions
+      width: 250px; 
+      height: 170px; 
+      
+      // Ensures the image scales down nicely without stretching
+      object-fit: contain; 
+      
+      // Centers the image if the parent div is larger
+      margin: 0 auto;
+      display: block; 
+    }
+    
+    }
+
+   
+
+    h3 {
+      color: #2c7c44; /* Changed title to white for contrast */
+      font-weight: 800;
+      margin-bottom: 10px;
+      font-size: 3rem;
+    }
+
+    p {
+    color: #2c7c44;
+
+    line-height: 1.4;
+    font-size: 19px;
+    font-weight: 500;
+
+    }
+
+  
+    
+  }
+}
+
+
+/* --- Dynamic Insights Section --- */
+.dynamic-insights-section {
+  background-color: #fdf8e3; /* Matching your existing page background for context */
+  padding: 60px 20px; /* Some padding around the section */
+  text-align: center; /* Center the image within the section */
+}
+
+.insights-image {
+  max-width: 100%; /* Ensure the image doesn't overflow its container */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Removes extra space below the image if it's inline */
+  margin: 0 auto; /* Center the image if its max-width is less than 100% */
+  border-radius: 10px; /* Optional: adds a slight border-radius to match card styles */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow */
+}
+
+/* Optional: Media queries for responsiveness if needed.
+  For example, to adjust padding or max-width on smaller screens.
+*/
+@media (max-width: 768px) {
+  .dynamic-insights-section {
+    padding: 30px 15px;
+  }
+}
+
+
