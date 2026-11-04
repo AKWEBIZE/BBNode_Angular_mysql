@@ -1,7 +1,9 @@
 export const environment = {
   production: true,
-  // Path must match the backend's server.servlet.context-path (/bigbisort-imp-exp) - update the
-  // host to the real production domain once one is assigned.
-  apiBaseUrl: 'https://api.bigbisort.com/bigbisort-imp-exp',
+  // The Node API on Hostinger. The /bigbisort-imp-exp path is the backend's
+  // BASE_PATH, kept from the original Spring context-path. Change this host if
+  // the API moves to a custom domain, and update CORS_ORIGINS on the API to
+  // match this app's origin.
+  apiBaseUrl: 'https://mediumvioletred-okapi-683426.hostingersite.com/bigbisort-imp-exp',
   googleClientId: '1063456149323-1tsum2ug1i536aqnhp1pehuio28ui163.apps.googleusercontent.com'
 };
