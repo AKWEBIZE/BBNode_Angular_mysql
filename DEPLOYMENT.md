@@ -60,7 +60,7 @@ Before deploying the frontend, set its production API URL in
 `frontend/src/environments/environment.prod.ts`:
 
 ```ts
-apiBaseUrl: 'https://<api-host>/bigbisort-imp-exp',
+apiBaseUrl: 'https://api.bigbisort.com/bigbisort-imp-exp',
 ```
 
 It currently reads `https://api.bigbisort.com/bigbisort-imp-exp`. **If that
