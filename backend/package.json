@@ -8,6 +8,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "prisma generate && tsc -p tsconfig.json && prisma migrate deploy",
+    "// postinstall": "Hostinger's Express preset runs only `npm install`, never a build script, so the compile is hooked here or dist/ never exists.",
+    "postinstall": "prisma generate && tsc -p tsconfig.json && prisma migrate deploy",
     "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
@@ -15,8 +17,15 @@
     "smoke": "tsx scripts/smoke.ts",
     "typecheck": "tsc --noEmit"
   },
+  "// dependencies": "typescript, prisma and the @types live here, not in devDependencies: the host installs with NODE_ENV=production, which omits dev packages, and postinstall needs all of them to compile.",
   "dependencies": {
     "@prisma/client": "6.1.0",
+    "@types/bcryptjs": "2.4.6",
+    "@types/cors": "2.8.17",
+    "@types/express": "4.17.21",
+    "@types/jsonwebtoken": "9.0.7",
+    "@types/node": "22.10.2",
+    "@types/nodemailer": "6.4.17",
     "bcryptjs": "2.4.3",
     "cors": "2.8.5",
     "dotenv": "16.4.7",
@@ -24,19 +33,13 @@
     "helmet": "8.0.0",
     "jsonwebtoken": "9.0.2",
     "nodemailer": "6.9.16",
+    "prisma": "6.1.0",
     "twilio": "5.4.0",
+    "typescript": "5.7.2",
     "uuid": "11.0.3",
     "zod": "3.24.1"
   },
   "devDependencies": {
-    "@types/bcryptjs": "2.4.6",
-    "@types/cors": "2.8.17",
-    "@types/express": "4.17.21",
-    "@types/jsonwebtoken": "9.0.7",
-    "@types/node": "22.10.2",
-    "@types/nodemailer": "6.4.17",
-    "prisma": "6.1.0",
-    "tsx": "4.19.2",
-    "typescript": "5.7.2"
+    "tsx": "4.19.2"
   }
 }
