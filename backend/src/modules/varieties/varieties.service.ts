@@ -36,6 +36,17 @@ function toCreateData(req: VarietyRequest, productId: string | null): Prisma.Var
     price_per_unit: req.price_per_unit ?? null,
     availability: req.availability ?? null,
     certifications: req.certifications ?? null,
+    grade: req.grade ?? null,
+    packingType: req.packingType ?? null,
+    packingDetail: req.packingDetail ?? null,
+    moq: req.moq ?? null,
+    availableQuantity: req.availableQuantity ?? null,
+    priceMin: req.priceMin ?? null,
+    priceMax: req.priceMax ?? null,
+    paymentTerms: req.paymentTerms ?? null,
+    deliveryTimeDays: req.deliveryTimeDays ?? null,
+    moistureContent: req.moistureContent ?? null,
+    processingType: req.processingType ?? null,
     ...(productId ? { product: { connect: { id: productId } } } : {}),
   };
 }

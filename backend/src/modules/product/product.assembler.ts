@@ -16,6 +16,12 @@ export interface ProductResponse {
   subcategory: string | null;
   description: string | null;
   image_url: string | null;
+  // Listing detail the buyer pages read; null until a seller supplies it.
+  country: string | null;
+  location: string | null;
+  productTag: string | null;
+  inStock: boolean | null;
+  farmerInfo: string | null;
   varietiesList?: VarietyResponse[];
 }
 
@@ -27,6 +33,11 @@ export function toProductResponse(entity: ProductWithVarieties): ProductResponse
     subcategory: entity.subcategory,
     description: entity.description,
     image_url: entity.image_url,
+    country: entity.country,
+    location: entity.location,
+    productTag: entity.productTag,
+    inStock: entity.inStock,
+    farmerInfo: entity.farmerInfo,
   };
 
   // Java only set varietiesList when the set was non-empty, leaving it null otherwise.

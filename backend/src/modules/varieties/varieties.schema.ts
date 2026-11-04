@@ -26,6 +26,17 @@ export const varietyRequestSchema = z.object({
   price_per_unit: z.string().nullish(),
   availability: z.string().nullish(),
   certifications: z.string().nullish(),
+  grade: z.string().nullish(),
+  packingType: z.string().nullish(),
+  packingDetail: z.string().nullish(),
+  moq: z.coerce.number().int().nullish(),
+  availableQuantity: z.coerce.number().int().nullish(),
+  priceMin: z.coerce.number().nullish(),
+  priceMax: z.coerce.number().nullish(),
+  paymentTerms: z.string().nullish(),
+  deliveryTimeDays: z.string().nullish(),
+  moistureContent: z.string().nullish(),
+  processingType: z.string().nullish(),
 });
 
 export const addVarietiesSchema = z.array(varietyRequestSchema);

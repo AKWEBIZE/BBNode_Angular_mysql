@@ -48,6 +48,11 @@ export async function addProduct(
           category: req.category ?? null,
           subcategory: req.subcategory ?? null,
           image_url: req.image_url ?? null,
+          country: req.country ?? null,
+          location: req.location ?? null,
+          productTag: req.productTag ?? null,
+          inStock: req.inStock ?? true,
+          farmerInfo: req.farmerInfo ?? null,
         },
       });
 

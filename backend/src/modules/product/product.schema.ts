@@ -14,6 +14,11 @@ export const productRequestSchema = z.object({
   description: z.string().nullish(),
   image_url: z.string().nullish(),
   quantity: bigIntegerLike,
+  country: z.string().nullish(),
+  location: z.string().nullish(),
+  productTag: z.string().nullish(),
+  inStock: z.boolean().nullish(),
+  farmerInfo: z.string().nullish(),
   varietiesRequestBeanList: z.array(varietyRequestSchema).nullish(),
 });
 

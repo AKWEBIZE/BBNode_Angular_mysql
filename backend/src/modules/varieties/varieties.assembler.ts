@@ -17,6 +17,23 @@ export interface VarietyResponse {
   price_per_unit: string | null;
   availability: string | null;
   certifications: string | null;
+  // Trade detail the buyer pages read; null until a seller supplies it.
+  grade: string | null;
+  packingType: string | null;
+  packingDetail: string | null;
+  moq: number | null;
+  availableQuantity: number | null;
+  priceMin: number | null;
+  priceMax: number | null;
+  paymentTerms: string | null;
+  deliveryTimeDays: string | null;
+  moistureContent: string | null;
+  processingType: string | null;
+}
+
+/** Prisma returns Decimal for money columns; the frontend expects numbers. */
+function toNumber(value: { toNumber(): number } | null): number | null {
+  return value === null ? null : value.toNumber();
 }
 
 export function toVarietyResponse(entity: Variety): VarietyResponse {
@@ -36,6 +53,17 @@ export function toVarietyResponse(entity: Variety): VarietyResponse {
     price_per_unit: entity.price_per_unit,
     availability: entity.availability,
     certifications: entity.certifications,
+    grade: entity.grade,
+    packingType: entity.packingType,
+    packingDetail: entity.packingDetail,
+    moq: entity.moq,
+    availableQuantity: entity.availableQuantity,
+    priceMin: toNumber(entity.priceMin),
+    priceMax: toNumber(entity.priceMax),
+    paymentTerms: entity.paymentTerms,
+    deliveryTimeDays: entity.deliveryTimeDays,
+    moistureContent: entity.moistureContent,
+    processingType: entity.processingType,
   };
 }
 
