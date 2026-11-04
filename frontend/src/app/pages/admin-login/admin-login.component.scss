@@ -1,0 +1,44 @@
+@import '../login/login.component.scss';
+
+// Phone field with +91 prefix
+.phone-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.8);
+
+  .country-code-prefix {
+    padding: 10px 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    background: #e8f5e9;
+    border-right: 1px solid #ccc;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .phone-field {
+    border: none !important;
+    border-radius: 0 !important;
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+// Read-only country field (locked to India)
+.readonly-field {
+  background-color: #e8f5e9 !important;
+  color: #2e7d32 !important;
+  font-weight: 600;
+  cursor: not-allowed;
+  opacity: 0.85;
+}

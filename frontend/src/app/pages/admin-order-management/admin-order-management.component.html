@@ -1,0 +1,192 @@
+<div class="order-mgmt-page">
+
+  <!-- ═══════════════ LIST VIEW ═══════════════ -->
+  <ng-container *ngIf="mode === 'list'">
+    <div class="page-header">
+      <div>
+        <h2>Buyer Orders</h2>
+        <p class="subtitle">Record and track buyer orders on behalf of buyers.</p>
+      </div>
+      <button class="btn-primary" (click)="openCreateForm()">+ Add Order</button>
+    </div>
+
+    <div class="toolbar">
+      <div class="filter-row">
+        <input type="text" class="search-input" placeholder="Filter by buyer name..."
+               [(ngModel)]="filterBuyerName" (ngModelChange)="onFilterChange()" />
+        <input type="text" class="search-input" placeholder="Filter by product name..."
+               [(ngModel)]="filterProductName" (ngModelChange)="onFilterChange()" />
+        <select class="search-input status-select" [(ngModel)]="filterStatus" (ngModelChange)="onFilterChange()">
+          <option value="">All Statuses</option>
+          <option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</option>
+        </select>
+        <button class="btn-outline" (click)="clearFilters()">Clear</button>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table *ngIf="orders.length > 0">
+        <thead>
+          <tr>
+            <th>Order #</th>
+            <th>Buyer</th>
+            <th>Product</th>
+            <th>Seller</th>
+            <th>Quantity</th>
+            <th>Total / Paid / Balance</th>
+            <th>Expected Delivery</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders">
+            <td>{{ order.orderNumber }}</td>
+            <td>{{ order.buyerInfoBean?.name || '—' }}</td>
+            <td>{{ productNames(order) }}</td>
+            <td>{{ order.sellerName || '—' }}</td>
+            <td>{{ order.quantity || '—' }}</td>
+            <td>
+              <div class="money-line"><strong>₹ {{ order.amount ?? '—' }}</strong></div>
+              <div class="money-sub">Paid ₹{{ order.paidAmount ?? 0 }} · Bal ₹{{ order.balanceAmount ?? 0 }}</div>
+            </td>
+            <td>{{ order.estimationDateOfArrival || '—' }}</td>
+            <td>
+              <select class="status-select-inline" [ngModel]="order.orderStatus"
+                      [disabled]="statusUpdatingOrderId === order.orderId"
+                      (ngModelChange)="changeStatus(order, $event)">
+                <option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="empty-state" *ngIf="!loading && orders.length === 0">No orders found.</div>
+      <div class="empty-state" *ngIf="loading">Loading orders...</div>
+    </div>
+
+    <div class="pagination" *ngIf="orders.length > 0">
+      <button [disabled]="currentPage === 0" (click)="prevPage()">&lsaquo;</button>
+      <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+      <button [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">&rsaquo;</button>
+    </div>
+  </ng-container>
+
+  <!-- ═══════════════ CREATE FORM ═══════════════ -->
+  <ng-container *ngIf="mode === 'create'">
+    <div class="page-header">
+      <div>
+        <h2>Add Buyer Order</h2>
+        <p class="subtitle">Record an order placed by a buyer.</p>
+      </div>
+    </div>
+
+    <div class="form-card">
+
+      <!-- Buyer search -->
+      <div class="form-group searchable-group">
+        <label>Buyer Name *</label>
+        <input type="text" class="form-input" placeholder="Search buyers by name..."
+               [(ngModel)]="buyerQuery" (focus)="onBuyerFocus()" (input)="onBuyerQueryInput()" />
+        <div class="dropdown-panel" *ngIf="buyerDropdownOpen" (scroll)="onBuyerListScroll($event)">
+          <div class="dropdown-item" *ngFor="let b of buyerResults" (click)="selectBuyer(b)">
+            <span class="d-name">{{ b.businessName || b.name }}</span>
+            <span class="d-sub">{{ b.name }} · {{ b.country }}</span>
+          </div>
+          <div class="dropdown-empty" *ngIf="!buyerLoading && buyerResults.length === 0">No buyers found</div>
+          <div class="dropdown-loading" *ngIf="buyerLoading">Loading...</div>
+        </div>
+        <span class="field-error" *ngIf="formErrors.buyer">{{ formErrors.buyer }}</span>
+        <span class="selected-tag" *ngIf="selectedBuyer">Selected: {{ selectedBuyer.businessName || selectedBuyer.name }}</span>
+      </div>
+
+      <!-- Product search -->
+      <div class="form-group searchable-group">
+        <label>Product Name / ID *</label>
+        <input type="text" class="form-input" placeholder="Search by product name or paste product id..."
+               [(ngModel)]="productQuery" (focus)="onProductFocus()" (input)="onProductQueryInput()" />
+        <div class="dropdown-panel" *ngIf="productDropdownOpen" (scroll)="onProductListScroll($event)">
+          <div class="dropdown-item" *ngFor="let p of productResults" (click)="selectProduct(p)">
+            <span class="d-name">{{ p.productName }}</span>
+            <span class="d-sub">{{ p.category }} · Seller: {{ p.sellerName }}</span>
+          </div>
+          <div class="dropdown-empty" *ngIf="!productLoading && productResults.length === 0">No products found</div>
+          <div class="dropdown-loading" *ngIf="productLoading">Loading...</div>
+        </div>
+        <span class="field-error" *ngIf="formErrors.product">{{ formErrors.product }}</span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Seller Name</label>
+          <input type="text" class="form-input" [value]="selectedProduct?.sellerName || ''" disabled />
+        </div>
+        <div class="form-group">
+          <label>Quality</label>
+          <select class="form-input" [(ngModel)]="grade" [disabled]="!selectedProduct?.grades?.length">
+            <option value="">{{ selectedProduct?.grades?.length ? 'Select grade' : 'No grade options' }}</option>
+            <option *ngFor="let g of selectedProduct?.grades" [value]="g">{{ gradeLabel(g) }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Quantity *</label>
+          <div class="quantity-input-group">
+            <input type="number" class="form-input" min="0" placeholder="e.g. 500" [(ngModel)]="quantityValue" />
+            <select class="form-input unit-select" [(ngModel)]="quantityUnit">
+              <option *ngFor="let u of measurementUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+          <span class="field-error" *ngIf="formErrors.quantity">{{ formErrors.quantity }}</span>
+        </div>
+        <div class="form-group">
+          <label>Payment Method *</label>
+          <select class="form-input" [(ngModel)]="paymentMethod">
+            <option value="">Select payment method</option>
+            <option *ngFor="let m of paymentMethods" [value]="m">{{ m }}</option>
+          </select>
+          <span class="field-error" *ngIf="formErrors.paymentMethod">{{ formErrors.paymentMethod }}</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Total *</label>
+          <input type="number" class="form-input" min="0" [(ngModel)]="amount" />
+          <span class="field-error" *ngIf="formErrors.amount">{{ formErrors.amount }}</span>
+        </div>
+        <div class="form-group">
+          <label>Paid *</label>
+          <input type="number" class="form-input" min="0" [(ngModel)]="paidAmount" />
+          <span class="field-error" *ngIf="formErrors.paidAmount">{{ formErrors.paidAmount }}</span>
+        </div>
+        <div class="form-group">
+          <label>Balance</label>
+          <input type="text" class="form-input" [value]="balance" disabled />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Expected Delivery Date *</label>
+          <input type="date" class="form-input" [(ngModel)]="estimationDateOfArrival" />
+          <span class="field-error" *ngIf="formErrors.estimationDateOfArrival">{{ formErrors.estimationDateOfArrival }}</span>
+        </div>
+        <div class="form-group">
+          <label>Order Status</label>
+          <select class="form-input" [(ngModel)]="status">
+            <option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-outline" (click)="cancelCreate()" [disabled]="isSubmitting">Cancel</button>
+        <button class="btn-primary" (click)="save()" [disabled]="isSubmitting">{{ isSubmitting ? 'Saving...' : 'Save' }}</button>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

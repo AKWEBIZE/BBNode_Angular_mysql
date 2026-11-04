@@ -1,0 +1,33 @@
+@import '../onboarding-shared.scss';
+
+.btn-continue-inline {
+  background: #F9A825;
+  color: #1B5E20;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) { background: darken(#F9A825, 5%); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.btn-change {
+  background: #E8F5E9;
+  color: #2E7D32;
+  border: 1px solid #C8E6C9;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.file-info {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}

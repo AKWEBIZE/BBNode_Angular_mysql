@@ -1,0 +1,71 @@
+<div class="buyer-layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="mark">B</div>
+      <div>
+        <div class="name">BIGBISORT</div>
+        <div class="sub">IMPORT &amp; EXPORT PVT LTD</div>
+      </div>
+    </div>
+
+    <nav>
+      <a class="nav-item" routerLink="/buyer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <span class="ic">▦</span> Dashboard
+      </a>
+      <a class="nav-item" routerLink="/buyer/explore" routerLinkActive="active">
+        <span class="ic">⌕</span> Explore Products
+      </a>
+      <a class="nav-item" routerLink="/buyer/orders" routerLinkActive="active">
+        <span class="ic">▢</span> My Orders
+      </a>
+      <a class="nav-item" routerLink="/buyer/WL" routerLinkActive="active">
+        <span class="ic">♡</span> Saved / Wishlist
+      </a>
+      <a class="nav-item" routerLink="/buyer/messages" routerLinkActive="active">
+        <span class="ic">✉</span> Messages <span class="badge" *ngIf="messageCount > 0">{{ messageCount }}</span>
+      </a>
+      <span class="nav-item disabled">
+        <span class="ic">📊</span> Market Insights
+      </span>
+      <span class="nav-item disabled">
+        <span class="ic">▤</span> Documents &amp; Compliance
+      </span>
+      <span class="nav-item disabled">
+        <span class="ic">⚙</span> Account Settings
+      </span>
+    </nav>
+
+    <div class="promo">
+      <div class="tag">🌾 Our Promise</div>
+      <p>Connecting global buyers with trusted Indian farmers for quality and reliability.</p>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="top-right">
+        <div class="bell">
+          🔔<span class="dot" *ngIf="notificationCount > 0">{{ notificationCount }}</span>
+        </div>
+        <div class="user-menu-wrapper">
+          <div class="profile" (click)="toggleUserMenu()">
+            <div class="avatar">{{ initials }}</div>
+            <div class="who">
+              <div class="nm">{{ buyerName || 'Buyer' }}</div>
+              <div class="rl">Buyer</div>
+            </div>
+          </div>
+          <div class="user-dropdown" *ngIf="showUserMenu">
+            <button class="logout-option" (click)="logout()">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,173 @@
+<div class="seller-mgmt-container">
+  <!-- ─── Filter Bar ─── -->
+  <div class="filter-header">
+    <div class="filter-status-dropdown">
+      <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+        <option *ngFor="let option of statusOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div class="table-header-controls">
+      <h2 class="table-title">Seller List</h2>
+      <div class="filters-row">
+      </div>
+    </div>
+
+    <!-- ─── Data Table ─── -->
+    <table class="seller-table">
+      <thead>
+        <tr>
+          <th>SELLER NAME & ID</th>
+          <th>PRODUCTS</th>
+          <th>LOCATION</th>
+          <th>STATUS</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let seller of sellers" 
+            [ngClass]="{'row-selected': isDrawerOpen && selectedSeller?.id === seller.id}">
+          <td>
+            <div class="seller-name clickable" (click)="openSellerDetails(seller.id)">{{ seller.name }}</div>
+            <div class="seller-id-status">
+              <span class="seller-id">{{ seller.sellerCode }}</span>
+              <span class="seller-sub text-muted" *ngIf="seller.businessName"> • {{ seller.businessName }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="product-info clickable" (click)="viewSellerProducts(seller, $event)">
+              <i class="bi bi-box-seam"></i>
+              <span class="product-label">Products</span>
+            </div>
+          </td>
+          <td>
+            <div class="location-info">{{ seller.state }}</div>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(seller.status)">
+              <i class="bi" [ngClass]="getStatusIcon(seller.status)"></i>
+              {{ formatStatus(seller.status) }}
+            </span>
+          </td>
+          <td class="action-cell">
+            <div class="action-menu-container">
+              <button class="btn-icon text-muted" (click)="toggleActionMenu(seller.id, $event)"><i class="bi bi-three-dots"></i></button>
+              
+              <!-- Action Dropdown Menu -->
+              <div class="action-dropdown" *ngIf="activeMenuId === seller.id">
+                <button class="action-item" (click)="viewSeller(seller.id, $event)">
+                  <i class="bi bi-eye"></i> View Profile
+                </button>
+                <button class="action-item" (click)="editSeller(seller.id, $event)">
+                  <i class="bi bi-pencil"></i> Edit Details
+                </button>
+                <div class="action-divider"></div>
+                <button class="action-item text-danger" (click)="deleteSeller(seller.id, $event)">
+                  <i class="bi bi-trash"></i> Delete Seller
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ─── Table Footer (Pagination & Bulk Actions) ─── -->
+    <div class="table-footer">
+      <div class="entries-info">
+        Displaying 1–{{ sellers.length }} of {{ totalSellers }}
+      </div>
+      <div class="bulk-actions" *ngIf="hasSelection">
+         <button class="btn-approve">Approve</button>
+         <button class="btn-reject">Reject</button>
+      </div>
+      <div class="pagination-controls">
+        <div class="page-size-selector">
+          <button *ngFor="let size of pageSizeOptions" 
+                  [ngClass]="{'active': pageSize === size}" 
+                  class="size-btn"
+                  (click)="onPageSizeChange(size)">{{ size }}</button>
+        </div>
+        <button class="btn-export">Export</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Right Drawer Component ─── -->
+<div class="drawer-overlay" *ngIf="isDrawerOpen" (click)="closeDrawer()"></div>
+<div class="right-drawer" [ngClass]="{'open': isDrawerOpen}" *ngIf="selectedSeller">
+  <div class="drawer-header-content">
+    <button class="btn-close" (click)="closeDrawer()"><i class="bi bi-x-lg"></i></button>
+    <div class="seller-profile-banner">
+      <div class="avatar">
+        <div class="avatar-icon"><i class="bi bi-person-fill"></i></div>
+        <span class="status-dot" [ngClass]="getStatusClass(selectedSeller.status)"></span>
+      </div>
+      <div class="profile-info">
+        <h2>{{ selectedSeller.name }} <i class="bi bi-check-circle-fill text-success" *ngIf="selectedSeller.status==='VERIFIED'"></i></h2>
+        <p>{{ selectedSeller.sellerCode }} {{ formatStatus(selectedSeller.status) }}</p>
+      </div>
+      <div class="profile-actions">
+        <button class="btn-icon"><i class="bi bi-telephone-fill"></i> Call</button>
+        <button class="btn-icon"><i class="bi bi-chat-dots-fill"></i> Message</button>
+      </div>
+    </div>
+
+    <!-- Drawer Tabs -->
+    <div class="drawer-tabs">
+      <button [ngClass]="{'active': activeDetailTab === 'Overview'}" (click)="setDetailTab('Overview')">Profile Overview</button>
+      <button [ngClass]="{'active': activeDetailTab === 'Documents'}" (click)="setDetailTab('Documents')">Documents ({{selectedSeller.documentCount}})</button>
+      <button [ngClass]="{'active': activeDetailTab === 'Farm'}" (click)="setDetailTab('Farm')">Farm Details</button>
+    </div>
+  </div>
+
+  <div class="drawer-body" *ngIf="activeDetailTab === 'Overview'">
+    <h3 class="section-title">IDENTITY DETAILS</h3>
+    <ul class="detail-list">
+      <li>
+        <i class="bi bi-check2 text-success" *ngIf="selectedSeller.aadhaarVerified"></i>
+        <span class="detail-label">Aadhaar</span>
+        <span class="detail-value">Verified</span>
+      </li>
+      <li>
+        <i class="bi bi-check2 text-success" *ngIf="selectedSeller.gs1Certificate"></i>
+        <span class="detail-label">GS1 Certificate</span>
+        <span class="detail-value text-muted">{{ selectedSeller.gs1Certificate || 'Not Provided' }}</span>
+      </li>
+      <li>
+        <i class="bi bi-check2 text-success" *ngIf="selectedSeller.produceLicense"></i>
+        <span class="detail-label">Produce License</span>
+        <span class="detail-value text-muted">{{ selectedSeller.produceLicense || 'Not Provided' }}</span>
+      </li>
+      <li>
+        <i class="bi bi-check2 text-success" *ngIf="selectedSeller.farmInspectionDone"></i>
+        <span class="detail-label">Farm Inspection</span>
+        <span class="detail-value text-bold">{{ selectedSeller.farmInspectionDone ? 'Conducted' : 'Pending' }} <i class="bi bi-caret-down-fill text-muted"></i></span>
+      </li>
+    </ul>
+
+    <h3 class="section-title mt-4">NOTES</h3>
+    <div class="notes-box">
+      <textarea [(ngModel)]="noteValue" (focus)="isEditingNotes=true" (blur)="saveNotes()" class="admin-notes" placeholder="Add administrative notes here..."></textarea>
+    </div>
+
+    <div class="whatsapp-preview">
+      <div class="wa-icon"><i class="bi bi-whatsapp"></i></div>
+      <div class="wa-msg">
+        <strong>WhatsApp</strong>
+        <span class="wa-time">05 Apr 2024, 2:50 AM</span>
+      </div>
+      <button class="btn-quick-reply"><i class="bi bi-reply-fill"></i> Quick Reply</button>
+    </div>
+  </div>
+
+  <div class="drawer-footer">
+    <button class="btn-approve" (click)="approveSeller()">Approve</button>
+    <button class="btn-request-update" (click)="requestUpdate()"><i class="bi bi-arrow-counterclockwise"></i> Request Update</button>
+  </div>
+</div>

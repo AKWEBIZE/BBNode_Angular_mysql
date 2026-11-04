@@ -1,0 +1,128 @@
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+/* ============================================================================
+   Bigbisort — global design tokens
+   ----------------------------------------------------------------------------
+   Deliberately tokens-only. Declaring custom properties has no visual effect
+   until something consumes them, so the buyer / seller / admin areas render
+   byte-identically while the public site (navbar, footer, home, about,
+   contact) styles itself from this palette.
+
+   Palette: deep green + harvest gold + cream.
+   ========================================================================= */
+
+:root {
+  /* ---- Greens: primary brand ramp ------------------------------------- */
+  --bb-green-900: #12291d;
+  --bb-green-800: #1a3c2a;
+  --bb-green-700: #24503a;
+  --bb-green-600: #2d5a3f;
+  --bb-green-500: #4a8c5c;
+  --bb-green-400: #6ba87c;
+  --bb-green-200: #c3ddcb;
+  --bb-green-100: #e3efe7;
+  --bb-green-50:  #f1f7f3;
+
+  /* ---- Gold: CTAs, highlights, accents -------------------------------- */
+  --bb-gold-700: #9c7716;
+  --bb-gold-600: #b8901f;
+  --bb-gold-500: #c5922e;
+  --bb-gold-400: #d4a843;
+  --bb-gold-300: #e2bf6d;
+  --bb-gold-200: #eed9a3;
+  --bb-gold-100: #f5e6c8;
+
+  /* ---- Neutrals ------------------------------------------------------- */
+  --bb-cream:      #f7f0e3;
+  --bb-cream-alt:  #f3eddf;
+  --bb-surface:    #ffffff;
+  --bb-surface-2:  #fbf8f2;
+  --bb-ink:        #1e1e1e;
+  --bb-ink-soft:   #4a4a4a;
+  --bb-muted:      #7a7a7a;
+  --bb-border:     #e8e0d4;
+  --bb-border-soft:#f0eae0;
+
+  /* ---- Status --------------------------------------------------------- */
+  --bb-success: #2e7d4f;
+  --bb-warning: #c5922e;
+  --bb-danger:  #c0392b;
+
+  /* ---- Typography ----------------------------------------------------- */
+  --bb-font-display: 'Fraunces', 'Georgia', 'Times New Roman', serif;
+  --bb-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --bb-text-xs:   0.8125rem;  /* 13px */
+  --bb-text-sm:   0.9375rem;  /* 15px */
+  --bb-text-base: 1rem;       /* 16px */
+  --bb-text-lg:   1.125rem;   /* 18px */
+  --bb-text-xl:   1.375rem;   /* 22px */
+  --bb-text-2xl:  1.75rem;    /* 28px */
+  --bb-text-3xl:  2.25rem;    /* 36px */
+  --bb-text-4xl:  3rem;       /* 48px */
+
+  --bb-leading-tight: 1.15;
+  --bb-leading-snug:  1.35;
+  --bb-leading-body:  1.7;
+
+  --bb-tracking-tight: -0.02em;
+  --bb-tracking-wide:  0.08em;
+
+  /* ---- Space (4px base) ----------------------------------------------- */
+  --bb-space-1:  0.25rem;
+  --bb-space-2:  0.5rem;
+  --bb-space-3:  0.75rem;
+  --bb-space-4:  1rem;
+  --bb-space-5:  1.5rem;
+  --bb-space-6:  2rem;
+  --bb-space-7:  2.5rem;
+  --bb-space-8:  3rem;
+  --bb-space-9:  4rem;
+  --bb-space-10: 5.5rem;
+
+  /* ---- Radius --------------------------------------------------------- */
+  --bb-radius-sm:   6px;
+  --bb-radius-md:   10px;
+  --bb-radius-lg:   16px;
+  --bb-radius-xl:   24px;
+  --bb-radius-pill: 999px;
+
+  /* ---- Elevation: warm-tinted, not grey ------------------------------- */
+  --bb-shadow-xs: 0 1px 2px rgba(26, 60, 42, 0.06);
+  --bb-shadow-sm: 0 2px 8px rgba(26, 60, 42, 0.07);
+  --bb-shadow-md: 0 8px 24px rgba(26, 60, 42, 0.09);
+  --bb-shadow-lg: 0 18px 44px rgba(26, 60, 42, 0.13);
+  --bb-shadow-gold: 0 10px 28px rgba(197, 146, 46, 0.28);
+
+  /* ---- Motion --------------------------------------------------------- */
+  --bb-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --bb-transition: 220ms var(--bb-ease);
+
+  /* ---- Layout --------------------------------------------------------- */
+  --bb-container: 1200px;
+  --bb-navbar-h: 76px;
+}
+
+
+/* Safe, area-agnostic base. Nothing here repaints an existing screen. */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

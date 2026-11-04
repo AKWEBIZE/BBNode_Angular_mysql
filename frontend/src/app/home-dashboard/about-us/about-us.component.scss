@@ -1,0 +1,993 @@
+/* ============================================================================
+   About Us — refined
+   ========================================================================= */
+
+:host { display: block; }
+
+/* ==============================
+   Banner Section
+   Now has a centered "About Us" overlay via ::before, a stronger cinematic
+   gradient, and a subtle zoom-in animation on load.
+============================== */
+.homepage-banner {
+  position: relative;
+  width: 100%;
+  height: clamp(380px, 62vh, 580px);
+  overflow: hidden;
+  background-color: var(--bb-green-900);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+    animation: bannerZoom 18s ease-out forwards;
+  }
+
+  /* Cinematic green gradient — heavier at top (navbar hand-off) and bottom
+     (story section hand-off), lighter in the middle to let the image breathe. */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg,
+        rgba(18, 41, 29, 0.68) 0%,
+        rgba(18, 41, 29, 0.18) 35%,
+        rgba(18, 41, 29, 0.08) 55%,
+        rgba(18, 41, 29, 0.72) 100%);
+  }
+
+  /* "About Us" headline generated from CSS. No HTML change needed. */
+  &::before {
+    content: 'About Us';
+    position: absolute;
+    left: 50%;
+    bottom: 18%;
+    transform: translateX(-50%);
+    z-index: 2;
+    font-family: var(--bb-font-display);
+    font-size: clamp(2.5rem, 5.5vw, 4rem);
+    font-weight: 600;
+    letter-spacing: var(--bb-tracking-tight);
+    color: #fff;
+    text-shadow: 0 3px 28px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.3s var(--bb-ease) forwards;
+  }
+
+  @media (max-width: 768px) {
+    height: clamp(280px, 48vh, 400px);
+
+    &::before { font-size: clamp(2rem, 7vw, 2.8rem); bottom: 14%; }
+  }
+}
+
+@keyframes bannerZoom {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(18px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ==============================
+   Our Story Section
+   Reduced from 100vh to a sensible clamped height. Card is wider with
+   better padding. The left-heavy gradient is stronger.
+============================== */
+.our-story-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 0;    /* was 100px — killed in favour of seamless flow */
+
+  .image-overlay-container {
+    position: relative;
+    width: 100%;
+    height: clamp(460px, 68vh, 620px);   /* was 100vh */
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg,
+          rgba(18, 41, 29, 0.82) 0%,
+          rgba(18, 41, 29, 0.48) 40%,
+          rgba(18, 41, 29, 0.12) 70%,
+          rgba(18, 41, 29, 0) 100%);
+    }
+
+    .our-story-content {
+      position: absolute;
+      top: 50%;
+      left: clamp(1.5rem, 4vw, 4rem);
+      transform: translateY(-50%);
+      z-index: 2;
+      color: #ffffff;
+      width: clamp(320px, 44%, 520px);
+      background: rgba(18, 41, 29, 0.38);
+      border: 1px solid rgba(212, 168, 67, 0.3);
+      padding: var(--bb-space-8) var(--bb-space-7);
+      border-radius: var(--bb-radius-xl);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--bb-shadow-lg),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      font-family: var(--bb-font-body);
+
+      h2 {
+        position: relative;
+        font-family: var(--bb-font-display);
+        font-size: clamp(1.9rem, 3.4vw, 2.8rem);
+        font-weight: 600;
+        line-height: var(--bb-leading-tight);
+        letter-spacing: var(--bb-tracking-tight);
+        margin: 0 0 var(--bb-space-5);
+        padding-bottom: var(--bb-space-4);
+        color: #fff;
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 52px;
+          height: 3px;
+          border-radius: 2px;
+          background: linear-gradient(90deg, var(--bb-gold-400), var(--bb-gold-300));
+        }
+      }
+
+      p {
+        font-size: var(--bb-text-lg);
+        line-height: var(--bb-leading-body);
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .image-overlay-container {
+      height: auto;
+
+      &::after { content: none; }
+
+      .our-story-content {
+        position: relative;
+        width: 100%;
+        background: linear-gradient(160deg, var(--bb-green-800) 0%, var(--bb-green-900) 100%);
+        border: none;
+        border-radius: 0;
+        backdrop-filter: none;
+        box-shadow: none;
+        transform: none;
+        left: 0;
+        top: 0;
+        padding: var(--bb-space-7) var(--bb-space-5);
+        text-align: center;
+
+        h2 {
+          padding-bottom: var(--bb-space-3);
+          &::after { left: 50%; transform: translateX(-50%); }
+        }
+
+        p { font-size: var(--bb-text-base); }
+      }
+    }
+  }
+}
+
+/* ==============================
+   Gap Between Sections
+   Reduced from a hard 100px to a proportional value. On dark-to-dark
+   transitions (story→vision) this lets the photos flow together.
+============================== */
+.section-gap {
+  width: 100%;
+  height: 0;    /* was 100px — the sections now butt cleanly */
+  background: transparent;
+
+  @media (max-width: 768px) {
+    height: 0;
+  }
+}
+
+/* ==============================
+   Vision & Mission Section
+   Same reduction from 100vh; cards get an inset glow.
+============================== */
+.vision-mission-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  .image-overlay-container {
+    position: relative;
+    width: 100%;
+    height: clamp(460px, 68vh, 620px);   /* was 100vh */
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg,
+        rgba(18, 41, 29, 0.60) 0%,
+        rgba(18, 41, 29, 0.28) 45%,
+        rgba(18, 41, 29, 0.62) 100%);
+    }
+
+    .vision-mission-content {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      color: #ffffff;
+      padding: 0 clamp(1rem, 5vw, 5%);
+      z-index: 2;
+      gap: var(--bb-space-6);
+      font-family: var(--bb-font-body);
+
+      .vision,
+      .mission {
+        flex: 1 1 0;
+        max-width: 480px;
+        padding: var(--bb-space-8) var(--bb-space-7);
+        border-radius: var(--bb-radius-xl);
+        backdrop-filter: blur(12px);
+        background: rgba(18, 41, 29, 0.40);
+        border: 1px solid rgba(212, 168, 67, 0.28);
+        box-shadow: var(--bb-shadow-lg),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        transition: transform var(--bb-transition), box-shadow var(--bb-transition);
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: var(--bb-shadow-lg),
+                      0 20px 50px rgba(0, 0, 0, 0.2),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        h2 {
+          font-family: var(--bb-font-display);
+          font-size: clamp(1.65rem, 3vw, 2.4rem);
+          font-weight: 600;
+          line-height: var(--bb-leading-tight);
+          letter-spacing: var(--bb-tracking-tight);
+          margin: 0 0 var(--bb-space-4);
+          color: #fff;
+        }
+
+        p {
+          font-size: var(--bb-text-lg);
+          line-height: var(--bb-leading-body);
+          color: rgba(255, 255, 255, 0.9);
+          margin: 0;
+        }
+      }
+
+      .vision {
+        text-align: left;
+        h2::after {
+          content: '';
+          display: block;
+          width: 52px;
+          height: 3px;
+          margin-top: var(--bb-space-3);
+          border-radius: 2px;
+          background: linear-gradient(90deg, var(--bb-gold-400), var(--bb-gold-300));
+        }
+      }
+
+      .mission {
+        text-align: right;
+        h2::after {
+          content: '';
+          display: block;
+          width: 52px;
+          height: 3px;
+          margin: var(--bb-space-3) 0 0 auto;
+          border-radius: 2px;
+          background: linear-gradient(90deg, var(--bb-gold-300), var(--bb-gold-400));
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .image-overlay-container {
+      height: auto;
+
+      &::after { content: none; }
+
+      .vision-mission-content {
+        flex-direction: column;
+        gap: var(--bb-space-5);
+        padding: var(--bb-space-8) var(--bb-space-5);
+        transform: none;
+        top: 0;
+        background: linear-gradient(160deg, var(--bb-green-800) 0%, var(--bb-green-900) 100%);
+
+        .vision,
+        .mission {
+          max-width: none;
+          width: 100%;
+          text-align: center;
+          background: rgba(255, 255, 255, 0.06);
+          border-color: rgba(212, 168, 67, 0.16);
+
+          h2::after { margin-left: auto; margin-right: auto; }
+        }
+
+        .mission h2::after { margin-right: auto; }
+      }
+    }
+  }
+}
+
+/* ==============================
+   Core Values
+   Tighter vertical rhythm, bigger icon medallions, subtle gradient behind
+   the card grid area, and the regional cards get a hover gold-border shift.
+============================== */
+.core-values-section {
+  position: relative;
+  background-color: var(--bb-cream);
+  color: var(--bb-ink);
+  padding: clamp(4rem, 8vw, 6.5rem) 0;
+  text-align: center;
+  font-family: var(--bb-font-body);
+  overflow: hidden;
+
+  /* Subtle radial bloom behind the card grid so it reads as a contained zone
+     rather than floating on a flat cream slab. */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(212, 168, 67, 0.1) 0%, rgba(212, 168, 67, 0) 70%);
+    pointer-events: none;
+  }
+
+  .container {
+    position: relative;
+    width: 90%;
+    max-width: var(--bb-container);
+    margin: 0 auto;
+  }
+
+  .section-title {
+    position: relative;
+    font-family: var(--bb-font-display);
+    font-size: clamp(2rem, 4.2vw, 3rem);
+    font-weight: 600;
+    line-height: var(--bb-leading-snug);
+    letter-spacing: var(--bb-tracking-tight);
+    margin: 0 auto var(--bb-space-9);
+    padding-bottom: var(--bb-space-4);
+    color: var(--bb-green-800);
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 56px;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--bb-gold-400), var(--bb-gold-300));
+    }
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--bb-space-5);
+    margin-bottom: var(--bb-space-10);
+
+    .value-card {
+      position: relative;
+      background-color: var(--bb-surface);
+      border: 1px solid var(--bb-border);
+      border-radius: var(--bb-radius-xl);
+      padding: var(--bb-space-8) var(--bb-space-5) var(--bb-space-6);
+      box-shadow: var(--bb-shadow-sm);
+      overflow: hidden;
+      transition: transform var(--bb-transition), box-shadow var(--bb-transition),
+                  border-color var(--bb-transition);
+
+      /* Subtle green tint at the top of each card — ties the icon medallion
+         to its card visually. */
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--bb-green-500), var(--bb-green-700));
+        border-radius: var(--bb-radius-xl) var(--bb-radius-xl) 0 0;
+        opacity: 0;
+        transition: opacity var(--bb-transition);
+      }
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--bb-shadow-lg);
+        border-color: var(--bb-gold-200);
+
+        &::before { opacity: 1; }
+      }
+
+      .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 74px;
+        height: 74px;
+        margin: 0 auto var(--bb-space-5);
+        font-size: 1.75rem;
+        border-radius: 50%;
+        background: linear-gradient(145deg, var(--bb-green-700) 0%, var(--bb-green-900) 100%);
+        box-shadow: 0 6px 18px rgba(26, 60, 42, 0.22),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+
+      .trust,
+      .transparency,
+      .global-trade,
+      .innovation {
+        color: var(--bb-gold-300);
+      }
+
+      h3 {
+        font-family: var(--bb-font-display);
+        font-size: var(--bb-text-xl);
+        font-weight: 600;
+        letter-spacing: var(--bb-tracking-tight);
+        margin: 0 0 var(--bb-space-3);
+        color: var(--bb-green-800);
+      }
+
+      p {
+        font-size: var(--bb-text-sm);
+        line-height: var(--bb-leading-body);
+        color: var(--bb-ink-soft);
+        margin: 0;
+      }
+    }
+  }
+
+  .footer-text {
+    margin-bottom: var(--bb-space-3);
+
+    h4 {
+      position: relative;
+      display: inline-block;
+      font-family: var(--bb-font-display);
+      font-size: var(--bb-text-2xl);
+      font-weight: 600;
+      letter-spacing: var(--bb-tracking-tight);
+      color: var(--bb-green-800);
+      margin: 0 0 var(--bb-space-3);
+      padding-bottom: var(--bb-space-3);
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--bb-gold-400);
+      }
+    }
+
+    p {
+      font-size: var(--bb-text-base);
+      font-weight: 400;
+      line-height: var(--bb-leading-body);
+      color: var(--bb-ink-soft);
+      margin: 0;
+    }
+  }
+
+  .regional-teams-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--bb-space-4);
+    max-width: 960px;
+    margin: var(--bb-space-7) auto 0;
+
+    .regional-team-card {
+      background-color: var(--bb-surface);
+      border: 1px solid var(--bb-border);
+      border-left: 3px solid var(--bb-gold-400);
+      border-radius: var(--bb-radius-md);
+      padding: var(--bb-space-5) var(--bb-space-4);
+      text-align: left;
+      box-shadow: var(--bb-shadow-xs);
+      transition: transform var(--bb-transition), box-shadow var(--bb-transition),
+                  border-left-color var(--bb-transition);
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--bb-shadow-md);
+        border-left-color: var(--bb-green-500);
+      }
+
+      h5 {
+        font-family: var(--bb-font-body);
+        font-size: var(--bb-text-sm);
+        font-weight: 700;
+        margin: 0 0 var(--bb-space-1);
+        color: var(--bb-green-800);
+      }
+
+      p {
+        font-size: var(--bb-text-xs);
+        line-height: var(--bb-leading-snug);
+        margin: 0;
+        color: var(--bb-muted);
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .values-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: var(--bb-space-9) var(--bb-space-5);
+
+    .values-grid {
+      grid-template-columns: 1fr;
+      gap: var(--bb-space-4);
+
+      .value-card { padding: var(--bb-space-6) var(--bb-space-4); }
+    }
+
+    .regional-teams-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .regional-teams-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+/* ==============================
+   Our Solution
+   Images get a circular mask with a gold ring, making the three-column
+   layout read as a proper diagram rather than loose pngs.
+============================== */
+.our-solution-section {
+  position: relative;
+  background: linear-gradient(160deg, var(--bb-green-800) 0%, var(--bb-green-900) 100%);
+  color: #ffffff;
+  text-align: center;
+  padding: clamp(4rem, 8vw, 6.5rem) var(--bb-space-5);
+  font-family: var(--bb-font-body);
+  overflow: hidden;
+
+  /* Radial gold bloom so the section isn't a flat dark block. */
+  &::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 168, 67, 0.12) 0%, rgba(212, 168, 67, 0) 70%);
+    pointer-events: none;
+  }
+
+  .container {
+    position: relative;
+    max-width: var(--bb-container);
+    margin: 0 auto;
+  }
+
+  h2 {
+    position: relative;
+    font-family: var(--bb-font-display);
+    font-size: clamp(1.85rem, 3.6vw, 2.6rem);
+    font-weight: 600;
+    line-height: var(--bb-leading-snug);
+    letter-spacing: var(--bb-tracking-tight);
+    margin: 0 auto var(--bb-space-9);
+    padding-bottom: var(--bb-space-4);
+    color: #ffffff;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 56px;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--bb-gold-400);
+    }
+  }
+
+  .solution-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(2rem, 5vw, 4.5rem);
+
+    .solution-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+
+      img {
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid var(--bb-gold-400);
+        padding: 4px;
+        background: rgba(212, 168, 67, 0.1);
+        margin-bottom: var(--bb-space-5);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3),
+                    inset 0 0 0 2px rgba(255, 255, 255, 0.08);
+        transition: transform var(--bb-transition), box-shadow var(--bb-transition);
+      }
+
+      &:hover img {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35),
+                    0 0 0 6px rgba(212, 168, 67, 0.2);
+      }
+
+      h3 {
+        font-family: var(--bb-font-display);
+        font-size: var(--bb-text-xl);
+        font-weight: 600;
+        letter-spacing: var(--bb-tracking-tight);
+        color: rgba(255, 255, 255, 0.94);
+        margin: 0;
+      }
+    }
+
+    .solution-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      .platform-box {
+        background: linear-gradient(135deg, var(--bb-gold-400) 0%, var(--bb-gold-500) 100%);
+        color: var(--bb-green-900);
+        font-family: var(--bb-font-display);
+        font-size: var(--bb-text-2xl);
+        font-weight: 700;
+        letter-spacing: var(--bb-tracking-tight);
+        padding: var(--bb-space-4) var(--bb-space-9);
+        border-radius: var(--bb-radius-pill);
+        box-shadow: var(--bb-shadow-gold),
+                    0 0 60px rgba(212, 168, 67, 0.2);
+        margin: var(--bb-space-5) 0;
+        transition: transform var(--bb-transition), box-shadow var(--bb-transition);
+
+        &:hover {
+          transform: scale(1.04);
+          box-shadow: var(--bb-shadow-gold),
+                      0 0 80px rgba(212, 168, 67, 0.28);
+        }
+      }
+
+      .arrow {
+        color: var(--bb-gold-300);
+        font-size: 1.75rem;
+        opacity: 0.85;
+        animation: arrowPulse 2.4s ease-in-out infinite;
+      }
+
+      .arrow-top {
+        transform: rotate(0deg);
+        margin-bottom: var(--bb-space-2);
+      }
+
+      .arrow-bottom {
+        transform: rotate(180deg);
+        margin-top: var(--bb-space-2);
+        animation-delay: 1.2s;
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    padding: var(--bb-space-9) var(--bb-space-5);
+
+    h2 { margin-bottom: var(--bb-space-7); }
+
+    .solution-grid {
+      flex-direction: column;
+      gap: var(--bb-space-7);
+
+      .solution-item img { width: 140px; height: 140px; }
+
+      .platform-box {
+        padding: var(--bb-space-3) var(--bb-space-8);
+        font-size: var(--bb-text-xl);
+      }
+    }
+  }
+}
+
+@keyframes arrowPulse {
+  0%, 100% { opacity: 0.6; transform: rotate(0deg) translateX(0); }
+  50%      { opacity: 1;   transform: rotate(0deg) translateX(4px); }
+}
+
+/* ==============================
+   Impact & Business Model
+   Slightly tightened, better node hover, pulsing platform glow.
+============================== */
+.impact-section {
+  position: relative;
+  background: linear-gradient(180deg, var(--bb-green-900) 0%, var(--bb-green-800) 100%);
+  color: #ffffff;
+  font-family: var(--bb-font-body);
+  padding: clamp(3rem, 6vw, 4.5rem) var(--bb-space-4) var(--bb-space-10);
+  text-align: center;
+  overflow: hidden;
+
+  .container {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .title {
+    position: relative;
+    font-family: var(--bb-font-display);
+    font-size: clamp(1.85rem, 3.6vw, 2.4rem);
+    font-weight: 600;
+    line-height: var(--bb-leading-snug);
+    letter-spacing: var(--bb-tracking-tight);
+    margin: var(--bb-space-1) 0 var(--bb-space-3);
+    padding-bottom: var(--bb-space-4);
+    color: #fff;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 56px;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--bb-gold-400);
+    }
+  }
+
+  .subtitle {
+    font-size: var(--bb-text-lg);
+    line-height: var(--bb-leading-body);
+    margin: 0 auto var(--bb-space-8);
+    max-width: 56ch;
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 1;
+  }
+
+  .model-wrap {
+    position: relative;
+    width: 100%;
+    height: 620px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* center platform */
+  .center-box {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    z-index: 30;
+
+    .platform {
+      background: linear-gradient(135deg, var(--bb-gold-400) 0%, var(--bb-gold-500) 100%);
+      color: var(--bb-green-900);
+      font-family: var(--bb-font-display);
+      font-weight: 700;
+      letter-spacing: var(--bb-tracking-tight);
+      padding: var(--bb-space-4) var(--bb-space-9);
+      border-radius: var(--bb-radius-xl);
+      font-size: var(--bb-text-2xl);
+      box-shadow: var(--bb-shadow-gold),
+                  0 0 80px rgba(212, 168, 67, 0.18);
+      animation: platformGlow 3s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes platformGlow {
+    from { box-shadow: var(--bb-shadow-gold), 0 0 60px rgba(212, 168, 67, 0.14); }
+    to   { box-shadow: var(--bb-shadow-gold), 0 0 100px rgba(212, 168, 67, 0.28); }
+  }
+
+  /* node base */
+  .node {
+    position: absolute;
+    width: 260px;
+    text-align: left;
+    z-index: 40;
+    transition: transform var(--bb-transition);
+
+    &:hover { transform: translateY(-4px); }
+
+    .node-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(212, 168, 67, 0.12);
+      border: 2px solid var(--bb-gold-400);
+      color: var(--bb-gold-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22),
+                  inset 0 0 0 1px rgba(212, 168, 67, 0.06);
+      margin-bottom: var(--bb-space-3);
+      backdrop-filter: blur(4px);
+      transition: box-shadow var(--bb-transition), border-color var(--bb-transition);
+    }
+
+    &:hover .node-icon {
+      border-color: var(--bb-gold-300);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.26),
+                  0 0 0 6px rgba(212, 168, 67, 0.15);
+    }
+
+    .node-text {
+      margin-top: var(--bb-space-3);
+      font-size: var(--bb-text-sm);
+      line-height: var(--bb-leading-snug);
+      color: rgba(255, 255, 255, 0.88);
+    }
+  }
+
+  /* positions — unchanged */
+  .node-farmer {
+    left: 6%;  top: 18%;  width: 240px;  text-align: left;
+    .node-icon { margin-left: 0; margin-right: auto; }
+  }
+
+  .node-buyer {
+    right: 6%;  top: 18%;  width: 240px;  text-align: right;
+    .node-icon { margin-left: auto; margin-right: 0; }
+  }
+
+  .node-export {
+    left: 10%;  bottom: 8%;  width: 240px;  text-align: left;
+    .node-icon { margin-left: 0; margin-right: auto; }
+  }
+
+  .node-shared {
+    left: 44%;  bottom: 6%;  width: 260px;
+    transform: translateX(-8%);
+    text-align: center;
+    .node-icon { margin-left: auto; margin-right: auto; }
+  }
+
+  /* svg arrows overlay */
+  .arrows {
+    position: absolute;
+    left: 0;  top: 0;
+    width: 100%;  height: 100%;
+    pointer-events: none;
+    z-index: 20;
+
+    .arrow-path {
+      fill: none;
+      stroke: var(--bb-gold-400);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 8 8;
+      opacity: 0.65;
+      animation: dashFlow 30s linear infinite;
+    }
+  }
+
+  @keyframes dashFlow {
+    to { stroke-dashoffset: -240; }
+  }
+}
+
+/* responsive */
+@media (max-width: 980px) {
+  .impact-section {
+    .model-wrap { height: 880px; }
+    .node { width: 220px; }
+    .center-box .platform {
+      font-size: var(--bb-text-xl);
+      padding: var(--bb-space-3) var(--bb-space-7);
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .impact-section {
+    padding: var(--bb-space-6) var(--bb-space-3) var(--bb-space-8);
+
+    .title { font-size: var(--bb-text-2xl); }
+
+    .subtitle {
+      font-size: var(--bb-text-sm);
+      margin-bottom: var(--bb-space-5);
+    }
+
+    .model-wrap { height: auto; display: block; }
+
+    .node {
+      position: relative;
+      margin: var(--bb-space-5) auto;
+      width: 86%;
+      text-align: center;
+    }
+
+    .node .node-icon { margin: 0 auto var(--bb-space-3); }
+
+    .center-box {
+      position: relative;
+      left: 50%;
+      transform: translate(-50%, 0);
+      top: 0;
+      margin-bottom: var(--bb-space-2);
+    }
+
+    .arrows { display: none; }
+  }
+}

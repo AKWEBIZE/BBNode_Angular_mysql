@@ -1,0 +1,338 @@
+// Ported from the Spring Boot / JPA model in Bigbisort_BE.
+// Postgres UUID columns become CHAR(36) here, since MySQL has no native UUID type.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+enum AuthenticationType {
+  BUYER
+  SELLER
+  ADMIN
+}
+
+enum UserStatus {
+  REGISTERED
+  ACTIVE
+  REVOKED
+  LOCKED
+}
+
+enum SellerStatus {
+  PENDING
+  IN_REVIEW
+  REJECTED
+  APPROVED
+}
+
+enum BuyerOrderStatus {
+  IN_TRANSIT
+  CANCELLED
+  RETURNED
+  DELIVERED
+}
+
+// AuditEntity was a @MappedSuperclass, so its columns are repeated on each table
+// rather than being a relation. createdId / modifiedId are populated by the
+// audit middleware from the authenticated user.
+
+model Users {
+  id          String  @id @default(uuid()) @db.Char(36)
+  name        String?
+  userName    String? @map("user_name")
+  phoneNumber String? @map("phone_number")
+  firstName   String?
+  lastName    String?
+  email       String?
+
+  // sPhrase holds the bcrypt hash of the password; oldSPhrase keeps prior hashes.
+  sPhrase      String?
+  oldSPhrase   String? @map("old_s_phrase") @db.Text
+  commonUserId String? @db.Char(36)
+
+  businessJustification String?
+  authenticationType    AuthenticationType
+  lock                  Boolean            @default(false) @map("lock_user")
+  userStatus            UserStatus?
+
+  securityQues1 String?
+  securityAns1  String?
+  securityQues2 String?
+  securityAns2  String?
+
+  profile               Bytes?  @map("profile") @db.LongBlob
+  sPhraseResetRequested Boolean @default(false)
+
+  buyer  Buyer?
+  seller Seller?
+  admin  Admin?
+
+  createdAt     DateTime?          @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  active        Boolean            @default(true)
+  createdBy     String             @default("SYSTEM")
+  modifiedBy    String             @default("SYSTEM")
+  auditAuthType AuthenticationType @default(ADMIN) @map("authentication_type_audit")
+  createdId     String?            @db.Char(36)
+  modifiedId    String?            @db.Char(36)
+
+  @@index([name])
+  @@map("Users")
+}
+
+model Admin {
+  id       String  @id @default(uuid()) @db.Char(36)
+  name     String?
+  userName String? @map("user_name")
+  email    String
+
+  usersEntityId String? @unique @map("userEntity_id") @db.Char(36)
+  usersEntity   Users?  @relation(fields: [usersEntityId], references: [id])
+
+  createdAt     DateTime?          @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  active        Boolean            @default(true)
+  createdBy     String             @default("SYSTEM")
+  modifiedBy    String             @default("SYSTEM")
+  auditAuthType AuthenticationType @default(ADMIN) @map("authentication_type")
+  createdId     String?            @db.Char(36)
+  modifiedId    String?            @db.Char(36)
+
+  @@index([id, name])
+  @@map("admin")
+}
+
+model Buyer {
+  id       String  @id @default(uuid()) @db.Char(36)
+  name     String?
+  userName String?
+  email    String?
+  phone    String?
+  address  String?
+  state    String?
+  city     String?
+  zip      String?
+  country  String?
+  password String?
+
+  usersEntityId String? @unique @map("userEntity_id") @db.Char(36)
+  usersEntity   Users?  @relation(fields: [usersEntityId], references: [id])
+
+  orders BuyerOrder[]
+
+  createdAt     DateTime?          @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  active        Boolean            @default(true)
+  createdBy     String             @default("SYSTEM")
+  modifiedBy    String             @default("SYSTEM")
+  auditAuthType AuthenticationType @default(ADMIN) @map("authentication_type")
+  createdId     String?            @db.Char(36)
+  modifiedId    String?            @db.Char(36)
+
+  @@index([name])
+  @@map("BUYER")
+}
+
+model Seller {
+  id      String        @id @default(uuid()) @db.Char(36)
+  name    String?
+  email   String?
+  phone   String?
+  address String?
+  state   String?
+  city    String?
+  zip     String?
+  country String?
+  status  SellerStatus? @map("seller_status")
+
+  usersEntityId String? @unique @map("userEntity_id") @db.Char(36)
+  usersEntity   Users?  @relation(fields: [usersEntityId], references: [id])
+
+  createdAt     DateTime?          @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  active        Boolean            @default(true)
+  createdBy     String             @default("SYSTEM")
+  modifiedBy    String             @default("SYSTEM")
+  auditAuthType AuthenticationType @default(ADMIN) @map("authentication_type")
+  createdId     String?            @db.Char(36)
+  modifiedId    String?            @db.Char(36)
+
+  @@index([name])
+  @@map("SELLER")
+}
+
+model Product {
+  id          String  @id @default(uuid()) @db.Char(36)
+  productName String?
+  category    String?
+  subcategory String?
+  description String?
+  image_url   String?
+
+  // JPA used BigInteger; stored as DECIMAL(65,0) to keep the full range.
+  quantity Decimal? @db.Decimal(65, 0)
+
+  varieties Variety[]
+  orders    BuyerOrder[] @relation("OrdersProductJoin")
+
+  // JPA modelled this as @OneToOne, which put a unique constraint on the join
+  // table's product_id — only one watch-list row could ever exist per product,
+  // so a second buyer saving the same product would fail. Modelled as
+  // one-to-many here; see README.
+  watchList WatchList[]
+
+  createdAt     DateTime?          @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  active        Boolean            @default(true)
+  createdBy     String             @default("SYSTEM")
+  modifiedBy    String             @default("SYSTEM")
+  auditAuthType AuthenticationType @default(ADMIN) @map("authentication_type")
+  createdId     String?            @db.Char(36)
+  modifiedId    String?            @db.Char(36)
+
+  @@index([productName])
+  @@map("PRODUCT")
+}
+
+model Variety {
+  id             String    @id @default(uuid()) @db.Char(36)
+  varietyName    String?   @map("variety_name")
+  description    String?
+  imageUrl       String?
+  origin         String?
+  grower         String?
+  growingMethod  String?
+  harvestDate    DateTime? @map("harvest_date")
+  harvestSeason  String?
+  quality        String?
+  color          String?
+  size           String?
+  price_per_unit String?
+  availability   String?
+  certifications String?
+
+  productId String?  @map("products_id") @db.Char(36)
+  product   Product? @relation(fields: [productId], references: [id])
+
+  createdAt     DateTime?          @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  active        Boolean            @default(true)
+  createdBy     String             @default("SYSTEM")
+  modifiedBy    String             @default("SYSTEM")
+  auditAuthType AuthenticationType @default(ADMIN) @map("authentication_type")
+  createdId     String?            @db.Char(36)
+  modifiedId    String?            @db.Char(36)
+
+  @@index([id])
+  @@map("VARIETIES")
+}
+
+model BuyerOrder {
+  id                      String            @id @default(uuid()) @db.Char(36)
+  orderDate               DateTime?         @map("order_date")
+  paymentMethod           String?
+  billingCompanyName      String?
+  quantity                String?
+  shippingName            String?
+  status                  BuyerOrderStatus?
+  // Declared @Temporal in JPA but typed String; kept as String to preserve behaviour.
+  estimationDateOfArrival String?
+
+  buyerId String? @map("buyer_id") @db.Char(36)
+  buyer   Buyer?  @relation(fields: [buyerId], references: [id])
+
+  products Product[] @relation("OrdersProductJoin")
+
+  createdAt     DateTime?          @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  active        Boolean            @default(true)
+  createdBy     String             @default("SYSTEM")
+  modifiedBy    String             @default("SYSTEM")
+  auditAuthType AuthenticationType @default(ADMIN) @map("authentication_type")
+  createdId     String?            @db.Char(36)
+  modifiedId    String?            @db.Char(36)
+
+  @@index([id])
+  @@map("BUYER_ORDER")
+}
+
+model WatchList {
+  id      String  @id @default(uuid()) @db.Char(36)
+  buyerId String? @db.Char(36)
+
+  productId String?  @db.Char(36)
+  product   Product? @relation(fields: [productId], references: [id])
+
+  createdAt     DateTime?          @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  active        Boolean            @default(true)
+  createdBy     String             @default("SYSTEM")
+  modifiedBy    String             @default("SYSTEM")
+  auditAuthType AuthenticationType @default(ADMIN) @map("authentication_type")
+  createdId     String?            @db.Char(36)
+  modifiedId    String?            @db.Char(36)
+
+  @@index([id])
+  @@index([buyerId])
+  @@index([buyerId, productId])
+  @@map("WATCH_LIST")
+}
+
+model Contact {
+  id          String  @id @default(uuid()) @db.Char(36)
+  name        String?
+  email       String
+  city        String
+  phoneNumber String? @map("Ph_no")
+  message     String  @default("") @db.VarChar(250)
+
+  // Added for the Angular enquiry dialog, which posts to /api/enquiry with more
+  // fields than the original contact form carried. All nullable, so rows
+  // written by /contact/save-contact-info are unaffected.
+  topic       String?
+  loginType   String?
+  state       String?
+  district    String?
+  companyName String?
+  country     String? @map("enquiry_country")
+  comments    String? @db.Text
+
+  createdAt     DateTime?          @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  active        Boolean            @default(true)
+  createdBy     String             @default("SYSTEM")
+  modifiedBy    String             @default("SYSTEM")
+  auditAuthType AuthenticationType @default(ADMIN) @map("authentication_type")
+  createdId     String?            @db.Char(36)
+  modifiedId    String?            @db.Char(36)
+
+  @@index([name])
+  @@map("CONTACT")
+}
+
+model Otp {
+  id        String   @id @default(uuid()) @db.Char(36)
+  userName  String?  @map("user_name")
+  code      String?
+  used      Boolean  @default(false)
+  expiresAt DateTime @map("expires_at")
+
+  createdAt     DateTime?          @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+  active        Boolean            @default(true)
+  createdBy     String             @default("SYSTEM")
+  modifiedBy    String             @default("SYSTEM")
+  auditAuthType AuthenticationType @default(ADMIN) @map("authentication_type")
+  createdId     String?            @db.Char(36)
+  modifiedId    String?            @db.Char(36)
+
+  @@index([id])
+  @@index([userName])
+  @@map("OTP")
+}

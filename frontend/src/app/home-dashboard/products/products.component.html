@@ -1,0 +1,206 @@
+<section class="section-two">
+  <div class="section-content">
+    <!-- Left Side: Text -->
+    <div class="section-text">
+      <h1>Welcome to <span>Bigbisort 🌍</span></h1>
+      <p>Connecting Farmers, Sellers & Buyers with <br />Trust & Transparency</p>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" routerLink="/prdland">Explore Products</button>
+        <button class="btn btn-secondary">Post Requirement</button>
+      </div>
+    </div>
+
+    <!-- Right Side: Image -->
+    <div class="section-image">
+      <img src="assets/images/Prdpage/Prdsec1.png" alt="Farmer with vegetables" />
+    </div>
+  </div>
+</section>
+
+<!-- Everything below is loaded live from the PRODUCT table
+     (POST /product/filter, status=APPROVED) — see products.component.ts. -->
+
+<div class="state-banner" *ngIf="loading">Loading products…</div>
+
+<div class="state-banner error" *ngIf="!loading && loadError">
+  Couldn't reach the product catalog right now. Please refresh, or check back shortly.
+</div>
+
+<div class="state-banner empty" *ngIf="!loading && !loadError && products.length === 0">
+  No products are listed yet — check back soon, or
+  <a routerLink="/login">become a seller</a> to be the first.
+</div>
+
+<ng-container *ngIf="!loading && !loadError && products.length > 0">
+
+<section class="products-section">
+  <h2 class="section-title">Categories</h2>
+  <div class="products-container">
+
+    <!-- Top Categories — derived from whatever categories currently have
+         approved products, not a fixed list. -->
+    <div class="categories">
+      <div class="category-card"
+           *ngFor="let category of categories"
+           [class.selected]="selectedCategory === category.name"
+           [ngStyle]="{'background-color': category.bg}"
+           (click)="filterByCategory(category.name)">
+        <span class="category-icon">{{ category.icon }}</span>
+        <h3>{{ category.name }}</h3>
+        <span>{{ category.count }} Product{{ category.count === 1 ? '' : 's' }}</span>
+        <button class="explore-btn">{{ selectedCategory === category.name ? 'Showing' : 'Explore' }}</button>
+      </div>
+    </div>
+
+    <!-- New Arrivals -->
+    <div class="new-arrivals" *ngIf="newArrivals.length > 0">
+      <h2>New Arrivals</h2>
+      <div class="filter-cards">
+        <div class="product-card" *ngFor="let product of newArrivals">
+          <img *ngIf="product.imageSrc" [src]="product.imageSrc" [alt]="product.name" />
+          <div class="product-icon-tile" *ngIf="!product.imageSrc" [ngStyle]="{'background-color': product.iconBg}">{{ product.icon }}</div>
+          <h4>{{ product.name }}</h4>
+          <p>{{ product.grade }}</p>
+          <p>{{ product.priceLabel }}</p>
+          <div class="actions">
+            <button class="btn-add" (click)="enquire(product)">Add now</button>
+            <button class="btn-enquire" (click)="enquire(product)">Enquire</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Product -->
+    <div class="highlight" *ngIf="featuredProduct as fp">
+      <img *ngIf="fp.imageSrc" [src]="fp.imageSrc" [alt]="fp.name" />
+      <div class="product-icon-tile large" *ngIf="!fp.imageSrc" [ngStyle]="{'background-color': fp.iconBg}">{{ fp.icon }}</div>
+      <div class="highlight-info">
+        <h3>{{ fp.name }}</h3>
+        <p><strong>Origin:</strong> {{ fp.origin }}</p>
+        <p><strong>Delivery:</strong> {{ fp.deliveryTime }}</p>
+        <p *ngIf="fp.farmerInfo">{{ fp.farmerInfo }}</p>
+      </div>
+
+      <div class="highlight-extra">
+        <p><strong>Grade:</strong> {{ fp.grade }}</p>
+        <p><strong>MOQ:</strong> {{ fp.moq }}</p>
+        <p><strong>Packaging:</strong> {{ fp.packaging }}</p>
+        <p><strong>Payment Terms:</strong> {{ fp.paymentTerms }}</p>
+        <button class="enquire-btn" (click)="enquire(fp)">Enquire</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="filter-buttons">
+  <button
+    *ngFor="let btn of filterButtons"
+    [ngClass]="{ 'active': selectedFilter === btn.value }"
+    (click)="setFilter(btn.value)">
+    {{ btn.label }}
+  </button>
+  <button
+    *ngIf="selectedCategory"
+    class="clear-category"
+    (click)="filterByCategory(selectedCategory)">
+    Clear "{{ selectedCategory }}" filter ✕
+  </button>
+</div>
+
+<p class="no-filter-results" *ngIf="filteredProducts.length === 0">
+  No products match this filter right now.
+</p>
+
+<div class="product-carousel-container" *ngIf="filteredProducts.length > 0">
+  <!-- Left Arrow -->
+  <button class="arrow left" (click)="scrollLeft()">&#10094;</button>
+
+  <!-- Scrollable Product List -->
+  <div class="product-carousel" #carousel>
+    <div
+      *ngFor="let prod of filteredProducts"
+      class="product-cards">
+
+      <!-- Product Image -->
+      <div class="product-logo">
+        <img *ngIf="prod.imageSrc" [src]="prod.imageSrc" alt="{{ prod.name }}" />
+        <div class="product-icon-tile" *ngIf="!prod.imageSrc" [ngStyle]="{'background-color': prod.iconBg}">{{ prod.icon }}</div>
+      </div>
+
+      <!-- Product Name -->
+      <h3 class="seller-name">{{ prod.name }}</h3>
+
+      <!-- Product Info -->
+      <div class="rating">
+        <span class="stars">★</span> Grade: {{ prod.grade }}
+      </div>
+
+      <div class="price">
+        {{ prod.priceLabel }}
+        <span class="price-usd" *ngIf="prod.priceApproxUsd">≈ ${{ prod.priceApproxUsd }} (approx.)</span>
+      </div>
+
+      <!-- Trade details -->
+      <div class="trade-meta">
+        <span><strong>MOQ:</strong> {{ prod.moq }}</span>
+        <span><strong>Packaging:</strong> {{ prod.packaging }}</span>
+        <span><strong>Delivery:</strong> {{ prod.deliveryTime }}</span>
+      </div>
+
+      <!-- Tag -->
+      <div class="badges" *ngIf="prod.tag !== 'NONE'">
+        <span class="badge" [ngStyle]="{'background-color': prod.tagColor}">
+          {{ prod.tagLabel }}
+        </span>
+      </div>
+
+      <!-- Enquiry Button -->
+      <button class="enquire-btn" (click)="enquire(prod)">Enquire</button>
+    </div>
+  </div>
+
+  <!-- Right Arrow -->
+  <button class="arrow right" (click)="scrollRight()">&#10095;</button>
+</div>
+
+</ng-container>
+
+<section class="why-choose-section">
+  <div class="section-wrapper">
+    <h2>Why Choose Bigbisort?</h2>
+
+    <div class="features-container">
+
+      <div class="feature-box">
+        <div class="icon">
+          <img style="width: 250px; height: 170px;" src="assets/images/Prdimg/wtcbbshield.png" alt="Trust Icon" />
+        </div>
+        <h3>Trust & Transparency</h3>
+        <p>Building trust and fostering transparent trade.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="icon">
+          <img style="width: 250px; height: 170px;" src="assets/images/Prdimg/glob.png" alt="Traceability Icon" />
+        </div>
+        <h3>Traceability</h3>
+        <p>Tracking every product from farm to market.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="icon">
+          <img style="width: 250px; height: 170px;" src="assets/images/Prdimg/ship.png" alt="Global Trade Icon" />
+        </div>
+        <h3>Global Trade</h3>
+        <p>Connecting farmers and buyers worldwide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dynamic-insights-section">
+  <img src="assets/images/Prdimg/ingsight.png"
+       alt="Dynamic Insights: Pricing Trends, Traceability, Logistics Integration"
+       class="insights-image">
+</section>

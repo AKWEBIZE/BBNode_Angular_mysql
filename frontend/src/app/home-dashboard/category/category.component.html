@@ -1,0 +1,7 @@
+<h2>{{ categoryType | titlecase }}</h2>
+<div class="item-container">
+  <div class="item-card" *ngFor="let item of items">
+    <img [src]="item.image" [alt]="item.name" />
+    <p>{{ item.name }}</p>
+  </div>
+</div>

@@ -1,0 +1,660 @@
+// ═══════════════════════════════════════════
+// Variables
+// ═══════════════════════════════════════════
+$dark-green: #2a4732;
+$green-light: #f5f9f6;
+$amber: #d4a843;
+$amber-bg: #fffbf0;
+$red: #d32f2f;
+$red-bg: #fff5f5;
+$orange: #e67e22;
+$orange-bg: #fff8f0;
+$gray: #7f8c8d;
+$gray-bg: #f9f9f9;
+$border: #e0e0e0;
+$text-main: #333;
+$text-muted: #888;
+$white: #fff;
+$cream-bg: #fdfaf3;
+
+.seller-mgmt-container {
+  padding: 0;
+  max-width: 100%;
+}
+
+// ═══════════════════════════════════════════
+// Filter Header
+// ═══════════════════════════════════════════
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-status-dropdown {
+  display: flex;
+  align-items: center;
+}
+
+.status-select {
+  background: $white;
+  border: 1px solid $border;
+  padding: 8px 36px 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: $dark-green;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232a4732%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat, repeat;
+  background-position: right .7em top 50%, 0 0;
+  background-size: .65em auto, 100%;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  
+  &:hover {
+    border-color: $dark-green;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: $dark-green;
+    box-shadow: 0 0 0 3px rgba($dark-green, 0.1);
+  }
+}
+
+.actions-right {
+  display: flex;
+  gap: 12px;
+
+  .btn-refresh {
+    background: $white;
+    border: 1px solid $border;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: $text-main;
+    cursor: pointer;
+    i { margin-right: 5px; }
+    &:hover { background: $gray-bg; }
+  }
+
+  .btn-primary {
+    background: $dark-green;
+    border: 1px solid $dark-green;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: $white;
+    cursor: pointer;
+    i { margin-right: 5px; }
+    &:hover { background: darken($dark-green, 5%); }
+  }
+}
+
+// ═══════════════════════════════════════════
+// Table Container
+// ═══════════════════════════════════════════
+.table-container {
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 12px;
+  // Removed overflow: hidden so dropdown menus don't get cut off
+}
+
+.table-header-controls {
+  padding: 16px 20px;
+  background: $dark-green;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 11px 11px 0 0;
+  
+  .table-title {
+    color: $white;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .country-select {
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(255,255,255,0.15);
+    color: $white;
+    font-size: 13px;
+    outline: none;
+    
+    option {
+      color: $text-main;
+    }
+  }
+}
+
+.seller-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: 14px 20px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: $gray;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid $border;
+  }
+
+  td {
+    padding: 16px 20px;
+    font-size: 13px;
+    vertical-align: middle;
+    border-bottom: 1px solid $border;
+  }
+
+  tbody tr {
+    transition: background 0.1s;
+    
+    &:hover {
+      background: $cream-bg;
+    }
+    
+    &.row-selected {
+      background: rgba($amber, 0.05);
+    }
+  }
+}
+
+.seller-name {
+  font-weight: 600;
+  color: $text-main;
+  font-size: 14px;
+  margin-bottom: 2px;
+
+  &.clickable {
+    cursor: pointer;
+    transition: color 0.1s;
+    &:hover {
+      color: $dark-green;
+      text-decoration: underline;
+    }
+  }
+}
+
+.seller-id-status {
+  font-size: 12px;
+}
+
+.seller-id {
+  color: $gray;
+}
+
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: $orange;
+  font-weight: 500;
+
+  &.clickable {
+    cursor: pointer;
+    transition: color 0.1s;
+    &:hover {
+      color: darken($orange, 10%);
+      text-decoration: underline;
+    }
+  }
+}
+
+.location-info {
+  color: $text-main;
+  font-weight: 500;
+}
+
+// Badges
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  
+  &.badge-verified {
+    background: $green-light;
+    color: darken($dark-green, 5%);
+    border: 1px solid rgba($dark-green, 0.2);
+  }
+  
+  &.badge-pending {
+    background: $amber-bg;
+    color: darken($amber, 10%);
+    border: 1px solid rgba($amber, 0.3);
+  }
+  
+  &.badge-rejected {
+    background: $red-bg;
+    color: $red;
+    border: 1px solid rgba($red, 0.2);
+  }
+  
+  &.badge-compliance {
+    background: $orange-bg;
+    color: darken($orange, 10%);
+    border: 1px solid rgba($orange, 0.2);
+  }
+
+  &.badge-suspended {
+    background: $gray-bg;
+    color: $gray;
+    border: 1px solid rgba($gray, 0.2);
+  }
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  
+  &:hover {
+    color: $dark-green;
+  }
+}
+
+// Action Menu Dropdown
+.action-cell {
+  position: relative;
+}
+
+.action-menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.action-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  z-index: 100;
+  padding: 8px 0;
+  margin-top: 4px;
+  animation: fadeIn 0.2s ease-in-out;
+
+  .action-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: $text-main;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.1s;
+    
+    i {
+      margin-right: 10px;
+      font-size: 15px;
+      color: $gray;
+    }
+
+    &:hover {
+      background: $gray-bg;
+      color: $dark-green;
+      
+      i {
+        color: $dark-green;
+      }
+    }
+    
+    &.text-danger {
+      color: $red;
+      i { color: $red; }
+      
+      &:hover {
+        background: $red-bg;
+        color: darken($red, 10%);
+        i { color: darken($red, 10%); }
+      }
+    }
+  }
+
+  .action-divider {
+    height: 1px;
+    background: $border;
+    margin: 4px 0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// ═══════════════════════════════════════════
+// Table Footer
+// ═══════════════════════════════════════════
+.table-footer {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: $gray;
+}
+
+.bulk-actions button {
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 8px;
+  
+  &.btn-approve {
+    background: $dark-green;
+    color: $white;
+  }
+  
+  &.btn-reject {
+    background: $red;
+    color: $white;
+  }
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-size-selector {
+  display: flex;
+  gap: 4px; border: 1px solid $border;
+  border-radius: 4px;
+  padding: 2px;
+  
+  .size-btn {
+    background: none;
+    border: none;
+    padding: 2px 6px;
+    border-radius: 2px;
+    color: $gray;
+    cursor: pointer;
+    font-size: 12px;
+    
+    &.active {
+      background: $dark-green;
+      color: $white;
+    }
+  }
+}
+
+.btn-export {
+  background: none;
+  border: none;
+  color: $text-main;
+  font-weight: 500;
+  cursor: pointer;
+  &:hover { text-decoration: underline; }
+}
+
+
+// ═══════════════════════════════════════════
+// Right Drawer (Detail Panel)
+// ═══════════════════════════════════════════
+.drawer-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+.right-drawer {
+  position: fixed;
+  top: 0; right: -450px;
+  width: 400px;
+  height: 100vh;
+  background: $white;
+  z-index: 1001;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.1);
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  
+  &.open {
+    right: 0;
+  }
+}
+
+.drawer-header-content {
+  padding: 0;
+  position: relative;
+  
+  .btn-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: none; border: none;
+    font-size: 20px;
+    color: $gray;
+    cursor: pointer;
+  }
+}
+
+.seller-profile-banner {
+  padding: 30px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 10px;
+
+  .avatar {
+    position: relative;
+    margin-bottom: 15px;
+    
+    .avatar-icon {
+      width: 64px; height: 64px;
+      background: #e8f5e9;
+      color: #81c784;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+    }
+    
+    .status-dot {
+      position: absolute;
+      bottom: 2px; right: 2px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      border: 2px solid $white;
+      
+      &.badge-verified { background: #4caf50; }
+      &.badge-pending { background: #ff9800; }
+      &.badge-rejected { background: #f44336; }
+      &.badge-compliance { background: #ff5722; }
+      &.badge-suspended { background: #9e9e9e; }
+    }
+  }
+
+  h2 {
+    font-size: 18px; margin: 0 0 4px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0 0 16px;
+    font-size: 13px; color: $gray;
+  }
+}
+
+.profile-actions {
+  display: flex; gap: 8px;
+  
+  button {
+    padding: 6px 12px;
+    border: 1px solid $border;
+    border-radius: 4px;
+    background: $white;
+    font-size: 12px; font-weight: 500;
+    color: $text-main;
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer;
+    
+    &:hover { background: $gray-bg; }
+  }
+}
+
+.drawer-tabs {
+  display: flex;
+  border-bottom: 1px solid $border;
+  padding: 0 24px;
+  margin-top: 15px;
+  
+  button {
+    background: none; border: none;
+    padding: 10px 16px;
+    font-size: 13px; font-weight: 600;
+    color: $gray;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    
+    &.active {
+      color: $dark-green;
+      border-bottom-color: $dark-green;
+    }
+  }
+}
+
+// Drawer body
+.drawer-body {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background: $white;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: $gray;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px;
+}
+
+.detail-list {
+  list-style: none; padding: 0; margin: 0;
+  
+  li {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 13px;
+    
+    i { margin-right: 12px; font-size: 16px; }
+    
+    .detail-label {
+      width: 140px;
+      color: $text-main;
+      font-weight: 500;
+    }
+    
+    .detail-value {
+      flex: 1;
+      &.text-bold { font-weight: 600; }
+    }
+  }
+}
+
+.notes-box {
+  background: $cream-bg;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 12px;
+  
+  textarea {
+    width: 100%;
+    min-height: 80px;
+    background: transparent;
+    border: none; outline: none;
+    resize: none;
+    font-size: 13px;
+    font-family: inherit;
+    color: $gray;
+  }
+}
+
+.whatsapp-preview {
+  margin-top: 24px;
+  display: flex; align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba($dark-green, 0.2);
+  gap: 12px;
+  
+  .wa-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: #e8f5e9; color: #4caf50;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  
+  .wa-msg {
+    flex: 1; display: flex; flex-direction: column;
+    strong { font-size: 13px; color: $text-main; }
+    .wa-time { font-size: 11px; color: $gray; }
+  }
+  
+  .btn-quick-reply {
+    background: $dark-green; color: $white;
+    border: none; padding: 6px 12px; border-radius: 16px;
+    font-size: 11px; font-weight: 600; cursor: pointer;
+  }
+}
+
+// Drawer Footer
+.drawer-footer {
+  padding: 16px 24px;
+  border-top: 1px solid $border;
+  display: flex; gap: 12px;
+  
+  button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 600; font-size: 13px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    
+    &.btn-approve {
+      background: $dark-green;
+      color: $white; border: none;
+    }
+    
+    &.btn-request-update {
+      background: rgba($amber, 0.2);
+      color: darken($amber, 15%);
+      border: 1px solid transparent;
+    }
+  }
+}
+
+// Utility classes for template
+.text-muted { color: $gray !important; }
+.text-success { color: #4caf50 !important; }
+.mt-4 { margin-top: 24px !important; }

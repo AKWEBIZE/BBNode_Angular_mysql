@@ -1,0 +1,96 @@
+<div class="panel-header">
+  <button class="back-btn" (click)="onClose()">← Order Details</button>
+  <button class="close-btn" (click)="onClose()">Close ✕</button>
+</div>
+
+<div class="sub-header">
+  <div class="sub-header-top">
+    <div class="order-id-row">
+      <span class="order-id">{{ displayOrderId }}</span>
+      <app-status-badge [status]="uiStatus"></app-status-badge>
+    </div>
+    <button class="btn-outline" (click)="downloadInvoice()">⭳ Download Invoice</button>
+  </div>
+  <div class="placed-on">Placed on {{ order.orderDate | date: 'MMM d, y' }} • {{ order.orderDate | date: 'h:mm a' }}</div>
+</div>
+
+<div class="stepper" *ngIf="steps.length > 0">
+  <div class="step" *ngFor="let step of steps; let last = last" [class.last]="last">
+    <div class="step-node">
+      <div class="dot" [ngClass]="step.state">
+        <span *ngIf="step.state === 'complete'">✓</span>
+      </div>
+      <div class="line" *ngIf="!last" [class.filled]="step.state === 'complete'"></div>
+    </div>
+    <div class="step-label">{{ step.label }}</div>
+    <div class="step-date">{{ step.date ? (step.date | date: 'MMM d') : '--' }}</div>
+  </div>
+</div>
+<div class="cancelled-notice" *ngIf="uiStatus === 'CANCELLED'">This order was cancelled.</div>
+
+<div class="section">
+  <div class="section-title">Order Items</div>
+  <div class="item-row" *ngFor="let product of products">
+    <div class="thumb" [style.background]="productThumb(product).bg">{{ productThumb(product).icon }}</div>
+    <div class="item-text">
+      <div class="p-name">{{ product.productName }}</div>
+      <div class="p-loc">{{ product.location || product.country }}</div>
+    </div>
+    <div class="item-qty">{{ order.quantity }}</div>
+    <div class="item-amount">{{ itemAmount | currency: 'USD' : 'symbol' : '1.0-0' }}</div>
+  </div>
+</div>
+
+<div class="card-row">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">🚢 Shipping Details</div>
+      <a href="javascript:void(0)" (click)="viewTracking()">View Tracking</a>
+    </div>
+    <div class="kv"><span>Port of Loading</span><strong>{{ shipping.portOfLoading }}</strong></div>
+    <div class="kv"><span>Port of Discharge</span><strong>{{ shipping.portOfDischarge }}</strong></div>
+    <div class="kv"><span>Shipping Line</span><strong>{{ shipping.shippingLine }}</strong></div>
+    <div class="kv"><span>Vessel</span><strong>{{ shipping.vessel }}</strong></div>
+    <div class="kv"><span>Estimated Departure</span><strong>{{ shipping.estimatedDeparture | date: 'MMM d, y' }}</strong></div>
+    <div class="kv"><span>Estimated Arrival</span><strong>{{ shipping.estimatedArrival ? (shipping.estimatedArrival | date: 'MMM d, y') : '--' }}</strong></div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">💳 Payment Status</div>
+    </div>
+    <div class="kv"><span>Total Amount</span><strong>{{ amount | currency: 'USD' : 'symbol' : '1.0-0' }}</strong></div>
+    <div class="kv"><span>Payment Terms</span><strong>{{ payment.paymentTerms }}</strong></div>
+    <div class="kv">
+      <span>Payment Status</span>
+      <span class="pay-badge" [ngClass]="payment.paymentStatus === 'Paid' ? 'paid' : payment.paymentStatus === 'Partially Paid' ? 'partial' : 'pending'">
+        {{ payment.paymentStatus }}
+      </span>
+    </div>
+    <div class="kv"><span>Paid Amount</span><strong>{{ payment.paidAmount | currency: 'USD' : 'symbol' : '1.0-0' }} ({{ payment.paidPercentage }}%)</strong></div>
+    <div class="kv"><span>Balance Amount</span><strong>{{ payment.balanceAmount | currency: 'USD' : 'symbol' : '1.0-0' }}</strong></div>
+    <button class="btn-primary full" (click)="viewPaymentDetails()">View Payment Details</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title-row">
+    <div class="section-title">Documents</div>
+    <a href="javascript:void(0)">View All Documents</a>
+  </div>
+  <div class="doc-grid">
+    <div class="doc-card" *ngFor="let doc of documents">
+      <div class="doc-icon">📄</div>
+      <div class="doc-text">
+        <div class="doc-name">{{ doc.name }}</div>
+        <div class="doc-size">{{ doc.sizeKb }} KB</div>
+      </div>
+      <button class="doc-download" (click)="downloadDocument(doc)">⭳</button>
+    </div>
+  </div>
+</div>
+
+<div class="help-card">
+  <div>Our team is here to assist you with your order.</div>
+  <button class="btn-outline">Contact Support</button>
+</div>

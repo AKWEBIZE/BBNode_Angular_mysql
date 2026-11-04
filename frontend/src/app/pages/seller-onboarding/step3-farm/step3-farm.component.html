@@ -1,0 +1,131 @@
+<div class="onboarding-content" style="max-width: 960px;">
+  <h1 class="page-title">Farm Profile</h1>
+  <p class="page-subtitle">Showcase your farm and the crops you grow. This helps us understand your production capacity and connect you with the right buyers.</p>
+
+  <div class="two-panel">
+    <!-- LEFT: Farm Profile -->
+    <div class="panel">
+      <div class="form-card">
+        <div class="card-header">
+          <span class="header-icon">🏠</span> Farm Profile
+        </div>
+        <div class="card-body">
+          <!-- Farm Name -->
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label>Farm / Estate Name <span style="color: #999;">(optional)</span></label>
+            <input type="text" [(ngModel)]="farmName" placeholder="Farm / Estate Name" />
+          </div>
+
+          <!-- Land Size -->
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label>Total Land Size <span class="required">*</span></label>
+            <div style="display: flex; gap: 8px;">
+              <div class="input-with-icon" style="flex: 1;">
+                <span class="icon">👤</span>
+                <input type="number" min="0" [(ngModel)]="landSize" placeholder="0-123" [class.error]="errors.landSize" />
+              </div>
+              <select [(ngModel)]="landUnit" style="width: 120px;">
+                <option *ngFor="let unit of landMetricUnits | keyvalue" [value]="unit.key">{{ unit.value }}</option>
+              </select>
+            </div>
+            <div *ngIf="errors.landSize" class="error-msg">{{ errors.landSize }}</div>
+          </div>
+
+          <!-- Farming Method -->
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label>Farming Method <span class="required">*</span></label>
+            <div class="toggle-group">
+              <button class="toggle-btn" [class.active]="farmingMethod === 'ORGANIC'" (click)="selectFarmingMethod('ORGANIC')">Organic</button>
+              <button class="toggle-btn" [class.active]="farmingMethod === 'CONVENTIONAL'" (click)="selectFarmingMethod('CONVENTIONAL')">Conventional</button>
+              <button class="toggle-btn" [class.active]="farmingMethod === 'MIXED'" (click)="selectFarmingMethod('MIXED')">Mixed</button>
+            </div>
+            <div *ngIf="errors.farmingMethod" class="error-msg">{{ errors.farmingMethod }}</div>
+          </div>
+
+          <!-- Irrigation Type -->
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label>Irrigation Type <span class="required">*</span></label>
+            <select [(ngModel)]="irrigationType" [class.error]="errors.irrigationType">
+              <option value="">Select Irrigation</option>
+              <option *ngFor="let type of irrigationTypes | keyvalue" [value]="type.key">{{ type.value }}</option>
+            </select>
+            <div *ngIf="errors.irrigationType" class="error-msg">{{ errors.irrigationType }}</div>
+          </div>
+
+          <!-- Past Export Experience -->
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label>Past Export Experience?</label>
+            <div class="toggle-group" style="max-width: 200px;">
+              <button class="toggle-btn" [class.active]="!exportExperience" (click)="toggleExportExperience(false)">No</button>
+              <button class="toggle-btn" [class.active]="exportExperience" (click)="toggleExportExperience(true)">Yes</button>
+            </div>
+          </div>
+
+          <!-- Conditional Export Fields -->
+          <div *ngIf="exportExperience" style="padding: 16px; background: #F5F5F5; border-radius: 8px;">
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label>Export Destinations <span class="required">*</span></label>
+              <input type="text" [(ngModel)]="exportDestinations" placeholder="e.g. USA, UK, UAE" [class.error]="errors.exportDestinations" />
+              <div *ngIf="errors.exportDestinations" class="error-msg">{{ errors.exportDestinations }}</div>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label>Products Exported <span class="required">*</span></label>
+              <input type="text" [(ngModel)]="productsExported" placeholder="e.g. Coffee, Pepper" [class.error]="errors.productsExported" />
+              <div *ngIf="errors.productsExported" class="error-msg">{{ errors.productsExported }}</div>
+            </div>
+            <div class="form-group">
+              <label>Export Volume (optional)</label>
+              <input type="text" [(ngModel)]="exportVolume" placeholder="e.g. 500 Tonnes" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Crop Selection -->
+    <div class="panel">
+      <div class="form-card">
+        <div class="card-header">
+          <span class="header-icon">🌾</span> Select Your Crops
+        </div>
+        <div class="card-body">
+          <div *ngIf="errors.crops" class="error-msg" style="margin-bottom: 12px;">{{ errors.crops }}</div>
+
+          <div class="crop-grid">
+            <div 
+              class="crop-card" 
+              *ngFor="let crop of crops"
+              [class.selected]="isCropSelected(crop.id)"
+              (click)="toggleCrop(crop.id)">
+              <div class="crop-image-placeholder" 
+                   [style.background]="'linear-gradient(135deg, #4CAF50, #81C784)'"
+                   style="height: 100px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white;">
+                🌿
+              </div>
+              <div class="crop-name">
+                <span *ngIf="isCropSelected(crop.id)" class="check-icon">✓</span>
+                {{ crop.name }}
+              </div>
+              <div class="crop-check">✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Banner -->
+  <div class="trust-banner">
+    <div class="trust-icon">🛡️</div>
+    <div class="trust-text">
+      Bigbisort uses documents solely for export compliance — we handle all regulations and keep your information private and secure.
+    </div>
+  </div>
+
+  <!-- Save & Continue -->
+  <div style="text-align: center; margin-top: 24px;">
+    <button class="btn-continue-inline" [disabled]="!canContinue" (click)="saveAndContinue()">
+      Save & Continue →
+    </button>
+  </div>
+</div>

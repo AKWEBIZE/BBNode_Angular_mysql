@@ -1,0 +1,344 @@
+/* ===== Bigbisort Seller Registration ===== */
+$dark-green: #1B5E20;
+$medium-green: #2E7D32;
+$light-green: #4CAF50;
+$gold: #F9A825;
+$cream: #FAFAF5;
+$white: #FFFFFF;
+$text-dark: #333333;
+$text-medium: #666666;
+$text-light: #999999;
+$error-red: #D32F2F;
+$border-light: #E0E0E0;
+
+.register-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #E8C840 0%, #D4B030 100%);
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+/* Header */
+.register-header {
+  background: $white;
+  padding: 14px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: $gold;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: $dark-green;
+    }
+  }
+
+  .login-link {
+    font-size: 14px;
+    color: $text-medium;
+
+    a {
+      color: $dark-green;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* Content */
+.register-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: calc(100vh - 66px);
+}
+
+.register-card {
+  background: $white;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  padding: 40px 48px;
+  max-width: 480px;
+  width: 100%;
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.register-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: $dark-green;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.register-subtitle {
+  font-size: 15px;
+  color: $text-medium;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.general-error {
+  background: #FFEBEE;
+  border: 1px solid #EF9A9A;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: $error-red;
+
+  .error-icon {
+    font-size: 16px;
+  }
+}
+
+/* Form */
+.form-body {
+  .form-group {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: $text-dark;
+      margin-bottom: 6px;
+
+      .required {
+        color: $error-red;
+        margin-left: 2px;
+      }
+    }
+
+    .input-with-icon {
+      position: relative;
+
+      .icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $text-light;
+        font-size: 16px;
+        pointer-events: none;
+
+        &.country-code {
+          font-size: 13px;
+          font-weight: 600;
+          color: $text-dark;
+          left: 14px;
+        }
+      }
+
+      input {
+        width: 100%;
+        padding: 12px 14px 12px 40px;
+        border: 1.5px solid $border-light;
+        border-radius: 10px;
+        font-size: 14px;
+        outline: none;
+        background: $white;
+        transition: all 0.2s;
+        box-sizing: border-box;
+
+        &:focus {
+          border-color: $light-green;
+          box-shadow: 0 0 0 3px rgba($light-green, 0.1);
+        }
+
+        &.error {
+          border-color: $error-red;
+          box-shadow: 0 0 0 3px rgba($error-red, 0.08);
+        }
+
+        &::placeholder {
+          color: $text-light;
+        }
+      }
+
+      .toggle-eye {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 16px;
+        user-select: none;
+      }
+    }
+
+    .error-msg {
+      color: $error-red;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .match-msg {
+      color: $light-green;
+      font-size: 12px;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+  }
+}
+
+/* Password Strength */
+.password-strength {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+
+  .strength-bar {
+    flex: 1;
+    height: 4px;
+    background: #E0E0E0;
+    border-radius: 4px;
+    overflow: hidden;
+
+    .strength-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease, background 0.3s ease;
+
+      &.weak {
+        background: $error-red;
+      }
+      &.medium {
+        background: #FF9800;
+      }
+      &.strong {
+        background: $light-green;
+      }
+    }
+  }
+
+  .strength-label {
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 55px;
+
+    &.weak {
+      color: $error-red;
+    }
+    &.medium {
+      color: #FF9800;
+    }
+    &.strong {
+      color: $light-green;
+    }
+  }
+}
+
+/* Submit Button */
+.btn-register {
+  width: 100%;
+  padding: 14px;
+  background: $gold;
+  color: $dark-green;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+
+  &:hover:not(:disabled) {
+    background: darken($gold, 5%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba($gold, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .spinner-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba($dark-green, 0.3);
+      border-top: 2px solid $dark-green;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Terms */
+.terms-text {
+  text-align: center;
+  font-size: 12px;
+  color: $text-light;
+  margin-top: 16px;
+  line-height: 1.5;
+
+  a {
+    color: $dark-green;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+  .register-card {
+    padding: 28px 24px;
+    border-radius: 16px;
+  }
+
+  .register-title {
+    font-size: 22px;
+  }
+}

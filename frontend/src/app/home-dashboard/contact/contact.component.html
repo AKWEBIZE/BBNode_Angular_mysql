@@ -1,0 +1,137 @@
+
+
+<app-enquiry-dialog *ngIf="enquiryOpen" [topic]="selectedTopic" (closed)="enquiryOpen = false"></app-enquiry-dialog>
+
+<app-contact-hero (sendEnquiry)="openEnquiry('Buyer Enquiry')"></app-contact-hero>
+
+
+
+<section class="contact-section">
+  <div class="contact-wrapper">
+
+    <div class="contact-header">
+      <h2 class="main-title">Reach the Right Team, Instantly</h2>
+      <p class="subtitle">
+        Whether you're sourcing produce or already trading with us, we've made it easy to connect with the right people.
+      </p>
+    </div>
+
+    <div class="contact-columns">
+
+      <div class="channels-column">
+        <h3 class="column-title">Choose Your Channel</h3>
+
+        <div class="channel-cards">
+          <article
+            class="channel-card"
+            *ngFor="let channel of contactChannels"
+            [ngClass]="channel.buttonClass"
+          >
+            <i class="material-symbols-outlined card-icon" aria-hidden="true">{{ channel.icon }}</i>
+            <h4 class="card-title">{{ channel.title }}</h4>
+            <p class="card-description">{{ channel.description }}</p>
+            <button type="button" class="card-btn" (click)="goToChannel(channel)">
+              {{ channel.buttonText }}
+            </button>
+          </article>
+        </div>
+      </div>
+
+      <div class="chat-column">
+        <div class="chat-column-header">
+          <h3 class="column-title">Already a Buyer? Chat Live</h3>
+          <div class="feature-tags">
+            <span class="feature-tag" *ngFor="let tag of loggedInBuyerTags">{{ tag.text }}</span>
+          </div>
+        </div>
+
+        <div class="chat-widget">
+          <div class="chat-header">
+            <span class="chat-title">Chat with Bigbisort</span>
+            <button type="button" class="chat-close" aria-label="Close chat">
+              <i class="material-symbols-outlined" aria-hidden="true">close</i>
+            </button>
+          </div>
+          <div class="chat-messages">
+            <div class="message-bubble buyer">
+              Hi, I need 5 tons of fresh apples.
+              <span class="message-sender">Buyer</span>
+            </div>
+            <div class="message-bubble admin">
+              Hello! We can provide that. When do you need it?
+              <span class="message-sender">Admin</span>
+            </div>
+          </div>
+          <div class="chat-input-area">
+            <label for="contact-chat-input" class="visually-hidden">Type a message</label>
+            <input id="contact-chat-input" type="text" placeholder="Type a message…" disabled />
+            <button type="button" class="chat-send" aria-label="Send message" disabled>
+              <i class="material-symbols-outlined" aria-hidden="true">send</i>
+            </button>
+          </div>
+        </div>
+
+        <p class="chat-note">
+          Send your requirements instantly — messages are routed straight to the Bigbisort export desk via email, so nothing gets missed.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="regional-teams-section">
+  <div class="teams-wrapper">
+
+    <div class="teams-header">
+      <h1 class="main-title">Connect with Our Regional Teams</h1>
+      <p class="subtitle">Local experts helping global trade run smoothly.</p>
+    </div>
+
+    <div class="map-container">
+
+      <div class="map-visual">
+
+        <div class="map-pin shimla">
+          <span class="location-label">Shimla, HP</span>
+          <i class="material-symbols-outlined pin-icon">location_on</i>
+        </div>
+
+        <div class="map-pin srinagar">
+          <span class="location-label">Srinagar, J&K</span>
+          <i class="material-symbols-outlined pin-icon">location_on</i>
+        </div>
+
+        <div class="map-pin coimbatore">
+          <span class="location-label">Coimbatore, TN</span>
+          <i class="material-symbols-outlined pin-icon">location_on</i>
+        </div>
+
+        <div class="map-pin chennai">
+          <span class="location-label">Chennai (HQ)</span>
+          <i class="material-symbols-outlined pin-icon">location_on</i>
+        </div>
+      </div>
+
+    </div>
+
+    <table class="contact-table">
+      <thead>
+        <tr>
+          <th>Region</th>
+          <th>Focus Area</th>
+          <th>Contact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let team of regionalTeams">
+          <td>{{ team.region }}</td>
+          <td>{{ team.focus }}</td>
+          <td><a [href]="'mailto:' + team.email">{{ team.email }}</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>

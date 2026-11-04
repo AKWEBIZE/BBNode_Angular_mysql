@@ -1,0 +1,201 @@
+<div class="product-mgmt-page">
+  <div class="page-header">
+    <h2>Product Management</h2>
+    <p class="subtitle">Review queue, approval, media review, and categorization.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab" [class.active]="activeTab === 'ALL'" (click)="setTab('ALL')">
+      All Products
+    </button>
+    <button class="tab" [class.active]="activeTab === 'REVIEW'" (click)="setTab('REVIEW')">
+      Product Review Queue
+    </button>
+    <button class="tab" [class.active]="activeTab === 'APPROVED'" (click)="setTab('APPROVED')">
+      Approved Products
+    </button>
+    <button class="tab" [class.active]="activeTab === 'MEDIA'" (click)="setTab('MEDIA')">
+      Product Media Review
+    </button>
+    <button class="tab" [class.active]="activeTab === 'CATEGORIES'" (click)="setTab('CATEGORIES')">
+      Product Categorization
+    </button>
+  </div>
+
+  <!-- All / Review Queue / Approved Products: same table, different status filter -->
+  <ng-container *ngIf="activeTab === 'ALL' || activeTab === 'REVIEW' || activeTab === 'APPROVED'">
+    <div class="main-row">
+      <div class="list-col" [class.narrow]="selectedProduct">
+        <div class="queue-header-bar">
+          <div class="qh-left">
+            <span class="qh-title">
+              {{ activeTab === 'ALL' ? 'All Products' : (activeTab === 'REVIEW' ? 'Product Review Queue' : 'Approved Products') }}
+              ({{ totalProducts }})
+            </span>
+            <button class="qh-refresh" title="Refresh" (click)="refresh()"><i class="bi bi-arrow-clockwise"></i></button>
+          </div>
+          <select class="qh-category-select" [(ngModel)]="categoryFilter">
+            <option value="">All Categories</option>
+            <option *ngFor="let c of categories" [value]="c.key">{{ c.label }}</option>
+          </select>
+        </div>
+
+        <div class="toolbar">
+          <div class="filter-row">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search by product name…"
+              [(ngModel)]="productNameQuery"
+              (keyup.enter)="onSearch()" />
+          </div>
+          <div class="filter-row">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search by seller name…"
+              [(ngModel)]="sellerNameQuery"
+              (keyup.enter)="onSearch()" />
+            <button class="btn-outline" (click)="onSearch()">Search</button>
+          </div>
+        </div>
+
+        <div class="table-wrapper" *ngIf="displayedProducts.length > 0">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Seller Name</th>
+                <th>Quantity</th>
+                <th>Date Added</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of displayedProducts" (click)="openProductDetails(p.id)" [class.active]="selectedProduct?.id === p.id">
+                <td>
+                  <div class="p-name">{{ p.productName }}</div>
+                  <span class="tag" *ngIf="p.qualityGrade">{{ p.qualityGrade }}</span>
+                  <span class="tag" [ngClass]="statusClass(p.status)">{{ statusLabel(p.status) }}</span>
+                </td>
+                <td>{{ p.sellerName || '—' }}</td>
+                <td>{{ p.quantitySummary }}</td>
+                <td>{{ p.createdAt | date: 'MMM d, y' }}</td>
+                <td class="cell-action">
+                  <select
+                    class="status-select"
+                    title="Update status"
+                    (click)="$event.stopPropagation()"
+                    (change)="onRowStatusChange(p, $event)">
+                    <option value="" selected disabled>Set status…</option>
+                    <option *ngFor="let opt of rowStatusOptions" [value]="opt.value">{{ opt.label }}</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="empty-state" *ngIf="displayedProducts.length === 0">
+          <ng-container *ngIf="categoryFilter && products.length > 0; else noProductsMsg">
+            No "{{ categoryFilter }}" products on this page. Clear the category filter or check another page to see the rest.
+          </ng-container>
+          <ng-template #noProductsMsg>
+            {{ activeTab === 'ALL' ? 'No products found.' : (activeTab === 'REVIEW' ? 'No products waiting for review.' : 'No approved products yet.') }}
+          </ng-template>
+        </div>
+
+        <div class="pagination" *ngIf="totalProducts > 0">
+          <button [disabled]="currentPage === 0" (click)="goToPage(currentPage - 1)">‹</button>
+          <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+          <button [disabled]="(currentPage + 1) * pageSize >= totalProducts" (click)="goToPage(currentPage + 1)">›</button>
+        </div>
+
+      </div>
+
+      <!-- Detail panel -->
+      <div class="detail-panel" *ngIf="selectedProduct">
+        <div class="detail-header">
+          <button class="close-btn" (click)="closeDetails()">✕ Close</button>
+          <div class="thumb">📦</div>
+          <div class="header-text">
+            <div class="d-name">{{ selectedProduct.productName }}</div>
+            <div class="d-meta">
+              {{ selectedProduct.productCode }} ·
+              <span class="tag" [ngClass]="statusClass(selectedProduct.status)">{{ statusLabel(selectedProduct.status) }}</span>
+            </div>
+            <div class="d-seller"><i class="bi bi-shop"></i> {{ selectedProduct.sellerName }}</div>
+          </div>
+        </div>
+
+        <div class="detail-tabs">
+          <button class="d-tab" [class.active]="activeDetailTab === 'submission'" (click)="setDetailTab('submission')">
+            Submission Details
+          </button>
+          <button class="d-tab" [class.active]="activeDetailTab === 'notes'" (click)="setDetailTab('notes')">Notes</button>
+          <button class="d-tab" [class.active]="activeDetailTab === 'history'" (click)="setDetailTab('history')">Last History</button>
+        </div>
+
+        <div class="detail-body" *ngIf="activeDetailTab === 'submission'">
+          <div class="media-preview">
+            <div class="media-thumb">📦</div>
+            <div class="media-thumb">📦</div>
+            <div class="media-thumb">📦</div>
+          </div>
+          <div class="kv"><span>Category</span><strong>{{ selectedProduct.category }} / {{ selectedProduct.subcategory }}</strong></div>
+          <div class="kv"><span>Country</span><strong>{{ selectedProduct.country }}</strong></div>
+          <div class="kv"><span>Quality Grade</span><strong>{{ selectedProduct.qualityGrade || '—' }}</strong></div>
+          <div class="kv"><span>Moisture Limit</span><strong>{{ selectedProduct.moistureLimit || '—' }}</strong></div>
+          <div class="kv"><span>Harvest</span><strong>{{ selectedProduct.harvestSummary || '—' }}</strong></div>
+          <div class="kv"><span>Varieties</span><strong>{{ selectedProduct.varietiesCount }}</strong></div>
+          <div class="description" *ngIf="selectedProduct.description">{{ selectedProduct.description }}</div>
+        </div>
+
+        <div class="detail-body" *ngIf="activeDetailTab === 'notes'">
+          <label class="notes-label">Notes for Seller</label>
+          <textarea rows="6" [(ngModel)]="noteValue" placeholder="Add notes visible to the seller…"></textarea>
+          <button class="btn-outline" (click)="saveNotes()">Save Notes</button>
+        </div>
+
+        <div class="detail-body" *ngIf="activeDetailTab === 'history'">
+          <div class="kv"><span>Submitted</span><strong>{{ selectedProduct.createdAt | date: 'MMM d, y, h:mm a' }}</strong></div>
+          <div class="kv"><span>Last Updated</span><strong>{{ selectedProduct.updatedAt | date: 'MMM d, y, h:mm a' }}</strong></div>
+          <p class="history-note">
+            A full audit trail isn't tracked yet — this shows the record's own timestamps only.
+          </p>
+        </div>
+
+        <div class="detail-actions">
+          <button class="btn-approve" *ngIf="selectedProduct.status !== 'APPROVED'" [disabled]="saving" (click)="approve()">Approve</button>
+          <button class="btn-changes" [disabled]="saving" (click)="requestChanges()">Request Changes</button>
+          <button class="btn-reject" [disabled]="saving" (click)="reject()">Reject</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Media Review stub -->
+  <div class="stub-panel" *ngIf="activeTab === 'MEDIA'">
+    <div class="stub-icon">🖼️</div>
+    <h3>Product Media Review</h3>
+    <p>
+      Not built yet — the backend only stores one image per product today, with no media gallery,
+      video review queue, or "flag poor quality" workflow. This tab is a placeholder until that
+      data model exists.
+    </p>
+  </div>
+
+  <!-- Categorization stub -->
+  <div class="stub-panel" *ngIf="activeTab === 'CATEGORIES'">
+    <div class="stub-icon">🗂️</div>
+    <h3>Product Categorization</h3>
+    <p>
+      Categories today are a free-text field on each product, not a managed category/variety/grade
+      tree. Full category CRUD would need a real <code>product_categories</code> table — out of
+      scope for this pass. Categories available from the product catalog:
+    </p>
+    <div class="category-chip-list">
+      <span class="chip" *ngFor="let c of categories">{{ c.label }}</span>
+    </div>
+  </div>
+</div>

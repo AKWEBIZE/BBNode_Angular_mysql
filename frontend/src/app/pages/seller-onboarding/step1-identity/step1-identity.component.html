@@ -1,0 +1,257 @@
+<div class="onboarding-content">
+  <h1 class="page-title">Seller Identity Details</h1>
+  <p class="page-subtitle">Sell globally. We manage buyers, pricing &amp; exports.</p>
+
+  <!-- General Error -->
+  <div *ngIf="errors.general" class="general-error">
+    <span>⚠️</span> {{ errors.general }}
+  </div>
+
+  <div class="form-card">
+    <div class="card-header">
+      <span class="header-icon">📋</span>
+      Seller Identity Details
+    </div>
+    <div class="card-body">
+
+      <!-- Entity Type Selection -->
+      <div class="entity-selector">
+        <div 
+          class="entity-card" 
+          *ngFor="let type of entityTypes"
+          [class.selected]="selectedEntityType === type.id"
+          (click)="selectEntityType(type.id)">
+          <div class="entity-icon">{{ type.icon }}</div>
+          <div class="entity-name">{{ type.label }}</div>
+          <div class="check-badge">✓</div>
+        </div>
+      </div>
+      <div *ngIf="errors.entityType" class="error-msg" style="margin-bottom: 16px; color: #D32F2F; font-size: 12px;">{{ errors.entityType }}</div>
+
+      <!-- Full Name & Email Row -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name <span class="required">*</span></label>
+          <div class="input-with-icon">
+            <span class="icon">👤</span>
+            <input type="text" [(ngModel)]="fullName" placeholder="Full Name" [class.error]="errors.fullName" />
+          </div>
+          <div *ngIf="errors.fullName" class="error-msg">{{ errors.fullName }}</div>
+        </div>
+        <div class="form-group">
+          <label>Email Address <span class="required">*</span></label>
+          <div class="input-with-icon">
+            <span class="icon">✉️</span>
+            <input type="email" [(ngModel)]="email" placeholder="Email Address" [class.error]="errors.email" />
+          </div>
+          <div *ngIf="errors.email" class="error-msg">{{ errors.email }}</div>
+        </div>
+      </div>
+
+      <!-- Mobile Number -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Mobile Number <span class="required">*</span></label>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" [(ngModel)]="mobile" placeholder="10-digit mobile number" 
+                   maxlength="10" (ngModelChange)="onMobileChange()" 
+                   [readonly]="otpSent" [class.error]="errors.mobile" 
+                   style="flex: 1;" />
+            <button *ngIf="!mobileVerified && !otpSent" class="btn-verify" (click)="sendOtp()"
+                    [disabled]="!mobile || mobile.length !== 10 || sendingOtp">
+              {{ sendingOtp ? 'Sending…' : 'Verify via OTP' }}
+            </button>
+            <span *ngIf="mobileVerified" class="verified-badge">
+              ✅ Verified ✓
+            </span>
+          </div>
+          <div *ngIf="errors.mobile" class="error-msg">{{ errors.mobile }}</div>
+        </div>
+      </div>
+
+      <!-- OTP Section -->
+      <div *ngIf="otpSent && !mobileVerified" class="otp-section">
+        <div class="otp-title">🔒 Enter OTP sent to your mobile number</div>
+        <div class="otp-hint">A 6-digit verification code has been sent to your registered mobile number.</div>
+        <input type="text" class="otp-input" [(ngModel)]="otpCode" maxlength="6" placeholder="● ● ● ● ● ●" />
+        <div *ngIf="errors.otp" class="error-msg" style="margin-top: 8px;">{{ errors.otp }}</div>
+        <div style="text-align: right; margin-top: 12px;">
+          <button class="btn-verify" (click)="verifyOtp()">Verify</button>
+        </div>
+        <div class="otp-actions">
+          <div class="resend-link">
+            Didn't receive it? 
+            <a (click)="resendOtp()" [style.opacity]="otpTimer > 0 ? 0.5 : 1">Resend OTP</a>
+          </div>
+          <div class="timer">{{ timerDisplay }}</div>
+        </div>
+      </div>
+
+      <!-- Username Field (only for new registration) -->
+      <div *ngIf="!isExistingSeller" class="form-row" style="margin-top: 20px;">
+        <div class="form-group">
+          <label>Username <span class="required">*</span></label>
+          <div class="input-with-icon">
+            <span class="icon">🆔</span>
+            <input type="text" [(ngModel)]="username" placeholder="Choose a username" [class.error]="errors.username" />
+          </div>
+          <div *ngIf="errors.username" class="error-msg">{{ errors.username }}</div>
+        </div>
+      </div>
+
+      <!-- Password Fields (only for new registration) -->
+      <div *ngIf="!isExistingSeller" class="form-row" style="margin-top: 20px;">
+        <div class="form-group">
+          <label>Password <span class="required">*</span></label>
+          <div class="input-with-icon">
+            <span class="icon">🔒</span>
+            <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password"
+                   placeholder="Min 8 chars, 1 uppercase, 1 number, 1 special"
+                   [class.error]="errors.password" />
+            <span class="toggle-eye" (click)="togglePassword()">
+              {{ showPassword ? '🙈' : '👁️' }}
+            </span>
+          </div>
+          <div *ngIf="errors.password" class="error-msg">{{ errors.password }}</div>
+          <!-- Password strength -->
+          <div class="password-strength" *ngIf="password.length > 0">
+            <div class="strength-bar">
+              <div class="strength-fill"
+                   [style.width]="isStrongPassword(password) ? '100%' : (password.length >= 6 ? '50%' : '25%')"
+                   [class.weak]="!isStrongPassword(password) && password.length < 6"
+                   [class.medium]="!isStrongPassword(password) && password.length >= 6"
+                   [class.strong]="isStrongPassword(password)"></div>
+            </div>
+            <span class="strength-label"
+                  [class.weak]="!isStrongPassword(password) && password.length < 6"
+                  [class.medium]="!isStrongPassword(password) && password.length >= 6"
+                  [class.strong]="isStrongPassword(password)">
+              {{ isStrongPassword(password) ? 'Strong' : (password.length >= 6 ? 'Medium' : 'Weak') }}
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password <span class="required">*</span></label>
+          <div class="input-with-icon">
+            <span class="icon">🔒</span>
+            <input [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="confirmPassword"
+                   placeholder="Re-enter your password"
+                   [class.error]="errors.confirmPassword" />
+            <span class="toggle-eye" (click)="toggleConfirmPassword()">
+              {{ showConfirmPassword ? '🙈' : '👁️' }}
+            </span>
+          </div>
+          <div *ngIf="errors.confirmPassword" class="error-msg">{{ errors.confirmPassword }}</div>
+          <!-- Real-time password match / mismatch -->
+          <div *ngIf="confirmPassword && password === confirmPassword && !errors.confirmPassword"
+               class="match-msg">✅ Passwords match</div>
+          <div *ngIf="confirmPassword && password !== confirmPassword"
+               class="mismatch-msg">⚠️ Passwords do not match</div>
+        </div>
+      </div>
+
+      <!-- Location Fields -->
+      <div class="form-row" style="margin-top: 20px;">
+        <div class="form-group">
+          <app-searchable-dropdown
+            label="State"
+            placeholder="Select State"
+            searchPlaceholder="Search state..."
+            [options]="states"
+            [value]="state"
+            displayKey="name"
+            valueKey="name"
+            (valueChange)="onStateChange($event)"
+            [required]="true"
+            [error]="errors.state">
+          </app-searchable-dropdown>
+          
+          <div class="helper-text" [class.success]="!!state" style="font-size: 12px; margin-top: 4px; color: #666;">
+            <span *ngIf="!state">Select your state of residence or farm operation.</span>
+            <span *ngIf="state" style="color: #4CAF50;">✓ State selected. Now select your district.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <app-searchable-dropdown
+            label="District"
+            placeholder="Select a state first..."
+            searchPlaceholder="Search district..."
+            [options]="districts"
+            [value]="district"
+            displayKey=""
+            valueKey=""
+            (valueChange)="onDistrictChange($event)"
+            [disabled]="!state"
+            [required]="true"
+            [error]="errors.district">
+          </app-searchable-dropdown>
+
+          <div class="helper-text" [class.success]="!!district" style="font-size: 12px; margin-top: 4px; color: #666;">
+            <span *ngIf="!state">Please select a state first to see available districts.</span>
+            <span *ngIf="state && !district">Showing {{ districts.length }} districts for selected state.</span>
+            <span *ngIf="district" style="color: #4CAF50;">✓ {{ district }}, {{ getStateName() }}</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Village <span class="required">*</span></label>
+          <input type="text" [(ngModel)]="village" placeholder="Village" [class.error]="errors.village" />
+          <div *ngIf="errors.village" class="error-msg">{{ errors.village }}</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="max-width: 200px;">
+          <label>Pincode <span class="required">*</span></label>
+          <input type="text" [(ngModel)]="pincode" placeholder="Pincode" maxlength="6" 
+                 (ngModelChange)="onPincodeChange()" [class.error]="errors.pincode" />
+          <div *ngIf="errors.pincode" class="error-msg">{{ errors.pincode }}</div>
+          <div class="helper-text" *ngIf="pincodeAutofillSuccess" style="color: #4CAF50; font-size: 12px; margin-top: 4px;">
+            ✓ Auto-filled based on pincode.
+          </div>
+          <div class="helper-text" *ngIf="pincodeAutofillError" style="color: #E65100; font-size: 12px; margin-top: 4px;">
+            Pincode not recognized. Please select State and District manually.
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Banner -->
+      <div class="trust-banner">
+        <div class="trust-icon">🛡️</div>
+        <div class="trust-text">
+          Your identity details are used solely for export compliance verification. We keep your information private and secure.
+        </div>
+      </div>
+
+      <!-- Save & Continue -->
+      <div style="text-align: center; margin-top: 24px;">
+        <button class="btn-continue-inline" [disabled]="!canContinue" (click)="saveAndContinue()">
+          <span *ngIf="!isSubmitting">Save & Continue →</span>
+          <span *ngIf="isSubmitting" class="spinner-text">
+            <span class="spinner"></span> Creating Account...
+          </span>
+        </button>
+
+        <!-- Dynamic info: why button is disabled -->
+        <div *ngIf="!canContinue && !isSubmitting" class="missing-fields-info">
+          <span class="info-icon">ℹ️</span>
+          <span>To continue, please complete: </span>
+          <span class="missing-list">
+            <span *ngIf="!selectedEntityType">Seller Type</span>
+            <span *ngIf="!fullName">Full Name</span>
+            <span *ngIf="!email || !isValidEmail(email)">Valid Email</span>
+            <span *ngIf="!mobileVerified">Mobile Verification</span>
+            <span *ngIf="!isExistingSeller && !username">Username</span>
+            <span *ngIf="!isExistingSeller && !password">Password</span>
+            <span *ngIf="!isExistingSeller && password && !isStrongPassword(password)">Stronger Password</span>
+            <span *ngIf="!isExistingSeller && password && confirmPassword && password !== confirmPassword">Matching Passwords</span>
+            <span *ngIf="!isExistingSeller && !confirmPassword && password">Confirm Password</span>
+            <span *ngIf="!state">State</span>
+            <span *ngIf="!district">District</span>
+            <span *ngIf="!village">Village</span>
+            <span *ngIf="!pincode">Pincode</span>
+          </span>
+        </div>
+      </div>
+
+    </div><!-- card-body -->
+  </div><!-- form-card -->
+

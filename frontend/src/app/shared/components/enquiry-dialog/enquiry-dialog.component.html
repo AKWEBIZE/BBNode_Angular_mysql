@@ -1,0 +1,144 @@
+<div class="enquiry-backdrop" (click)="onBackdropClick($event)">
+  <div class="enquiry-dialog" role="dialog" aria-modal="true" aria-labelledby="enquiry-title">
+
+    <!-- Header -->
+    <div class="enquiry-header">
+      <h2 id="enquiry-title">Send Enquiry</h2>
+      <button type="button" class="close-btn" aria-label="Close" (click)="close()">×</button>
+    </div>
+
+    <!-- Success state -->
+    <div class="enquiry-body enquiry-success" *ngIf="successMessage">
+      <div class="success-icon">✓</div>
+      <h3>Enquiry sent</h3>
+      <p>{{ successMessage }}</p>
+      <p class="muted">A copy has been emailed to you. This window will close automatically.</p>
+      <button type="button" class="btn-primary" (click)="close()">Done</button>
+    </div>
+
+    <!-- Form -->
+    <form class="enquiry-body" [formGroup]="form" (ngSubmit)="submit()" *ngIf="!successMessage" novalidate>
+
+      <!-- Name -->
+      <div class="field">
+        <label for="enq-name">Name <span class="req">*</span></label>
+        <input id="enq-name" type="text" formControlName="name" placeholder="Your full name"
+               [class.invalid]="showError('name')" autocomplete="name" />
+        <div class="error" *ngIf="showError('name')">{{ errorFor('name') }}</div>
+      </div>
+
+      <!-- Email -->
+      <div class="field">
+        <label for="enq-email">Email <span class="req">*</span></label>
+        <input id="enq-email" type="email" formControlName="email" placeholder="name@example.com"
+               [class.invalid]="showError('email')" autocomplete="email" />
+        <div class="hint" *ngIf="!showError('email')">We'll validate the email format.</div>
+        <div class="error" *ngIf="showError('email')">{{ errorFor('email') }}</div>
+      </div>
+
+      <!-- Login type -->
+      <div class="field">
+        <label for="enq-type">I am a <span class="req">*</span></label>
+        <select id="enq-type" formControlName="loginType" [class.invalid]="showError('loginType')">
+          <option value="" disabled>Select…</option>
+          <option *ngFor="let t of loginTypes" [value]="t.value">{{ t.label }}</option>
+        </select>
+        <div class="hint" *ngIf="!loginTypesError && !showError('loginType')">Options loaded from server.</div>
+        <div class="error" *ngIf="loginTypesError">Could not load options. Please try again later.</div>
+        <div class="error" *ngIf="showError('loginType')">{{ errorFor('loginType') }}</div>
+      </div>
+
+      <!-- ================= SELLER ================= -->
+      <ng-container *ngIf="isSeller">
+        <hr class="divider" />
+        <h4 class="group-title">Seller details</h4>
+
+        <div class="field">
+          <label for="enq-phone">Contact Number <span class="req">*</span></label>
+          <div class="phone-input" [class.invalid]="showError('contactNumber')">
+            <span class="prefix">+91</span>
+            <input id="enq-phone" type="tel" formControlName="contactNumber" placeholder="10-digit mobile"
+                   maxlength="10" inputmode="numeric" autocomplete="tel-national" />
+          </div>
+          <div class="hint" *ngIf="!showError('contactNumber')">Indian mobile format (starts 6–9, 10 digits).</div>
+          <div class="error" *ngIf="showError('contactNumber')">{{ errorFor('contactNumber') }}</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <app-searchable-dropdown
+              label="State"
+              placeholder="Select state"
+              searchPlaceholder="Search state..."
+              [options]="states"
+              [value]="ctrl('state')?.value"
+              displayKey="name"
+              valueKey="name"
+              [required]="true"
+              [error]="showError('state') ? errorFor('state') : null"
+              (valueChange)="onStateChange($event)">
+            </app-searchable-dropdown>
+          </div>
+          <div class="field">
+            <app-searchable-dropdown
+              label="District"
+              placeholder="Select district"
+              searchPlaceholder="Search district..."
+              [options]="districts"
+              [value]="ctrl('district')?.value"
+              displayKey=""
+              valueKey=""
+              [disabled]="!ctrl('state')?.value"
+              [required]="true"
+              [error]="showError('district') ? errorFor('district') : null"
+              (valueChange)="onDistrictChange($event)">
+            </app-searchable-dropdown>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ================= BUYER ================= -->
+      <ng-container *ngIf="isBuyer">
+        <hr class="divider" />
+        <h4 class="group-title">Buyer details</h4>
+
+        <div class="field">
+          <label for="enq-company">Company Name <span class="req">*</span></label>
+          <input id="enq-company" type="text" formControlName="companyName" placeholder="Your company"
+                 [class.invalid]="showError('companyName')" autocomplete="organization" />
+          <div class="error" *ngIf="showError('companyName')">{{ errorFor('companyName') }}</div>
+        </div>
+
+        <div class="field">
+          <label for="enq-country">Country <span class="req">*</span></label>
+          <select id="enq-country" formControlName="country" [class.invalid]="showError('country')">
+            <option value="" disabled>Select country</option>
+            <option *ngFor="let c of countries" [value]="c">{{ c }}</option>
+          </select>
+          <div class="error" *ngIf="showError('country')">{{ errorFor('country') }}</div>
+        </div>
+      </ng-container>
+
+      <!-- Comments (both types) -->
+      <div class="field" *ngIf="isSeller || isBuyer">
+        <label for="enq-comments">Comments</label>
+        <textarea id="enq-comments" formControlName="comments" rows="3"
+                  placeholder="Anything you'd like us to know..." [attr.maxlength]="commentsMax"
+                  [class.invalid]="showError('comments')"></textarea>
+        <div class="counter" [class.limit]="commentsLength >= commentsMax">{{ commentsLength }}/{{ commentsMax }}</div>
+        <div class="error" *ngIf="showError('comments')">{{ errorFor('comments') }}</div>
+      </div>
+
+      <div class="error submit-error" *ngIf="submitError">{{ submitError }}</div>
+
+      <!-- Footer -->
+      <div class="enquiry-footer">
+        <button type="button" class="btn-secondary" (click)="close()" [disabled]="submitting">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="!canSubmit">
+          <span *ngIf="!submitting">Send Enquiry</span>
+          <span *ngIf="submitting">Sending…</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<td class="cell-id">{{ displayOrderId }}</td>
+<td class="cell-product">
+  <div class="product-cell">
+    <div class="thumb" [style.background]="thumb.bg">{{ thumb.icon }}</div>
+    <div class="product-text">
+      <div class="p-name">{{ product?.productName || '—' }}</div>
+      <div class="p-loc">{{ product?.location || product?.country || '—' }}</div>
+    </div>
+  </div>
+</td>
+<td>{{ variety }}</td>
+<td>{{ order.quantity }}</td>
+<td>{{ qualityLabel }}</td>
+<td>{{ expectedDelivery ? (expectedDelivery | date: 'MMM d, y') : '—' }}</td>
+<td><app-status-badge [status]="uiStatus"></app-status-badge></td>
+<td><span class="pay-badge" [ngClass]="paymentStatusClass">{{ paymentStatusLabel }}</span></td>
+<td class="cell-amount">{{ amount | currency: 'USD' : 'symbol' : '1.0-0' }}</td>
+<td class="cell-chevron">›</td>

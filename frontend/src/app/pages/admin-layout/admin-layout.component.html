@@ -1,0 +1,80 @@
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <img src="assets/images/logo/logo.png" alt="Bigbisort" class="brand-logo" />
+      </div>
+      <span class="brand-text">Bigbisort</span>
+    </div>
+
+    <!-- Menu Items -->
+    <nav class="sidebar-nav">
+      <a *ngFor="let item of menuItems"
+         [routerLink]="item.route"
+         routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{exact: item.route === '/admin/dashboard'}"
+         class="nav-item">
+        <i class="bi" [ngClass]="item.icon"></i>
+        <span>{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <!-- User Badge -->
+    <div class="sidebar-user">
+      <div class="user-avatar-badge">
+        <span>{{ adminName.charAt(0).toUpperCase() }}</span>
+      </div>
+      <div class="user-info">
+        <span class="user-name">{{ adminName }}</span>
+        <span class="user-role">{{ getRoleLabel() }}</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Area -->
+  <div class="admin-main">
+    <!-- Top Bar -->
+    <header class="admin-topbar">
+      <div class="topbar-left">
+        <h1 class="page-title">Admin Dashboard</h1>
+        <p class="page-subtitle">Internal operational hub for Bigbisort.</p>
+      </div>
+      <div class="topbar-right">
+        <div class="search-wrapper">
+          <i class="bi bi-search search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search for seller, buyer, product..."
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="onSearch()"
+          />
+        </div>
+        <div class="notification-bell" (click)="null">
+          <i class="bi bi-bell-fill"></i>
+          <span class="notification-badge" *ngIf="notificationCount > 0">{{ notificationCount }}</span>
+        </div>
+        <div class="user-menu-wrapper">
+          <div class="user-trigger" (click)="toggleUserMenu()">
+            <span class="user-greeting">{{ adminName }}</span>
+            <div class="avatar-menu">
+              <span>{{ adminName.charAt(0).toUpperCase() }}</span>
+            </div>
+          </div>
+          <div class="user-dropdown" *ngIf="showUserMenu">
+            <button class="logout-option" (click)="logout()">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="admin-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

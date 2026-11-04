@@ -1,0 +1,141 @@
+<div class="buyer-mgmt-page">
+  <div class="page-header">
+    <h2>Buyer Management</h2>
+    <p class="subtitle">Manage and verify buyers on the platform.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab" *ngFor="let t of tabs" [class.active]="activeTab === t.value" (click)="setTab(t.value)">
+      {{ t.label }}
+    </button>
+  </div>
+
+  <div class="main-row">
+    <div class="list-col" [class.narrow]="selectedBuyer">
+      <div class="queue-header-bar">
+        <div class="qh-left">
+          <span class="qh-title">Buyer List ({{ totalBuyers }})</span>
+          <button class="qh-refresh" title="Refresh" (click)="refresh()"><i class="bi bi-arrow-clockwise"></i></button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="filter-row">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search by buyer, company, or country…"
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="onSearch()" />
+          <button class="btn-outline" (click)="onSearch()">Search</button>
+        </div>
+      </div>
+
+      <div class="table-wrapper" *ngIf="buyers.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>Buyer Name &amp; ID</th>
+              <th>Country</th>
+              <th>Contact Person</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let b of buyers" (click)="openBuyerDetails(b.id)" [class.active]="selectedBuyer?.id === b.id">
+              <td>
+                <div class="p-name">{{ displayName(b) }}</div>
+                <div class="p-seller">{{ b.buyerCode }}</div>
+              </td>
+              <td>{{ b.country || '—' }}</td>
+              <td>{{ b.name || '—' }}</td>
+              <td>
+                <span class="tag" [ngClass]="getStatusClass(b.status)">{{ formatStatus(b.status) }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" *ngIf="buyers.length === 0">
+        No buyers found for this filter.
+      </div>
+
+      <div class="pagination" *ngIf="totalBuyers > 0">
+        <button [disabled]="currentPage === 0" (click)="goToPage(currentPage - 1)">‹</button>
+        <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+        <button [disabled]="(currentPage + 1) * pageSize >= totalBuyers" (click)="goToPage(currentPage + 1)">›</button>
+      </div>
+    </div>
+
+    <!-- Detail panel -->
+    <div class="detail-panel" *ngIf="selectedBuyer">
+      <div class="detail-header">
+        <button class="close-btn" (click)="closeDetails()">✕ Close</button>
+        <div class="thumb">🌍</div>
+        <div class="header-text">
+          <div class="d-name">{{ displayName(selectedBuyer) }}</div>
+          <div class="d-meta">
+            {{ selectedBuyer.buyerCode }} ·
+            <span class="tag" [ngClass]="getStatusClass(selectedBuyer.status)">{{ formatStatus(selectedBuyer.status) }}</span>
+          </div>
+          <div class="d-seller"><i class="bi bi-person-fill"></i> {{ selectedBuyer.name }}</div>
+        </div>
+      </div>
+
+      <div class="detail-tabs">
+        <button class="d-tab" [class.active]="activeDetailTab === 'Overview'" (click)="setDetailTab('Overview')">
+          Profile Overview
+        </button>
+        <button class="d-tab" [class.active]="activeDetailTab === 'History'" (click)="setDetailTab('History')">
+          Purchase History ({{ selectedBuyer.ordersCount }})
+        </button>
+      </div>
+
+      <div class="detail-body" *ngIf="activeDetailTab === 'Overview'">
+        <div class="kv"><span>Email</span><strong>{{ selectedBuyer.email || '—' }}</strong></div>
+        <div class="kv"><span>Phone</span><strong>{{ selectedBuyer.phone || '—' }}</strong></div>
+        <div class="kv"><span>Address</span><strong>{{ selectedBuyer.address || '—' }}</strong></div>
+        <div class="kv"><span>City</span><strong>{{ selectedBuyer.city || '—' }}</strong></div>
+        <div class="kv"><span>State</span><strong>{{ selectedBuyer.state || '—' }}</strong></div>
+        <div class="kv"><span>Zip</span><strong>{{ selectedBuyer.zip || '—' }}</strong></div>
+        <div class="kv"><span>Country</span><strong>{{ selectedBuyer.country || '—' }}</strong></div>
+        <div class="kv"><span>Joined</span><strong>{{ selectedBuyer.createdAt | date: 'MMM d, y' }}</strong></div>
+
+        <label class="notes-label mt-2">Internal Notes</label>
+        <textarea rows="4" [(ngModel)]="noteValue" (blur)="saveNotes()" placeholder="Add administrative notes here…"></textarea>
+      </div>
+
+      <div class="detail-body" *ngIf="activeDetailTab === 'History'">
+        <div class="table-wrapper" *ngIf="purchaseHistory.length > 0">
+          <table>
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let o of purchaseHistory">
+                <td>{{ o.orderNumber }}</td>
+                <td>{{ o.orderDate | date: 'MMM d, y' }}</td>
+                <td><span class="tag">{{ o.orderStatus }}</span></td>
+                <td>{{ o.amount ?? '—' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="empty-state" *ngIf="!loadingHistory && purchaseHistory.length === 0">
+          No past orders for this buyer.
+        </div>
+      </div>
+
+      <div class="detail-actions">
+        <button class="btn-approve" [disabled]="saving || selectedBuyer.status === 'VERIFIED'" (click)="approve()">Approve</button>
+        <button class="btn-reject" [disabled]="saving || selectedBuyer.status === 'REJECTED'" (click)="reject()">Reject</button>
+      </div>
+    </div>
+  </div>
+</div>

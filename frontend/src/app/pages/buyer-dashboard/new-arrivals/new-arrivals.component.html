@@ -1,0 +1,37 @@
+<div class="new-arrivals-section">
+  <div class="product-grid">
+    <div class="product-card" *ngFor="let item of newArrivals">
+      <img [src]="item.image" alt="{{ item.name }}" />
+      <div class="product-info">
+        <h3>{{ item.name }}</h3>
+        <p class="price">₹ {{ item.price }} <span>/{{ item.unit }}</span></p>
+        <p class="location">📍 {{ item.location }}</p>
+        <p class="time">🕒 {{ item.timeAgo }}</p>
+        <button>Enquire Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="catalogue-section">
+    <h2>Discover Our Fresh Catalogue</h2>
+    <p><strong>At Bigbisort</strong>, we're dedicated to bringing you a variety of fresh, high-quality products directly from trusted suppliers and local farms.</p>
+
+    <div class="features">
+      <div class="feature">
+        ✅
+        <h4>Trusted Suppliers</h4>
+        <p>We work only with verified and reputable vendors.</p>
+      </div>
+      <div class="feature">
+        🍊
+        <h4>Wide Selection</h4>
+        <p>From fruits and vegetables to spices and herbs.</p>
+      </div>
+      <div class="feature">
+        📞
+        <h4>Fast Enquiries</h4>
+        <p>Get quick responses to your product requests.</p>
+      </div>
+    </div>
+  </div>
+</div>

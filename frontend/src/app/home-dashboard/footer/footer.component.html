@@ -1,0 +1,46 @@
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Company Section -->
+    <div class="footer-section">
+      <h3>Company</h3>
+      <p><strong>Bigbisort</strong></p>
+      <p>Connecting buyers and sellers worldwide with trust and transparency.</p>
+      <ul>
+        <li><a routerLink="/about">About Us</a></li>
+        <li><a routerLink="/login">Become a Seller</a></li>
+      </ul>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a routerLink="/products">Products</a></li>
+        <li><a routerLink="/contact">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-section">
+      <h3>Contact</h3>
+      <p>📍 # 269 Anbalagan nagar Kambar Street, Minjur ,Chennai-601203</p>
+      <p>📧 <a href="mailto:contact@bigbisort.com">contact&#64;bigbisort.com</a></p>
+      <p>📞 <a routerLink="/contact" fragment="contact-form">Send us a message</a></p>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="footer-section">
+      <h3>Newsletter</h3>
+      <p>Subscribe to our newsletter</p>
+      <form *ngIf="!newsletterSubmitted" (ngSubmit)="subscribeNewsletter()">
+        <input type="email" name="newsletterEmail" [(ngModel)]="newsletterEmail" placeholder="Your email address" required />
+        <button type="submit">Subscribe</button>
+      </form>
+      <p *ngIf="newsletterSubmitted">Thanks — you're on the list!</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© Bigbisort {{ currentYear }}. All rights reserved.</p>
+  </div>
+</footer>

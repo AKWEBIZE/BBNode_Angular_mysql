@@ -1,0 +1,97 @@
+<div class="login-wrapper">
+  <div class="login-box">
+    <!-- Form inputs for Admin Login -->
+    <div class="login-form" *ngIf="!isRegisterVisible">
+      <h2>Admin Login</h2>
+      <div>
+        <input [(ngModel)]="adminUsername" placeholder="Admin Username" />
+        <div *ngIf="loginErrors.adminUsername" class="error-msg" style="color: red; font-size: 12px;">{{loginErrors.adminUsername}}</div>
+        
+        <input [(ngModel)]="adminPassword" type="password" placeholder="Admin Password" style="margin-top: 20px;" />
+        <div *ngIf="loginErrors.adminPassword" class="error-msg" style="color: red; font-size: 12px;">{{loginErrors.adminPassword}}</div>
+      </div>
+
+      <button (click)="loginAdmin()" style="margin-top: 20px;">Login</button>
+
+      <div class="divider"><span>or</span></div>
+
+      <!-- Google Identity Services renders its own button here -->
+      <div id="google-signin-btn-admin" class="google-signin-btn"></div>
+
+      <!-- Links -->
+      <div class="login-links" style="margin-top: 15px;">
+        <a href="#" (click)="showRegister($event)">Register New Admin</a>
+      </div>
+    </div>
+
+    <!-- Register Admin form -->
+    <div *ngIf="isRegisterVisible" class="register-box">
+      <h2>Register Admin</h2>
+      <div class="register-form">
+        <!-- Row 1: Name + Username -->
+        <div class="form-row">
+          <div class="form-group">
+            <input [(ngModel)]="registerData.name" placeholder="Full Name (Optional)" />
+          </div>
+          <div class="form-group">
+            <input [(ngModel)]="registerData.userName" placeholder="Admin Username*" />
+            <div *ngIf="registerErrors.userName" class="error-msg">{{registerErrors.userName}}</div>
+          </div>
+        </div>
+
+        <!-- Row 2: Email + Phone -->
+        <div class="form-row">
+          <div class="form-group">
+            <input [(ngModel)]="registerData.email" placeholder="Email*" />
+            <div *ngIf="registerErrors.email" class="error-msg">{{registerErrors.email}}</div>
+          </div>
+          <div class="form-group">
+            <div class="phone-input-group">
+              <span class="country-code-prefix">+91</span>
+              <input [(ngModel)]="registerData.phone" placeholder="Phone*" class="phone-field" />
+            </div>
+            <div *ngIf="registerErrors.phone" class="error-msg">{{registerErrors.phone}}</div>
+          </div>
+        </div>
+
+        <!-- Row 3: Address + Zip -->
+        <div class="form-row">
+          <div class="form-group">
+            <input [(ngModel)]="registerData.address" placeholder="Address (Optional)" />
+          </div>
+          <div class="form-group">
+            <input [(ngModel)]="registerData.zip" placeholder="Zip (Optional)" />
+          </div>
+        </div>
+
+        <!-- Row 4: City + State + Country (3 in one line) -->
+        <div class="form-row">
+          <div class="form-group small">
+            <input [(ngModel)]="registerData.city" placeholder="City" />
+          </div>
+          <div class="form-group small">
+            <input [(ngModel)]="registerData.state" placeholder="State" />
+          </div>
+          <div class="form-group small">
+            <input [(ngModel)]="registerData.country" placeholder="Country" readonly class="readonly-field" />
+          </div>
+        </div>
+
+        <!-- Row 5: Password -->
+        <div class="form-row">
+          <div class="form-group full-width">
+            <input [(ngModel)]="registerData.password" type="password" placeholder="Secure Password*" />
+            <div *ngIf="registerErrors.password" class="error-msg">{{registerErrors.password}}</div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="register-buttons">
+          <button (click)="registerAdmin()">Register Admin</button>
+          <button (click)="cancelRegister()" class="cancel-btn" style="background-color: #f44336;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

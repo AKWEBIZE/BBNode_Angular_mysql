@@ -1,0 +1,228 @@
+<div class="add-product-container">
+  <div class="breadcrumbs">
+    <a routerLink="/seller/products">My Products</a> &rsaquo; <span>Add Product</span>
+  </div>
+  <h1 class="page-title">Add New Product</h1>
+
+  <div class="card main-form-card">
+    <div class="card-header">
+      <span class="icon">📋</span>
+      Product Information
+    </div>
+
+    <div class="card-body">
+      <!-- Section 1: Basic Info -->
+      <div class="section">
+        <div class="section-title">
+          <span class="tag-icon">🏷️</span> BASIC INFORMATION
+        </div>
+
+        <div class="form-group">
+          <label>Product Category <span class="required">*</span></label>
+          <select [(ngModel)]="category" (change)="onCategoryChange()" [class.error]="errors.category">
+            <option value="">Select Category</option>
+            <option *ngFor="let cat of categories" [value]="cat.key">{{cat.label}}</option>
+          </select>
+          <div class="error-msg" *ngIf="errors.category">{{errors.category}}</div>
+        </div>
+
+        <div class="form-group searchable-input-container p-container">
+          <label>Product Name <span class="required">*</span></label>
+          
+          <!-- State: Selected -->
+          <div class="chip-selected" *ngIf="productName">
+            <span class="icon">🍎</span> {{productName}}
+            <button class="btn-clear" (click)="clearProduct()">✕ Clear</button>
+          </div>
+
+          <!-- State: Search Input -->
+          <div class="search-input-wrapper" *ngIf="!productName" [class.disabled]="!category" [class.error]="errors.productName">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text"
+                   [(ngModel)]="productSearchTerm" 
+                   (focus)="showProductDropdown = true"
+                   (input)="onProductSearchInput()"
+                   [disabled]="!category"
+                   placeholder="{{category ? 'Search product name...' : 'Select a category first...'}}">
+            <i class="fas fa-caret-down caret-icon"></i>
+            
+            <div class="dropdown-list" *ngIf="showProductDropdown && category">
+              <div class="dropdown-item" *ngFor="let p of filteredProducts" (click)="selectProduct(p)">
+                <span class="item-icon">🍃</span> {{p.label || p}}
+              </div>
+              <div class="dropdown-empty" *ngIf="filteredProducts.length === 0">No products found.</div>
+            </div>
+          </div>
+          
+          <div class="helper-text" *ngIf="category && !productName">Showing products for category: {{category}}</div>
+          <div class="helper-text" *ngIf="productName">✓ Selected from {{category}} category</div>
+          <div class="error-msg" *ngIf="errors.productName">{{errors.productName}}</div>
+        </div>
+
+        <div class="form-group searchable-input-container v-container">
+          <label>Product Variety <span class="required">*</span></label>
+          
+          <div class="chip-selected" *ngIf="productVariety">
+            {{productVariety}}
+          </div>
+
+          <div class="search-input-wrapper" *ngIf="!productVariety" [class.disabled]="!productName" [class.error]="errors.productVariety">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" 
+                   [(ngModel)]="varietySearchTerm"
+                   (focus)="showVarietyDropdown = true"
+                   (input)="onVarietySearchInput()"
+                   [disabled]="!productName"
+                   placeholder="{{productName ? 'Search variety...' : 'Select a product name first to see varieties...'}}">
+            <i class="fas fa-caret-down caret-icon"></i>
+
+            <div class="dropdown-list" *ngIf="showVarietyDropdown && productName">
+              <div class="dropdown-item" *ngFor="let v of filteredVarieties" (click)="selectVariety(v)">
+                {{v}}
+              </div>
+              <div class="dropdown-empty" *ngIf="filteredVarieties.length === 0">No varieties found.</div>
+            </div>
+          </div>
+          
+          <div class="helper-text" *ngIf="productName && !productVariety">Showing varieties for: {{productName}}</div>
+          <div class="error-msg" *ngIf="errors.productVariety">{{errors.productVariety}}</div>
+        </div>
+
+        <div class="form-group">
+          <label>Product Description <span class="optional">(optional)</span></label>
+          <textarea [(ngModel)]="description" rows="3" placeholder="Describe your product quality, export suitability, shelf life..."></textarea>
+        </div>
+      </div>
+
+      <!-- Section 2: Details -->
+      <div class="section mt-3">
+        <div class="section-title">
+          <span class="tag-icon">📊</span> PRODUCT DETAILS
+        </div>
+
+        <div class="row-flex">
+          <div class="form-group flex-1">
+            <label>Expected Harvest <span class="required">*</span></label>
+            <div class="flex-gap">
+              <select [(ngModel)]="harvestYear" (change)="onHarvestYearChange()" class="flex-1" [class.error]="errors.harvestYear">
+                <option value="" disabled>Year</option>
+                <option *ngFor="let y of years" [value]="y">{{y}}</option>
+              </select>
+              <select [(ngModel)]="harvestMonth" (change)="onHarvestMonthChange()" [disabled]="!harvestYear" class="flex-2" [class.error]="errors.harvestMonth">
+                <option value="" disabled>{{harvestYear ? 'Month' : 'Select year first'}}</option>
+                <option *ngFor="let m of months" [value]="m">{{m}}</option>
+              </select>
+              <select [(ngModel)]="harvestDay" [disabled]="!harvestMonth" class="flex-1" [class.error]="errors.harvestDay">
+                <option value="" disabled>{{harvestMonth ? 'Day' : 'Select month first'}}</option>
+                <option *ngFor="let d of days" [value]="d">{{d}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row-flex mt-2">
+          <div class="form-group flex-1">
+            <label>Estimated Quantity <span class="required">*</span></label>
+            <div class="input-with-append">
+              <input type="number" [(ngModel)]="quantity" placeholder="e.g. 5000" [class.error]="errors.quantity">
+              <div class="unit-append">
+                <select [(ngModel)]="unit">
+                  <option *ngFor="let mUnit of measurementUnits" [value]="mUnit">{{mUnit}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="error-msg" *ngIf="errors.quantity">{{errors.quantity}}</div>
+          </div>
+
+          <div class="form-group flex-1 ml-gap">
+            <label>Grade <span class="required">*</span></label>
+            <select [(ngModel)]="grade" [class.error]="errors.grade">
+              <option value="">Select Grade</option>
+              <option *ngFor="let g of grades" [value]="g">{{g}}</option>
+            </select>
+            <div class="error-msg" *ngIf="errors.grade">{{errors.grade}}</div>
+          </div>
+        </div>
+
+        <div class="form-group mt-2">
+          <label>Package Type <span class="required">*</span></label>
+          <div class="toggle-group">
+            <button [class.active]="packaging === 'Loose'" (click)="selectPackaging('Loose')"><span *ngIf="packaging === 'Loose'">✓ </span>Loose</button>
+            <button [class.active]="packaging === 'Box'" (click)="selectPackaging('Box')"><span *ngIf="packaging === 'Box'">✓ </span>Box</button>
+            <button [class.active]="packaging === 'Custom'" (click)="selectPackaging('Custom')"><span *ngIf="packaging === 'Custom'">✓ </span>Custom</button>
+          </div>
+          <p class="helper-text-sm">Accurate details help us find better buyers.</p>
+        </div>
+      </div>
+
+      <!-- Section 3: Media -->
+      <div class="section mt-3">
+        <div class="section-title">
+          <span class="tag-icon">📸</span> MEDIA UPLOADS
+        </div>
+
+        <div class="row-flex gap-lg">
+          <div class="upload-card">
+            <label>Product Images <span class="required">*</span></label>
+            <div class="upload-zone" [class.error]="errors.image" (click)="imgInput.click()">
+              <input #imgInput type="file" hidden accept="image/*" (change)="onImageSelected($event)">
+              <div *ngIf="!productImageBase64" class="up-content">
+                <div class="up-icon">⬆️</div>
+                <p><strong>Drag & drop</strong> or Browse</p>
+                <small>JPG, PNG &bull; Max 15MB each</small>
+              </div>
+              <div *ngIf="productImageBase64" class="preview-content">
+                <img [src]="productImageBase64" />
+                <button class="btn-remove" (click)="productImageBase64 = null; $event.stopPropagation()">✕</button>
+              </div>
+            </div>
+            <div class="error-msg" *ngIf="errors.image">{{errors.image}}</div>
+          </div>
+
+          <div class="upload-card">
+            <label>Product Video <span class="optional">(optional)</span></label>
+            <div class="upload-zone" (click)="vidInput.click()">
+              <input #vidInput type="file" hidden accept="video/*" (change)="onVideoSelected($event)">
+              <div *ngIf="!productVideoBase64" class="up-content">
+                <div class="up-icon">🎬</div>
+                <p><strong>Drag & drop</strong> or Browse</p>
+                <small>MP4 &bull; Max 50MB</small>
+              </div>
+              <div *ngIf="productVideo" class="preview-content">
+                <div class="v-pill">{{productVideo.name}}</div>
+                <button class="btn-remove" (click)="productVideo = null; productVideoBase64 = null; $event.stopPropagation()">✕</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="upload-card mt-2 farm-card">
+          <label>Farm / Packing Images <span class="optional">(optional)</span></label>
+          <div class="upload-zone row-zone" (click)="farmInput.click()">
+            <input #farmInput type="file" hidden accept="image/*" (change)="onFarmImageSelected($event)">
+            <div *ngIf="!farmImageBase64" class="up-content flex-row">
+              <div class="up-icon inline">⬆️</div>
+              <p><strong>Drag & drop</strong> or Browse <small>&bull; JPG, PNG &bull; Max 15MB</small></p>
+            </div>
+            <div *ngIf="farmImageBase64" class="preview-content row-preview">
+              <img [src]="farmImageBase64" class="mini-thumb"/>
+              <button class="btn-remove" (click)="farmImageBase64 = null; $event.stopPropagation()">✕ Remove</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="action-footer">
+    <button class="btn-secondary" (click)="cancel()">Cancel</button>
+    <div class="right-actions">
+      <button class="btn-outline" (click)="saveAsDraft()">Save as Draft</button>
+      <button class="btn-primary-yellow" [disabled]="isSubmitting" (click)="submitForReview()">
+        {{isSubmitting ? 'Submitting...' : 'Submit for Review \u2192'}}
+      </button>
+    </div>
+  </div>
+</div>

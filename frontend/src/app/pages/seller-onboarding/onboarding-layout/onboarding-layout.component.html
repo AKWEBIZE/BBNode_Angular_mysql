@@ -1,0 +1,40 @@
+<!-- Header -->
+<div class="onboarding-header">
+  <div class="logo">
+    <div class="logo-icon">🌿</div>
+    <span class="logo-text">Bigbisort</span>
+  </div>
+  <!-- Step 1: not yet an account. Steps 2-4: already signed in, so leaving means the dashboard. -->
+  <div class="login-link" *ngIf="currentStep === 1">Already a Seller? <a routerLink="/login">Login</a></div>
+  <div class="login-link" *ngIf="currentStep > 1">
+    <a href="javascript:void(0)" (click)="exitToDashboard()">Finish later → Go to Dashboard</a>
+  </div>
+</div>
+
+<!-- Progress Stepper -->
+<div class="onboarding-stepper">
+  <ng-container *ngFor="let step of steps; let i = index">
+    <div class="step-item">
+      <div class="step-circle" [class.active]="isStepActive(step.num)" [class.completed]="isStepCompleted(step.num)">
+        {{ step.num }}
+      </div>
+      <span class="step-label" [class.active]="isStepActive(step.num)" [class.completed]="isStepCompleted(step.num)">
+        {{ step.label }}
+      </span>
+    </div>
+    <div *ngIf="i < steps.length - 1" class="step-connector" [class.completed]="isStepCompleted(steps[i+1].num)"></div>
+  </ng-container>
+</div>
+
+<!-- Page Content (child route) -->
+<div class="onboarding-page">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- Fixed Bottom Navigation -->
+<div class="bottom-nav">
+  <button class="btn-back" *ngIf="currentStep > 1" (click)="goBack()">← Back</button>
+  <div *ngIf="currentStep === 1"></div>
+  <!-- The Save & Continue button is handled by each step component -->
+  <div id="bottom-nav-actions"></div>
+</div>

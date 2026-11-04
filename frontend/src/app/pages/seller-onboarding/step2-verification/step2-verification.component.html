@@ -1,0 +1,160 @@
+<div class="onboarding-content">
+  <h1 class="page-title">Identity & Compliance Verification</h1>
+  <p class="page-subtitle">Upload the required documents to verify your <strong>identity</strong> and legal compliance.</p>
+  <p class="page-subtitle" style="margin-top: -18px;">Your information is secure and used only for export purposes.</p>
+
+  <!-- Aadhaar Card -->
+  <div class="form-card">
+    <div class="card-header">
+      <span class="header-icon">🪪</span>
+      Document Upload
+    </div>
+    <div class="card-body">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div>
+          <h3 style="margin: 0; font-size: 16px;">Aadhaar / Driving License / Voter ID</h3>
+          <p style="font-size: 13px; color: #666; margin: 4px 0;">Upload clear images for verification.</p>
+        </div>
+        <span *ngIf="canContinue" class="required-badge">Requirement Met ✓</span>
+        <span *ngIf="!canContinue" class="required-badge" style="background: #FFF3E0; color: #E65100;">At least 1 Document Required</span>
+      </div>
+
+      <div class="form-row">
+        <!-- Front -->
+        <div class="form-group">
+          <div class="upload-zone" [class.has-file]="!!aadhaarFront" (click)="aadhaarFrontInput.click()">
+            <input #aadhaarFrontInput type="file" style="display: none;" accept=".jpg,.jpeg,.png,.pdf" 
+                   (change)="onFileSelected($event, 'AADHAAR', 'FRONT')" />
+            <div *ngIf="!aadhaarFront">
+              <div class="upload-icon">⬆️</div>
+              <div class="upload-text">Front Side of Aadhaar</div>
+            </div>
+            <div *ngIf="aadhaarFront" class="file-preview">
+              <img *ngIf="aadhaarFront.preview" [src]="aadhaarFront.preview" alt="Front" />
+              <div *ngIf="!aadhaarFront.preview">📄 {{ aadhaarFront.fileName }}</div>
+            </div>
+          </div>
+          <div *ngIf="aadhaarFront" style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+            <span style="color: #4CAF50; font-size: 13px;">✓ Front Side of Aadhaar</span>
+            <button class="btn-change" (click)="removeDoc('AADHAAR', 'FRONT')">Change</button>
+          </div>
+          <div class="file-info" style="margin-top: 4px;">JPG, PNG, PDF Max Size: 15MB</div>
+        </div>
+
+        <!-- Back -->
+        <div class="form-group">
+          <div class="upload-zone" [class.has-file]="!!aadhaarBack" (click)="aadhaarBackInput.click()">
+            <input #aadhaarBackInput type="file" style="display: none;" accept=".jpg,.jpeg,.png,.pdf" 
+                   (change)="onFileSelected($event, 'AADHAAR', 'BACK')" />
+            <div *ngIf="!aadhaarBack">
+              <div class="upload-icon">⬆️</div>
+              <div class="upload-text">Back Side of Aadhaar</div>
+            </div>
+            <div *ngIf="aadhaarBack" class="file-preview">
+              <img *ngIf="aadhaarBack.preview" [src]="aadhaarBack.preview" alt="Back" />
+              <div *ngIf="!aadhaarBack.preview">📄 {{ aadhaarBack.fileName }}</div>
+            </div>
+          </div>
+          <div *ngIf="aadhaarBack" style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+            <span style="color: #4CAF50; font-size: 13px;">✓ Back Side of Aadhaar</span>
+            <button class="btn-change" (click)="removeDoc('AADHAAR', 'BACK')">Change</button>
+          </div>
+          <div class="file-info" style="margin-top: 4px;">JPG, PNG, PDF Max Size: 15MB</div>
+        </div>
+      </div>
+      <div *ngIf="errors.aadhaar" class="error-msg">{{ errors.aadhaar }}</div>
+    </div>
+  </div>
+
+  <!-- PAN Card & Bank Proof -->
+  <div class="form-row">
+    <!-- PAN Card -->
+    <div class="form-card" style="flex: 1;">
+      <div class="card-header" style="font-size: 14px;">
+        <span class="header-icon">🪪</span> PAN Card
+      </div>
+      <div class="card-body">
+        <div class="upload-zone" [class.has-file]="!!panCard" (click)="panInput.click()">
+          <input #panInput type="file" style="display: none;" accept=".jpg,.jpeg,.png,.pdf" 
+                 (change)="onFileSelected($event, 'PAN_CARD')" />
+          <div *ngIf="!panCard">
+            <div class="upload-icon">⬆️</div>
+            <div class="upload-text">Drop file here or browse</div>
+          </div>
+          <div *ngIf="panCard" class="file-preview">
+            <img *ngIf="panCard.preview" [src]="panCard.preview" alt="PAN" />
+            <div *ngIf="!panCard.preview">📄 {{ panCard.fileName }}</div>
+          </div>
+        </div>
+        <div *ngIf="panCard" style="margin-top: 6px;">
+          <button class="btn-change" (click)="removeDoc('PAN_CARD')">Change</button>
+        </div>
+        <div class="file-info">JPG, PNG, PDF Max Size: 15MB</div>
+        <div *ngIf="errors.pan" class="error-msg">{{ errors.pan }}</div>
+      </div>
+    </div>
+
+    <!-- Bank Proof -->
+    <div class="form-card" style="flex: 1;">
+      <div class="card-header" style="font-size: 14px;">
+        <span class="header-icon">🏦</span> Bank Proof
+      </div>
+      <div class="card-body">
+        <div class="upload-zone" [class.has-file]="!!bankProof" (click)="bankInput.click()">
+          <input #bankInput type="file" style="display: none;" accept=".jpg,.jpeg,.png,.pdf" 
+                 (change)="onFileSelected($event, 'BANK_PROOF')" />
+          <div *ngIf="!bankProof">
+            <div class="upload-icon">⬆️</div>
+            <div class="upload-text">Drop file here or browse</div>
+          </div>
+          <div *ngIf="bankProof" class="file-preview">
+            <img *ngIf="bankProof.preview" [src]="bankProof.preview" alt="Bank" />
+            <div *ngIf="!bankProof.preview">📄 {{ bankProof.fileName }}</div>
+          </div>
+        </div>
+        <div *ngIf="bankProof" style="margin-top: 6px;">
+          <button class="btn-change" (click)="removeDoc('BANK_PROOF')">Change</button>
+        </div>
+        <div class="file-info">JPG, PNG, PDF Max Size: 15MB</div>
+        <div *ngIf="errors.bank" class="error-msg">{{ errors.bank }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional Documents -->
+  <div class="form-card">
+    <div class="card-header" style="font-size: 14px;">
+      <span class="header-icon">📄</span> Optional Documents (APEDA / FSSAI)
+    </div>
+    <div class="card-body">
+      <div class="upload-zone" (click)="otherInput.click()">
+        <input #otherInput type="file" style="display: none;" accept=".jpg,.jpeg,.png,.pdf" 
+               (change)="onFileSelected($event, 'OTHER')" />
+        <div class="upload-icon">⬆️</div>
+        <div class="upload-text">Drop file here or browse</div>
+      </div>
+      <div class="file-info">JPG, PNG, PDF Max Size: 15MB</div>
+      <div *ngFor="let doc of otherDocs" style="margin-top: 8px; font-size: 13px; color: #4CAF50;">
+        ✓ {{ doc.fileName }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Banner -->
+  <div class="trust-banner">
+    <div class="trust-icon">🛡️</div>
+    <div class="trust-text">
+      Bigbisort uses documents solely for export compliance — we handle all regulations and keep your information private and secure.
+    </div>
+  </div>
+
+  <!-- Save & Continue -->
+  <div *ngIf="errors.general" class="error-msg" style="text-align: center; margin-bottom: 12px; font-size: 14px; font-weight: bold;">
+    {{ errors.general }}
+  </div>
+  <div style="text-align: center; margin-top: 24px;">
+    <button class="btn-continue-inline" [disabled]="!canContinue" (click)="saveAndContinue()">
+      Save & Continue →
+    </button>
+  </div>
+</div>

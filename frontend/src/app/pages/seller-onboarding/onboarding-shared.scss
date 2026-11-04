@@ -1,0 +1,696 @@
+/* ===== Bigbisort Onboarding — Global Shared Styles ===== */
+$dark-green: #1B5E20;
+$medium-green: #2E7D32;
+$light-green: #4CAF50;
+$gold: #F9A825;
+$cream: #FAFAF5;
+$beige: #F5F0E0;
+$white: #FFFFFF;
+$text-dark: #333333;
+$text-medium: #666666;
+$text-light: #999999;
+$error-red: #D32F2F;
+$border-light: #E0E0E0;
+
+/* ===== Progress Stepper ===== */
+.onboarding-stepper {
+  background: $dark-green;
+  padding: 18px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+
+  .step-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: $white;
+      background: $medium-green;
+      transition: all 0.3s ease;
+
+      &.active {
+        background: $gold;
+        color: $dark-green;
+        box-shadow: 0 0 0 3px rgba($gold, 0.3);
+      }
+
+      &.completed {
+        background: $gold;
+        color: $dark-green;
+      }
+    }
+
+    .step-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba($white, 0.5);
+      transition: all 0.3s ease;
+
+      &.active {
+        color: $white;
+        font-weight: 700;
+        text-decoration: underline;
+        text-underline-offset: 6px;
+        text-decoration-color: $gold;
+      }
+
+      &.completed {
+        color: rgba($white, 0.8);
+      }
+    }
+  }
+
+  .step-connector {
+    width: 40px;
+    height: 2px;
+    background: rgba($white, 0.3);
+    margin: 0 4px;
+
+    &.completed {
+      background: $gold;
+    }
+  }
+}
+
+/* ===== Page Background ===== */
+.onboarding-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #E8C840 0%, #D4B030 100%);
+  padding: 0 0 100px 0;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+}
+
+/* ===== Header ===== */
+.onboarding-header {
+  background: $white;
+  padding: 14px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: $gold;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: $dark-green;
+    }
+  }
+
+  .login-link {
+    font-size: 14px;
+    color: $text-medium;
+
+    a {
+      color: $dark-green;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* ===== Content Card ===== */
+.onboarding-content {
+  max-width: 820px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: $text-dark;
+  margin-bottom: 6px;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: $text-medium;
+  margin-bottom: 24px;
+}
+
+.form-card {
+  background: $white;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  overflow: hidden;
+  margin-bottom: 20px;
+
+  .card-header {
+    background: $dark-green;
+    color: $white;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .header-icon {
+      font-size: 18px;
+    }
+  }
+
+  .card-body {
+    padding: 24px;
+  }
+}
+
+/* ===== Form Row / Group ===== */
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 200px;
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: $text-dark;
+    margin-bottom: 6px;
+
+    .required {
+      color: $error-red;
+      margin-left: 2px;
+    }
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid $border-light;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: $white;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: $light-green;
+      box-shadow: 0 0 0 3px rgba($light-green, 0.1);
+    }
+
+    &.error {
+      border-color: $error-red;
+    }
+
+    &::placeholder {
+      color: $text-light;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .error-msg {
+    color: $error-red;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .input-with-icon {
+    position: relative;
+
+    .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $text-light;
+      font-size: 16px;
+    }
+
+    input {
+      padding-left: 36px;
+    }
+  }
+}
+
+/* ===== Entity Type Selector ===== */
+.entity-selector {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+
+  .entity-card {
+    flex: 1;
+    min-width: 130px;
+    padding: 20px 16px;
+    border: 2px solid $border-light;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    background: $beige;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+      border-color: $light-green;
+    }
+
+    &.selected {
+      border-color: $light-green;
+      background: $white;
+
+      .check-badge {
+        display: flex;
+      }
+    }
+
+    .entity-icon {
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    .entity-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: $text-dark;
+    }
+
+    .check-badge {
+      display: none;
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      background: $light-green;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      color: $white;
+      font-size: 14px;
+      font-weight: 700;
+    }
+  }
+}
+
+/* ===== OTP Section ===== */
+.otp-section {
+  border: 2px dashed $light-green;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 12px;
+  background: rgba($light-green, 0.05);
+
+  .otp-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: $dark-green;
+    margin-bottom: 6px;
+  }
+
+  .otp-hint {
+    font-size: 12px;
+    color: $text-medium;
+    margin-bottom: 16px;
+  }
+
+  .otp-input {
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 12px;
+    padding: 12px 20px;
+    border: 1px solid $border-light;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .otp-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+
+    .resend-link {
+      font-size: 13px;
+      color: $text-medium;
+
+      a {
+        color: $dark-green;
+        font-weight: 600;
+        cursor: pointer;
+      }
+    }
+
+    .timer {
+      font-size: 13px;
+      color: $text-medium;
+    }
+  }
+}
+
+/* ===== Verify Button ===== */
+.btn-verify {
+  background: $dark-green;
+  color: $white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: $medium-green;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* ===== Upload Zone ===== */
+.upload-zone {
+  border: 2px dashed $border-light;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba($cream, 0.5);
+
+  &:hover {
+    border-color: $light-green;
+    background: rgba($light-green, 0.05);
+  }
+
+  &.has-file {
+    border-style: solid;
+    border-color: $light-green;
+  }
+
+  .upload-icon {
+    font-size: 32px;
+    color: $dark-green;
+    margin-bottom: 8px;
+  }
+
+  .upload-text {
+    font-size: 13px;
+    color: $text-medium;
+  }
+
+  .file-info {
+    font-size: 12px;
+    color: $text-light;
+    margin-top: 6px;
+  }
+
+  .file-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    img {
+      max-width: 120px;
+      max-height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+  }
+}
+
+/* ===== Crop Grid ===== */
+.crop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  .crop-card {
+    border: 2px solid $border-light;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+
+    &:hover {
+      border-color: $light-green;
+    }
+
+    &.selected {
+      border-color: $light-green;
+
+      .crop-check {
+        display: flex;
+      }
+    }
+
+    .crop-image {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+    }
+
+    .crop-name {
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: $text-dark;
+
+      .check-icon {
+        color: $light-green;
+        margin-right: 4px;
+      }
+    }
+
+    .crop-check {
+      display: none;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      background: $light-green;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      color: $white;
+      font-size: 14px;
+    }
+  }
+}
+
+/* ===== Toggle Button Group ===== */
+.toggle-group {
+  display: flex;
+  border: 1px solid $border-light;
+  border-radius: 8px;
+  overflow: hidden;
+
+  .toggle-btn {
+    flex: 1;
+    padding: 10px 16px;
+    background: $white;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: $text-dark;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-right: 1px solid $border-light;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &.active {
+      background: $dark-green;
+      color: $white;
+    }
+
+    &:hover:not(.active) {
+      background: rgba($light-green, 0.1);
+    }
+  }
+}
+
+/* ===== Trust Banner ===== */
+.trust-banner {
+  background: rgba($light-green, 0.08);
+  border: 1px solid rgba($light-green, 0.2);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 24px;
+
+  .trust-icon {
+    font-size: 28px;
+    color: $light-green;
+  }
+
+  .trust-text {
+    font-size: 13px;
+    color: $text-medium;
+    line-height: 1.5;
+  }
+}
+
+/* ===== Bottom Navigation Bar ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $dark-green;
+  padding: 16px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+
+  .btn-back {
+    background: transparent;
+    border: none;
+    color: $gold;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px 20px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .btn-continue {
+    background: $gold;
+    color: $dark-green;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &:hover {
+      background: darken($gold, 5%);
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+}
+
+/* ===== Status Badge ===== */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.pending {
+    background: #FFF3E0;
+    color: #E65100;
+  }
+
+  &.approved {
+    background: #E8F5E9;
+    color: #2E7D32;
+  }
+
+  &.rejected {
+    background: #FFEBEE;
+    color: #C62828;
+  }
+
+  &.draft {
+    background: #F5F5F5;
+    color: #757575;
+  }
+}
+
+/* ===== Required Badge ===== */
+.required-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #E8F5E9;
+  color: $light-green;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ===== Verified Badge ===== */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: $light-green;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ===== Two Panel Layout ===== */
+.two-panel {
+  display: flex;
+  gap: 20px;
+
+  .panel {
+    flex: 1;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}

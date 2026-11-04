@@ -1,0 +1,176 @@
+<div class="explore-wrapper" [class.with-detail]="selectedProduct">
+  <div class="explore-main">
+    <h1>Explore Products</h1>
+    <p class="subtitle">Discover premium Indian agricultural products sourced directly from farmers.</p>
+
+    <div class="filters-card">
+      <div class="filters-row">
+        <div class="filter-group">
+          <label>CATEGORY</label>
+          <select [(ngModel)]="filter.category" (change)="applyFilters()">
+            <option value="">All Categories</option>
+            <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>COUNTRY OF ORIGIN</label>
+          <select [(ngModel)]="filter.country" (change)="applyFilters()">
+            <option value="">All Countries</option>
+            <option *ngFor="let c of countries" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>PRICE RANGE (USD/MT)</label>
+          <div class="range-inputs">
+            <input type="number" placeholder="$ Min" [(ngModel)]="priceMin" (change)="applyFilters()" />
+            <span>-</span>
+            <input type="number" placeholder="$ Max" [(ngModel)]="priceMax" (change)="applyFilters()" />
+          </div>
+        </div>
+      </div>
+      <div class="filters-row" *ngIf="showMoreFilters">
+        <div class="filter-group">
+          <label>MOQ (MT)</label>
+          <div class="range-inputs">
+            <input type="number" placeholder="Min" [(ngModel)]="moqMin" (change)="applyFilters()" />
+            <span>-</span>
+            <input type="number" placeholder="Max" [(ngModel)]="moqMax" (change)="applyFilters()" />
+          </div>
+        </div>
+        <div class="filter-group">
+          <label>SEARCH</label>
+          <input type="text" placeholder="Search products..." [(ngModel)]="searchTerm" (keyup.enter)="applyFilters()" />
+        </div>
+        <div class="filter-group">
+          <button class="btn-clear" (click)="clearFilters()">Clear Filters</button>
+        </div>
+      </div>
+      <div class="filters-actions">
+        <button class="btn-more-filters" (click)="toggleMoreFilters()">
+          <span>&#8942;&#8942;</span> More Filters
+        </button>
+      </div>
+    </div>
+
+    <div class="results-header">
+      <div class="count">{{ totalElements }} Products found</div>
+      <div class="sort-view">
+        <span class="sort-label">Sort by:</span>
+        <select disabled>
+          <option>Newest First</option>
+        </select>
+        <div class="view-toggle">
+          <button [class.active]="viewMode === 'grid'" (click)="setViewMode('grid')">▦</button>
+          <button [class.active]="viewMode === 'list'" (click)="setViewMode('list')">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="products-grid" [class.list-mode]="viewMode === 'list'">
+      <div class="product-card" *ngFor="let product of products" (click)="openProductDetails(product.productId)">
+        <div class="product-thumb" [style.background]="display(product).bg">
+          <span class="tag" *ngIf="tagLabel(product)" [style.background]="tagColor(product)">{{ tagLabel(product) }}</span>
+          <div class="heart" [class.saved]="isSaved(product.productId)" (click)="toggleSave(product, $event)">
+            {{ isSaved(product.productId) ? '♥' : '♡' }}
+          </div>
+          {{ display(product).icon }}
+        </div>
+        <div class="p-body">
+          <div class="nm">{{ product.productName }}</div>
+          <div class="loc">📍 {{ product.location || product.country }}</div>
+          <div class="price">{{ priceRange(product) }}</div>
+          <div class="moq">{{ moqLabel(product) }}</div>
+          <div class="stock" *ngIf="product.inStock">In Stock</div>
+          <button class="btn-outline" (click)="openProductDetails(product.productId); $event.stopPropagation()">View Details</button>
+        </div>
+      </div>
+      <div class="empty-state" *ngIf="products.length === 0">No products match your filters.</div>
+    </div>
+
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button (click)="goToPage(page - 1)" [disabled]="page === 0">‹</button>
+      <button *ngFor="let p of [].constructor(totalPages); let i = index"
+              [class.active]="i === page"
+              (click)="goToPage(i)">{{ i + 1 }}</button>
+      <button (click)="goToPage(page + 1)" [disabled]="page >= totalPages - 1">›</button>
+    </div>
+  </div>
+
+  <!-- Product Detail Panel -->
+  <div class="detail-panel" *ngIf="selectedProduct as product">
+    <button class="close-btn" (click)="closeDetails()">✕</button>
+
+    <div class="gallery">
+      <div class="hero" [style.background]="display(product).bg">
+        <span class="hero-icon">{{ display(product).icon }}</span>
+        <div class="hero-heart" [class.saved]="isSaved(product.productId)" (click)="toggleSave(product, $event)">
+          {{ isSaved(product.productId) ? '♥' : '♡' }}
+        </div>
+      </div>
+      <div class="thumbs" *ngIf="galleryThumbs(product) as thumbs">
+        <div class="thumb" *ngFor="let thumb of thumbs.slice(0, 3)" [style.background]="thumb.bg">
+          {{ thumb.icon }}
+        </div>
+        <div class="thumb more" *ngIf="thumbs.length > 3">+{{ thumbs.length - 3 }}</div>
+      </div>
+    </div>
+
+    <div class="detail-header">
+      <h2>{{ product.productName }}</h2>
+      <span class="tag" *ngIf="tagLabel(product)" [style.background]="tagColor(product)">{{ tagLabel(product) }}</span>
+    </div>
+    <div class="loc">📍 {{ product.location || product.country }}</div>
+    <div class="price-big">{{ priceRange(product) }}</div>
+    <div class="price-note">Price varies based on quantity</div>
+
+    <div class="spec-list" *ngIf="product.varietiesList?.[0] as v">
+      <div class="spec-row"><span>MOQ</span><strong>{{ v.moq }} MT</strong></div>
+      <div class="spec-row"><span>Available Quantity</span><strong>{{ v.availableQuantity }} MT</strong></div>
+      <div class="spec-row"><span>Availability</span><strong class="badge">{{ v.availability }}</strong></div>
+      <div class="spec-row" *ngIf="v.harvestSeason"><span>Harvest Season</span><strong>{{ v.harvestSeason }}</strong></div>
+      <div class="spec-row" *ngIf="v.paymentTerms"><span>Payment Terms</span><strong>{{ v.paymentTerms }}</strong></div>
+      <div class="spec-row" *ngIf="v.deliveryTimeDays"><span>Delivery Time</span><strong>{{ v.deliveryTimeDays }}</strong></div>
+    </div>
+
+    <div class="tabs">
+      <button [class.active]="activeTab === 'details'" (click)="setTab('details')">Product Details</button>
+      <button [class.active]="activeTab === 'quality'" (click)="setTab('quality')">Quality Details</button>
+      <button [class.active]="activeTab === 'export'" (click)="setTab('export')">Export Details</button>
+      <button [class.active]="activeTab === 'farmer'" (click)="setTab('farmer')">Farmer Info</button>
+    </div>
+
+    <div class="tab-content" *ngIf="product.varietiesList?.[0] as v">
+      <p *ngIf="activeTab === 'details'">{{ v.description || product.description }}</p>
+
+      <div class="quality-grid" *ngIf="activeTab === 'quality'">
+        <div class="q-item"><span>⭐ Grade</span><strong>{{ label(v.grade) }}</strong></div>
+        <div class="q-item"><span>🧺 Processing</span><strong>{{ v.processingType }}</strong></div>
+        <div class="q-item"><span>💧 Moisture</span><strong>{{ v.moistureContent }}</strong></div>
+        <div class="q-item"><span>📦 Packing</span><strong>{{ v.packingDetail }}</strong></div>
+      </div>
+
+      <div *ngIf="activeTab === 'export'">
+        <div class="spec-row"><span>Payment Terms</span><strong>{{ v.paymentTerms }}</strong></div>
+        <div class="spec-row"><span>Delivery Time</span><strong>{{ v.deliveryTimeDays }}</strong></div>
+        <div class="spec-row"><span>Certifications</span><strong>{{ v.certifications || '—' }}</strong></div>
+      </div>
+
+      <div class="farmer-box" *ngIf="activeTab === 'farmer'">
+        <div class="farmer-icon">👤</div>
+        <div>
+          <div class="farmer-title">About the Farmer (Limited Info)</div>
+          <p>{{ product.farmerInfo || 'Farmer information not available for this product.' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-actions">
+      <button class="btn-save" [class.saved]="isSaved(product.productId)" (click)="toggleSave(product, $event)">
+        {{ isSaved(product.productId) ? '♥ Saved' : '♡ Save Product' }}
+      </button>
+      <button class="btn-quote" disabled title="Coming soon">📄 Request Quote</button>
+    </div>
+
+    <div class="trust-note">🔒 All communication and transactions are managed by Bigbisort to ensure quality and secure trade.</div>
+  </div>
+</div>

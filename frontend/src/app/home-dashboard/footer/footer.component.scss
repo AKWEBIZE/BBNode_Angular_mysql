@@ -1,0 +1,200 @@
+/* ============================================================================
+   Public site footer — markup unchanged.
+   ========================================================================= */
+
+.footer {
+  position: relative;
+  background: linear-gradient(180deg, var(--bb-green-800) 0%, var(--bb-green-900) 100%);
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-text-sm);
+  line-height: var(--bb-leading-body);
+  padding: var(--bb-space-9) clamp(1rem, 5vw, 3rem) var(--bb-space-5);
+
+  /* Gold hairline mirrors the navbar, closing the page frame. */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+      var(--bb-gold-500) 0%,
+      var(--bb-gold-300) 50%,
+      var(--bb-gold-500) 100%);
+  }
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1.2fr 1.2fr;
+  gap: var(--bb-space-7) var(--bb-space-6);
+  max-width: var(--bb-container);
+  margin: 0 auto;
+}
+
+.footer-section {
+  margin: 0;
+  min-width: 0;
+}
+
+.footer-section h3 {
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--bb-tracking-wide);
+  color: var(--bb-gold-300);
+  margin: 0 0 var(--bb-space-4);
+}
+
+.footer-section p {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: var(--bb-text-sm);
+  margin: 0 0 var(--bb-space-3);
+}
+
+/* The company name sits directly under its heading — give it weight. */
+.footer-section p strong {
+  display: inline-block;
+  font-family: var(--bb-font-display);
+  font-size: var(--bb-text-lg);
+  font-weight: 600;
+  letter-spacing: var(--bb-tracking-tight);
+  color: #fff;
+  margin-bottom: var(--bb-space-1);
+}
+
+.footer-section ul {
+  list-style: none;
+  margin: var(--bb-space-3) 0 0;
+  padding: 0;
+}
+
+.footer-section li { margin-bottom: var(--bb-space-2); }
+
+.footer-section a {
+  position: relative;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: var(--bb-text-sm);
+  text-decoration: none;
+  transition: color var(--bb-transition), padding-left var(--bb-transition);
+}
+
+.footer-section a:hover,
+.footer-section a:focus-visible {
+  color: var(--bb-gold-300);
+  text-decoration: none;
+}
+
+/* Nudge list links on hover rather than underlining — quieter, and it does
+   not reflow the surrounding text. */
+.footer-section li a::before {
+  content: '›';
+  position: absolute;
+  left: -0.75rem;
+  opacity: 0;
+  color: var(--bb-gold-400);
+  transition: opacity var(--bb-transition), transform var(--bb-transition);
+  transform: translateX(-3px);
+}
+
+.footer-section li a:hover::before,
+.footer-section li a:focus-visible::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.footer-section a:focus-visible {
+  outline: 2px solid var(--bb-gold-300);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---- Newsletter -------------------------------------------------------- */
+.footer-section form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bb-space-3);
+  margin-top: var(--bb-space-4);
+}
+
+.footer-section input {
+  width: 100%;
+  padding: var(--bb-space-3) var(--bb-space-4);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--bb-radius-md);
+  color: #fff;
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-text-sm);
+  outline: none;
+  transition: border-color var(--bb-transition), background var(--bb-transition),
+              box-shadow var(--bb-transition);
+
+  &::placeholder { color: rgba(255, 255, 255, 0.42); }
+
+  &:focus {
+    background: rgba(255, 255, 255, 0.11);
+    border-color: var(--bb-gold-400);
+    box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.18);
+  }
+}
+
+.footer-section button {
+  background: linear-gradient(135deg, var(--bb-gold-400) 0%, var(--bb-gold-500) 100%);
+  color: var(--bb-green-900);
+  border: none;
+  padding: var(--bb-space-3) var(--bb-space-5);
+  border-radius: var(--bb-radius-md);
+  cursor: pointer;
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-text-sm);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: transform var(--bb-transition), box-shadow var(--bb-transition),
+              background var(--bb-transition);
+
+  &:hover {
+    background: linear-gradient(135deg, var(--bb-gold-300) 0%, var(--bb-gold-400) 100%);
+    transform: translateY(-2px);
+    box-shadow: var(--bb-shadow-gold);
+  }
+
+  &:active { transform: translateY(0); }
+
+  &:focus-visible {
+    outline: 2px solid var(--bb-gold-200);
+    outline-offset: 2px;
+  }
+}
+
+/* ---- Bottom bar -------------------------------------------------------- */
+.footer-bottom {
+  max-width: var(--bb-container);
+  margin: var(--bb-space-8) auto 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: var(--bb-space-5);
+
+  p {
+    margin: 0;
+    font-size: var(--bb-text-xs);
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.01em;
+  }
+}
+
+/* ---- Responsive -------------------------------------------------------- */
+@media (max-width: 992px) {
+  .footer-container { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 560px) {
+  .footer { padding-top: var(--bb-space-7); }
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: var(--bb-space-6);
+  }
+}

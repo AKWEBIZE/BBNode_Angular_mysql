@@ -1,0 +1,527 @@
+/* ============================================================================
+   Home page
+   Markup unchanged. The carousel still transforms .carousel-container via
+   [style.transform] from the component, so its flex/width/transition rules
+   are preserved exactly.
+   ========================================================================= */
+
+/* ---------------------------------------------------------------- HERO ---- */
+.hero-section {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: clamp(460px, 72vh, 660px);
+  margin-top: 0;
+  overflow: hidden;
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bb-green-900);
+
+  .hero-carousel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    .carousel-container {
+      display: flex;
+      transition: transform 0.8s var(--bb-ease);
+      height: 100%;
+      width: 100%;
+
+      .carousel-slide {
+        min-width: 100%;
+        height: 100%;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+
+  /* Green scrim over the photography: guarantees headline contrast on every
+     slide instead of depending on how light each image happens to be. */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(18, 41, 29, 0.55) 0%, rgba(18, 41, 29, 0.30) 45%, rgba(18, 41, 29, 0.80) 100%),
+      linear-gradient(90deg, rgba(18, 41, 29, 0.60) 0%, rgba(18, 41, 29, 0.10) 60%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    background: none;          /* was a translucent white box */
+    padding: var(--bb-space-6);
+    border-radius: 0;
+    max-width: 780px;
+    margin: 0 auto;
+
+    h1 {
+      font-family: var(--bb-font-display);
+      font-size: clamp(2.25rem, 5.5vw, 3.75rem);
+      font-weight: 600;
+      line-height: var(--bb-leading-tight);
+      letter-spacing: var(--bb-tracking-tight);
+      color: #fff;
+      margin: 0 0 var(--bb-space-4);
+      text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    p {
+      font-family: var(--bb-font-body);
+      font-size: clamp(1rem, 2vw, var(--bb-text-lg));
+      font-weight: 400;
+      line-height: var(--bb-leading-snug);
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 46ch;
+      margin: 0 auto var(--bb-space-7);
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--bb-gold-400) 0%, var(--bb-gold-500) 100%);
+      border: none;
+      color: var(--bb-green-900);
+      padding: var(--bb-space-4) var(--bb-space-8);
+      text-decoration: none;
+      font-family: var(--bb-font-body);
+      font-weight: 700;
+      font-size: var(--bb-text-base);
+      letter-spacing: 0.01em;
+      border-radius: var(--bb-radius-pill);
+      box-shadow: var(--bb-shadow-gold);
+      transition: transform var(--bb-transition), box-shadow var(--bb-transition),
+                  background var(--bb-transition);
+
+      &:hover {
+        background: linear-gradient(135deg, var(--bb-gold-300) 0%, var(--bb-gold-400) 100%);
+        color: var(--bb-green-900);
+        transform: translateY(-2px);
+        box-shadow: 0 16px 36px rgba(197, 146, 46, 0.38);
+      }
+
+      &:active { transform: translateY(0); }
+
+      &:focus-visible {
+        outline: 3px solid var(--bb-gold-200);
+        outline-offset: 3px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    height: clamp(380px, 62vh, 460px);
+
+    .hero-content {
+      padding: var(--bb-space-5) var(--bb-space-4);
+
+      p { margin-bottom: var(--bb-space-6); }
+
+      .btn-primary {
+        padding: var(--bb-space-3) var(--bb-space-6);
+        font-size: var(--bb-text-sm);
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    height: 400px;
+
+    .hero-content {
+      padding: var(--bb-space-4);
+      p { font-size: var(--bb-text-sm); }
+    }
+
+    .carousel-slide img {
+      object-fit: cover;
+      background-color: var(--bb-green-900);
+    }
+  }
+}
+
+/* ---- Shared section rhythm --------------------------------------------- */
+.features-section,
+.about-preview,
+.categories-section,
+.testimonials-section,
+.cta-section {
+  font-family: var(--bb-font-body);
+  padding: clamp(3.5rem, 7vw, 5.5rem) clamp(1rem, 5vw, 3rem);
+  text-align: center;
+}
+
+/* Section headings share one treatment: display serif with a gold rule. */
+.features-section > h2,
+.about-preview > h2,
+.categories-section > h2,
+.testimonials-section > h2 {
+  position: relative;
+  font-family: var(--bb-font-display);
+  font-size: clamp(1.75rem, 3.6vw, var(--bb-text-3xl));
+  font-weight: 600;
+  line-height: var(--bb-leading-snug);
+  letter-spacing: var(--bb-tracking-tight);
+  color: var(--bb-green-800);
+  margin: 0 auto var(--bb-space-8);
+  padding-bottom: var(--bb-space-4);
+  max-width: 24ch;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 56px;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--bb-gold-400), var(--bb-gold-300));
+  }
+}
+
+/* ------------------------------------------------------------ FEATURES --- */
+.features-section {
+  background-color: var(--bb-cream);
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--bb-space-5);
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .feature-card {
+    background-color: var(--bb-surface);
+    border: 1px solid var(--bb-border);
+    border-radius: var(--bb-radius-lg);
+    padding: var(--bb-space-7) var(--bb-space-5);
+    box-shadow: var(--bb-shadow-sm);
+    text-align: center;
+    cursor: default;
+    transition: transform var(--bb-transition), box-shadow var(--bb-transition),
+                border-color var(--bb-transition);
+
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--bb-shadow-lg);
+      border-color: var(--bb-gold-200);
+    }
+
+    /* Icon sits in a green medallion — a bare yellow glyph on white was the
+       weakest-contrast element on the page. */
+    i {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 66px;
+      height: 66px;
+      margin: 0 auto var(--bb-space-5);
+      font-size: 1.75rem;
+      color: var(--bb-gold-300);
+      background: linear-gradient(135deg, var(--bb-green-700) 0%, var(--bb-green-800) 100%);
+      border-radius: var(--bb-radius-lg);
+      box-shadow: var(--bb-shadow-sm);
+    }
+
+    h3 {
+      font-family: var(--bb-font-display);
+      font-size: var(--bb-text-xl);
+      font-weight: 600;
+      letter-spacing: var(--bb-tracking-tight);
+      color: var(--bb-green-800);
+      margin: 0 0 var(--bb-space-3);
+    }
+
+    p {
+      font-size: var(--bb-text-sm);
+      color: var(--bb-ink-soft);
+      line-height: var(--bb-leading-body);
+      margin: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .feature-card {
+      padding: var(--bb-space-6) var(--bb-space-4);
+
+      i { width: 56px; height: 56px; font-size: 1.5rem; }
+    }
+  }
+}
+
+/* -------------------------------------------------------- ABOUT PREVIEW -- */
+.about-preview {
+  background-color: var(--bb-surface);
+
+  p {
+    max-width: 62ch;
+    margin: 0 auto var(--bb-space-6);
+    font-size: var(--bb-text-lg);
+    line-height: var(--bb-leading-body);
+    color: var(--bb-ink-soft);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    margin-top: 0;
+    padding: var(--bb-space-3) var(--bb-space-7);
+    background-color: transparent;
+    border: 2px solid var(--bb-green-700);
+    color: var(--bb-green-800);
+    border-radius: var(--bb-radius-pill);
+    font-weight: 600;
+    font-size: var(--bb-text-sm);
+    text-decoration: none;
+    transition: background-color var(--bb-transition), color var(--bb-transition),
+                transform var(--bb-transition), box-shadow var(--bb-transition);
+
+    &:hover {
+      background-color: var(--bb-green-800);
+      border-color: var(--bb-green-800);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: var(--bb-shadow-md);
+    }
+
+    &:active { transform: translateY(0); }
+
+    &:focus-visible {
+      outline: 2px solid var(--bb-gold-400);
+      outline-offset: 3px;
+    }
+  }
+}
+
+/* ---------------------------------------------------------- CATEGORIES --- */
+.categories-section {
+  background-color: var(--bb-surface-2);
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: var(--bb-space-5);
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .category-card {
+    position: relative;
+    border-radius: var(--bb-radius-lg);
+    overflow: hidden;
+    background: var(--bb-green-900);
+    box-shadow: var(--bb-shadow-sm);
+    cursor: pointer;
+    transition: transform var(--bb-transition), box-shadow var(--bb-transition);
+
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-6px);
+      box-shadow: var(--bb-shadow-lg);
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--bb-gold-400);
+      outline-offset: 3px;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      transition: transform 600ms var(--bb-ease);
+    }
+
+    &:hover img { transform: scale(1.06); }
+
+    /* Label overlays the image on a green fade rather than sitting in its own
+       yellow bar — the card reads as one object and the image gets the space. */
+    h3 {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      padding: var(--bb-space-7) var(--bb-space-4) var(--bb-space-4);
+      background: linear-gradient(180deg, rgba(18, 41, 29, 0) 0%, rgba(18, 41, 29, 0.88) 100%);
+      font-family: var(--bb-font-display);
+      font-size: var(--bb-text-lg);
+      font-weight: 600;
+      letter-spacing: var(--bb-tracking-tight);
+      color: #fff;
+      text-align: left;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Thin gold reveal along the bottom edge. */
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: var(--bb-gold-400);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 300ms var(--bb-ease);
+    }
+
+    &:hover::after,
+    &:focus-visible::after { transform: scaleX(1); }
+  }
+
+  @media (max-width: 480px) {
+    .category-card img { height: 190px; }
+  }
+}
+
+/* -------------------------------------------------------- TESTIMONIALS --- */
+.testimonials-section {
+  background-color: var(--bb-cream-alt);
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: var(--bb-space-5);
+    max-width: 1080px;
+    margin: 0 auto;
+    align-items: stretch;
+  }
+
+  .testimonial-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--bb-surface);
+    border: 1px solid var(--bb-border);
+    border-radius: var(--bb-radius-lg);
+    padding: var(--bb-space-8) var(--bb-space-6) var(--bb-space-6);
+    box-shadow: var(--bb-shadow-sm);
+    font-style: normal;               /* italic body was hurting legibility */
+    text-align: left;
+    transition: transform var(--bb-transition), box-shadow var(--bb-transition);
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--bb-shadow-md);
+    }
+
+    /* Oversized gold quote mark as an ornament. */
+    &::before {
+      content: '\201C';
+      position: absolute;
+      top: 6px;
+      left: var(--bb-space-5);
+      font-family: var(--bb-font-display);
+      font-size: 4.5rem;
+      line-height: 1;
+      color: var(--bb-gold-200);
+      pointer-events: none;
+    }
+
+    p {
+      position: relative;
+      flex: 1 1 auto;
+      margin: 0 0 var(--bb-space-5);
+      font-size: var(--bb-text-base);
+      line-height: var(--bb-leading-body);
+      color: var(--bb-ink-soft);
+    }
+
+    h4 {
+      margin: 0;
+      padding-top: var(--bb-space-4);
+      border-top: 1px solid var(--bb-border-soft);
+      font-family: var(--bb-font-body);
+      font-size: var(--bb-text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--bb-tracking-wide);
+      color: var(--bb-green-600);
+    }
+  }
+}
+
+/* ------------------------------------------------------------- CTA BAND -- */
+.cta-section {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--bb-green-800) 0%, var(--bb-green-900) 100%);
+  color: #fff;
+
+  /* Soft gold bloom keeps the flat green band from reading as a dead slab. */
+  &::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -8%;
+    width: 460px;
+    height: 460px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 168, 67, 0.18) 0%, rgba(212, 168, 67, 0) 70%);
+    pointer-events: none;
+  }
+
+  h2 {
+    position: relative;
+    font-family: var(--bb-font-display);
+    font-size: clamp(1.75rem, 3.6vw, var(--bb-text-3xl));
+    font-weight: 600;
+    line-height: var(--bb-leading-snug);
+    letter-spacing: var(--bb-tracking-tight);
+    color: #fff;
+    margin: 0 0 var(--bb-space-4);
+  }
+
+  p {
+    position: relative;
+    max-width: 52ch;
+    margin: 0 auto var(--bb-space-7);
+    font-size: var(--bb-text-lg);
+    line-height: var(--bb-leading-body);
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .cta-btn {
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(135deg, var(--bb-gold-400) 0%, var(--bb-gold-500) 100%);
+    color: var(--bb-green-900);
+    padding: var(--bb-space-4) var(--bb-space-8);
+    border-radius: var(--bb-radius-pill);
+    font-weight: 700;
+    font-size: var(--bb-text-base);
+    text-decoration: none;
+    box-shadow: var(--bb-shadow-gold);
+    transition: transform var(--bb-transition), box-shadow var(--bb-transition),
+                background var(--bb-transition);
+
+    &:hover {
+      background: linear-gradient(135deg, var(--bb-gold-300) 0%, var(--bb-gold-400) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(197, 146, 46, 0.38);
+    }
+
+    &:active { transform: translateY(0); }
+
+    &:focus-visible {
+      outline: 3px solid var(--bb-gold-200);
+      outline-offset: 3px;
+    }
+  }
+}

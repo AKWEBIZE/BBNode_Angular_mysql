@@ -1,0 +1,58 @@
+<div class="payments-container">
+  
+  <div class="page-header">
+    <h2 class="page-title">Payments</h2>
+  </div>
+
+  <div class="summary-cards">
+    <div class="card summary-card">
+      <p class="subtitle">TOTAL EARNINGS</p>
+      <h3 class="highlight-green">{{totalEarnings}}</h3>
+    </div>
+    <div class="card summary-card">
+      <p class="subtitle">PAID</p>
+      <h3 class="text-dark">{{totalPaid}}</h3>
+    </div>
+    <div class="card summary-card">
+      <p class="subtitle">PENDING</p>
+      <h3 class="highlight-orange">{{totalPending}}</h3>
+    </div>
+  </div>
+
+  <div class="table-card mt-4">
+    <table *ngIf="payments.length > 0">
+      <thead>
+        <tr>
+          <th>ORDER ID</th>
+          <th>BUYER NAME</th>
+          <th>AMOUNT</th>
+          <th>PAYMENT STATUS</th>
+          <th>DATE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of payments">
+          <td>{{payment.orderId}}</td>
+          <td>{{payment.buyerName}}</td>
+          <td><strong>{{payment.amount}}</strong></td>
+          <td>
+            <span class="status-badge" [ngClass]="{
+              'badge-paid': payment.paymentStatus === 'Paid',
+              'badge-pending': payment.paymentStatus === 'Pending',
+              'badge-failed': payment.paymentStatus === 'Failed'
+            }">{{payment.paymentStatus}}</span>
+          </td>
+          <td>{{payment.date}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="empty-state" *ngIf="payments.length === 0">
+      <div class="alert alert-success d-flex align-items-center" role="alert" style="background-color: #e8f5e9; border: 1px solid #c8e6c9; color: #1b5e20;">
+        <i class="bi bi-info-circle me-2"></i>
+        <div>Empty state: shows "No Payments Available" with illustration placeholder</div>
+      </div>
+    </div>
+  </div>
+
+</div>

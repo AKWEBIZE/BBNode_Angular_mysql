@@ -1,0 +1,95 @@
+<div class="product-dashboard">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="title-area">
+      <h1>My Products</h1>
+      <p class="subtitle">{{totalElements}} total products &middot; {{approvedCount}} approved (on this page)</p>
+    </div>
+    <button class="btn btn-primary" (click)="navigateToAddProduct()">+ Add Product</button>
+  </div>
+
+  <!-- Filter Card -->
+  <div class="filter-card card">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search by product name..." (input)="onSearch($event)" />
+    </div>
+    
+    <div class="status-filter">
+      <select (change)="onFilterStatus($event)">
+        <option *ngFor="let option of statusOptions" [value]="option" [selected]="option === selectedStatus">{{option}}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Product Table -->
+  <div class="table-card card">
+    <table *ngIf="products.length > 0" class="product-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Variety</th>
+          <th>Buyers</th>
+          <th>Status</th>
+          <th>Quantity</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products" class="product-row">
+          <td class="product-cell">
+            <div class="product-info">
+              <div class="icon-avatar">
+                 <span *ngIf="!product.product_image">📦</span>
+                 <img *ngIf="product.product_image" [src]="'data:image/jpeg;base64,' + product.product_image" class="thumb">
+              </div>
+              <div class="name-block">
+                <span class="p-name" (click)="navigateToEdit(product)">{{product.productName}}</span>
+                <span class="p-cat">{{product.category}}</span>
+              </div>
+            </div>
+          </td>
+          <td>{{getVarietyText(product)}}</td>
+          <td>
+            <div class="buyer-pill">
+              👥 0
+            </div>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(getStatus(product))">
+              {{getStatus(product)}}
+            </span>
+          </td>
+          <td class="qty-text">{{getQuantityText(product)}}</td>
+          <td>
+            <button class="btn-outline-green" (click)="navigateToEdit(product)">Edit &rsaquo;</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Empty State -->
+    <div *ngIf="products.length === 0" class="empty-state">
+      <div class="empty-icon">📦</div>
+      <h3>No products found.</h3>
+      <p>Try adjusting your filters or add a new product.</p>
+      <button class="btn btn-primary mt-3" (click)="navigateToAddProduct()">Add Product</button>
+    </div>
+
+    <!-- Pagination Footer -->
+    <div class="pagination-footer" *ngIf="totalElements > 0">
+      <div class="page-size">
+        Show 
+        <select (change)="onPageSizeChange($event)">
+          <option *ngFor="let size of pageSizes" [value]="size" [selected]="size === pageSize">{{size}}</option>
+        </select> 
+        per page
+      </div>
+      <div class="page-controls">
+        <span class="page-count">Page {{currentPage + 1}} of {{totalPages > 0 ? totalPages : 1}}</span>
+        <button [disabled]="currentPage === 0" (click)="prevPage()">&larr; Prev</button>
+        <button [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">Next &rarr;</button>
+      </div>
+    </div>
+  </div>
+</div>

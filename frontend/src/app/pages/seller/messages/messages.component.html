@@ -1,0 +1,96 @@
+<div class="messages-page">
+  <div class="conversation-list" [class.hide-on-mobile]="selectedConversation || creatingNew">
+    <div class="page-header">
+      <div>
+        <h2>Messages</h2>
+        <p class="subtitle">Conversations with the Bigbisort team.</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-refresh" title="Refresh" [disabled]="loading" (click)="refresh()">
+          <i class="bi bi-arrow-clockwise" [class.spinning]="loading"></i>
+        </button>
+        <button class="btn-new" (click)="openNewConversationForm()">+ New</button>
+      </div>
+    </div>
+
+    <div class="list-body" *ngIf="conversations.length > 0">
+      <div
+        class="conversation-item"
+        *ngFor="let c of conversations"
+        [class.active]="selectedConversation?.id === c.id"
+        (click)="openConversation(c)">
+        <div class="conv-top">
+          <div class="conv-subject">{{ c.subject }}</div>
+          <span class="unread-badge" *ngIf="c.unreadCount > 0">{{ c.unreadCount }}</span>
+        </div>
+        <div class="conv-preview">{{ c.lastMessagePreview }}</div>
+        <div class="conv-date">{{ c.updatedAt | date: 'MMM d, y, h:mm a' }}</div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="conversations.length === 0 && !loading">
+      No conversations yet. Click "+ New" to start one with the Bigbisort team.
+    </div>
+  </div>
+
+  <!-- New conversation form -->
+  <div class="conversation-thread" *ngIf="creatingNew" [class.show-on-mobile]="creatingNew">
+    <div class="thread-header">
+      <button class="back-btn" (click)="cancelNewConversation()">← Back</button>
+      <div class="thread-subject">New Conversation</div>
+    </div>
+
+    <div class="new-conversation-body">
+      <label>Message</label>
+      <textarea
+        rows="6"
+        placeholder="Type your message…"
+        maxlength="250"
+        [(ngModel)]="newMessage"></textarea>
+      <span class="char-count" [class.limit]="newMessage.length >= 250">{{ newMessage.length }}/250</span>
+      <span class="field-error" *ngIf="newConversationError">{{ newConversationError }}</span>
+    </div>
+
+    <div class="thread-reply new-conversation-actions">
+      <button class="btn-outline" (click)="cancelNewConversation()" [disabled]="startingConversation">Cancel</button>
+      <button class="btn-send" [disabled]="!newMessage.trim() || startingConversation" (click)="startConversation()">
+        {{ startingConversation ? 'Sending…' : 'Send' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="conversation-thread" *ngIf="selectedConversation && !creatingNew" [class.show-on-mobile]="selectedConversation">
+    <div class="thread-header">
+      <button class="back-btn" (click)="closeConversation()">← Back</button>
+      <div class="thread-subject">{{ selectedConversation.subject }}</div>
+    </div>
+
+    <div class="thread-body">
+      <div class="bubble" *ngFor="let m of messages" [class.mine]="m.senderType === 'SELLER'">
+        <div class="bubble-sender">{{ m.senderType === 'SELLER' ? 'You' : 'Bigbisort Team' }}</div>
+        <div class="bubble-text">{{ m.messageText }}</div>
+        <div class="bubble-time">
+          {{ m.sentAt | date: 'MMM d, h:mm a' }}
+          <span class="receipt" *ngIf="m.senderType === 'SELLER'">{{ m.read ? '✓✓ Read' : '✓ Sent' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="thread-reply">
+      <div class="reply-input-wrap">
+        <input
+          type="text"
+          placeholder="Type a message…"
+          maxlength="250"
+          [(ngModel)]="replyText"
+          (keyup.enter)="sendReply()" />
+        <span class="char-count" [class.limit]="replyText.length >= 250">{{ replyText.length }}/250</span>
+      </div>
+      <button class="btn-send" [disabled]="!replyText.trim() || sending" (click)="sendReply()">Send</button>
+    </div>
+  </div>
+
+  <div class="conversation-thread empty" *ngIf="!selectedConversation && !creatingNew && conversations.length > 0">
+    <div class="empty-state">Select a conversation to view messages, or click "+ New" to start one.</div>
+  </div>
+</div>

@@ -1,0 +1,285 @@
+/* ============================================================================
+   Public site navbar + session modal
+   Markup unchanged — same classes, same structure.
+   ========================================================================= */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--bb-space-4);
+  min-height: var(--bb-navbar-h);
+  padding: var(--bb-space-3) clamp(1rem, 4vw, 3rem);
+  font-family: var(--bb-font-body);
+
+  /* Deep green with a subtle vertical lift, plus a gold hairline at the base
+     to tie the header to the accent colour used on CTAs. */
+  background: linear-gradient(180deg, var(--bb-green-800) 0%, var(--bb-green-900) 100%);
+  border-bottom: 1px solid rgba(212, 168, 67, 0.28);
+  box-shadow: var(--bb-shadow-md);
+}
+
+/* ---- Left: logo + primary nav ------------------------------------------ */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: var(--bb-space-1);
+  min-width: 0;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--bb-space-5);
+  padding: 0;
+  flex: 0 0 auto;
+
+  img {
+    height: 46px;
+    width: auto;
+    max-width: 150px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform var(--bb-transition), filter var(--bb-transition);
+  }
+
+  &:hover img {
+    transform: translateY(-1px) scale(1.03);
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+  }
+}
+
+/* ---- Nav links --------------------------------------------------------- */
+.navbar a {
+  position: relative;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  font-family: var(--bb-font-body);
+  font-weight: 500;
+  font-size: var(--bb-text-sm);
+  letter-spacing: 0.01em;
+  padding: var(--bb-space-2) var(--bb-space-4);
+  border-radius: var(--bb-radius-pill);
+  white-space: nowrap;
+  transition: color var(--bb-transition), background-color var(--bb-transition);
+
+  /* Gold underline grows from the centre — replaces the old scale(1.2) jump,
+     which shifted every sibling link on hover. */
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 2px;
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--bb-gold-400);
+    transform: translateX(-50%);
+    transition: width var(--bb-transition);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.07);
+
+    &::after { width: calc(100% - 2 * var(--bb-space-4)); }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bb-gold-300);
+    outline-offset: 2px;
+  }
+}
+
+/* Logo is an <a> too — opt it out of the link treatment. */
+.navbar a.logo {
+  background: none;
+  border-radius: 0;
+
+  &::after { content: none; }
+  &:hover { background: none; }
+}
+
+.active-link {
+  color: #fff !important;
+  font-weight: 600;
+  border-bottom: none;
+
+  &::after {
+    width: calc(100% - 2 * var(--bb-space-4)) !important;
+    background: var(--bb-gold-400);
+  }
+}
+
+/* ---- Right: auth action ------------------------------------------------ */
+.nav-right {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.login-link {
+  background: linear-gradient(135deg, var(--bb-gold-400) 0%, var(--bb-gold-500) 100%);
+  color: var(--bb-green-900) !important;
+  padding: var(--bb-space-3) var(--bb-space-6) !important;
+  border-radius: var(--bb-radius-pill);
+  font-weight: 700;
+  font-size: var(--bb-text-sm);
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 14px rgba(197, 146, 46, 0.32);
+  transition: transform var(--bb-transition), box-shadow var(--bb-transition),
+              filter var(--bb-transition);
+
+  &::after { content: none; }
+
+  &:hover,
+  &:focus-visible {
+    background: linear-gradient(135deg, var(--bb-gold-300) 0%, var(--bb-gold-400) 100%);
+    color: var(--bb-green-900) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--bb-shadow-gold);
+  }
+
+  &:active { transform: translateY(0); }
+}
+
+/* ---- Responsive -------------------------------------------------------- */
+@media (max-width: 900px) {
+  .navbar { padding: var(--bb-space-3) var(--bb-space-4); }
+  .logo {
+    margin-right: var(--bb-space-3);
+    img { height: 38px; max-width: 118px; }
+  }
+  .navbar a { padding: var(--bb-space-2) var(--bb-space-3); font-size: var(--bb-text-xs); }
+  .login-link { padding: var(--bb-space-2) var(--bb-space-4) !important; }
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    flex-wrap: wrap;
+    row-gap: var(--bb-space-2);
+  }
+  .nav-left {
+    flex: 1 1 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .logo {
+    flex: 1 1 100%;
+    justify-content: center;
+    margin-right: 0;
+  }
+  .nav-right {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+/* ============================================================================
+   Session Expired modal
+   ========================================================================= */
+.session-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 41, 29, 0.62);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--bb-space-4);
+  backdrop-filter: blur(6px);
+  animation: overlayFade 200ms var(--bb-ease);
+}
+
+.session-modal {
+  background: var(--bb-surface);
+  border: 1px solid var(--bb-border);
+  border-radius: var(--bb-radius-lg);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--bb-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--bb-font-body);
+  animation: modalPop 0.3s var(--bb-ease);
+
+  .modal-icon {
+    background: linear-gradient(180deg, var(--bb-gold-100) 0%, var(--bb-cream) 100%);
+    border-bottom: 1px solid var(--bb-border);
+    padding: var(--bb-space-7) var(--bb-space-6) var(--bb-space-5);
+    text-align: center;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--bb-gold-500);
+  }
+
+  .modal-content-text {
+    padding: var(--bb-space-6);
+    text-align: center;
+
+    h3 {
+      margin: 0 0 var(--bb-space-2);
+      font-family: var(--bb-font-display);
+      font-size: var(--bb-text-xl);
+      font-weight: 600;
+      letter-spacing: var(--bb-tracking-tight);
+      color: var(--bb-green-800);
+    }
+
+    p {
+      margin: 0;
+      color: var(--bb-ink-soft);
+      font-size: var(--bb-text-sm);
+      line-height: var(--bb-leading-body);
+    }
+  }
+
+  .modal-footer-actions {
+    padding: var(--bb-space-4) var(--bb-space-6) var(--bb-space-6);
+    display: flex;
+    justify-content: center;
+
+    .btn-ok {
+      background: var(--bb-green-800);
+      color: #fff;
+      border: none;
+      padding: var(--bb-space-3) var(--bb-space-8);
+      border-radius: var(--bb-radius-pill);
+      font-family: var(--bb-font-body);
+      font-size: var(--bb-text-sm);
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--bb-shadow-sm);
+      transition: background var(--bb-transition), transform var(--bb-transition),
+                  box-shadow var(--bb-transition);
+
+      &:hover {
+        background: var(--bb-green-900);
+        transform: translateY(-1px);
+        box-shadow: var(--bb-shadow-md);
+      }
+
+      &:active { transform: translateY(0); }
+
+      &:focus-visible {
+        outline: 2px solid var(--bb-gold-400);
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+
+@keyframes overlayFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modalPop {
+  from { transform: scale(0.94) translateY(8px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}

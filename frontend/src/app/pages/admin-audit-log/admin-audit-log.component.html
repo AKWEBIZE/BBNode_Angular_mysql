@@ -1,0 +1,78 @@
+<div class="audit-log-page">
+  <div class="page-header">
+    <h2>Audit Logs</h2>
+    <p class="subtitle">Login activity across Buyer, Seller, and Admin portals — success and failed attempts.</p>
+  </div>
+
+  <div class="queue-header-bar">
+    <div class="qh-left">
+      <span class="qh-title">Login Events ({{ totalLogs }})</span>
+      <button class="qh-refresh" title="Refresh" (click)="refresh()"><i class="bi bi-arrow-clockwise"></i></button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="filter-row">
+      <select class="filter-select" [(ngModel)]="actorTypeFilter" (change)="onFilterChange()">
+        <option *ngFor="let o of actorTypeOptions" [value]="o.value">{{ o.label }}</option>
+      </select>
+      <select class="filter-select" [(ngModel)]="statusFilter" (change)="onFilterChange()">
+        <option *ngFor="let o of statusOptions" [value]="o.value">{{ o.label }}</option>
+      </select>
+      <input type="date" class="filter-date" [(ngModel)]="fromDate" (change)="onFilterChange()" title="From date">
+      <input type="date" class="filter-date" [(ngModel)]="toDate" (change)="onFilterChange()" title="To date">
+    </div>
+    <div class="filter-row">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search by username or email…"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onFilterChange()" />
+      <button class="btn-outline" (click)="onFilterChange()">Search</button>
+    </div>
+  </div>
+
+  <div class="table-wrapper" *ngIf="logs.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Occurred At</th>
+          <th>Role</th>
+          <th>User</th>
+          <th>Action</th>
+          <th>Status</th>
+          <th>IP Address</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of logs">
+          <td>{{ log.occurredAt | date: 'MMM d, y, h:mm:ss a' }}</td>
+          <td>{{ actorTypeLabel(log.actorType) }}</td>
+          <td>
+            <div class="p-name">{{ log.actorUsername || '—' }}</div>
+            <div class="p-seller" *ngIf="log.actorEmail">{{ log.actorEmail }}</div>
+          </td>
+          <td>{{ log.action }}</td>
+          <td><span class="tag" [ngClass]="statusClass(log.status)">{{ log.status }}</span></td>
+          <td>{{ log.ipAddress || '—' }}</td>
+          <td class="details-cell">
+            <span *ngIf="log.status === 'FAILURE'" class="text-failure" [title]="log.failureReason">{{ log.failureReason || 'Failed' }}</span>
+            <span *ngIf="log.status === 'SUCCESS'" class="text-muted" [title]="log.userAgent">{{ log.userAgent ? (log.userAgent.length > 40 ? (log.userAgent | slice:0:40) + '…' : log.userAgent) : '—' }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="empty-state" *ngIf="logs.length === 0">
+    No login events found for this filter.
+  </div>
+
+  <div class="pagination" *ngIf="totalLogs > 0">
+    <button [disabled]="currentPage === 0" (click)="goToPage(currentPage - 1)">‹</button>
+    <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+    <button [disabled]="(currentPage + 1) * pageSize >= totalLogs" (click)="goToPage(currentPage + 1)">›</button>
+  </div>
+</div>

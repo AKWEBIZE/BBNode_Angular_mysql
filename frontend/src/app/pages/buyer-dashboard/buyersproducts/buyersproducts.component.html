@@ -1,0 +1,30 @@
+<div class="category-cards">
+  <div
+    class="category-card"
+    *ngFor="let category of categories"
+    (click)="onCategoryClick(category)"
+    [class.selected]="category.name === selectedCategory"
+  >
+    <img [src]="category.image" [alt]="category.name" />
+    <p>{{ category.name }}</p>
+  </div>
+</div>
+
+
+<hr />
+
+<div class="products-container">
+  <div class="product-card" *ngFor="let product of products">
+    <h3>{{ product.productName }}</h3>
+    <p>{{ product.description }}</p>
+    <p><strong>Category:</strong> {{ product.category }}</p>
+    <div *ngIf="product.varietiesList?.length">
+      <p><strong>Varieties:</strong></p>
+      <ul>
+        <li *ngFor="let variety of product.varietiesList">
+          {{ variety.varietyName }} - {{ variety.description }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

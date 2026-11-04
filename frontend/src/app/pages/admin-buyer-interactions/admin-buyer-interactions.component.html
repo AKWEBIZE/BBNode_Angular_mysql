@@ -1,0 +1,68 @@
+<div class="interactions-page">
+  <div class="conversation-list" [class.hide-on-mobile]="selectedConversation">
+    <div class="page-header">
+      <h2>Buyer Interactions</h2>
+      <p class="subtitle">Quote requests and messages from buyers.</p>
+    </div>
+
+    <div class="list-body" *ngIf="conversations.length > 0">
+      <div
+        class="conversation-item"
+        *ngFor="let c of conversations"
+        [class.active]="selectedConversation?.id === c.id"
+        (click)="openConversation(c)">
+        <div class="conv-top">
+          <div class="conv-subject">{{ c.subject }}</div>
+          <span class="unread-badge" *ngIf="c.unreadCount > 0">{{ c.unreadCount }}</span>
+        </div>
+        <div class="conv-participant">{{ c.participantType }} — {{ c.participantName || 'Unknown' }}</div>
+        <div class="conv-preview">{{ c.lastMessagePreview }}</div>
+        <div class="conv-date">{{ c.updatedAt | date: 'MMM d, y, h:mm a' }}</div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="conversations.length === 0 && !loading">
+      No buyer conversations yet.
+    </div>
+  </div>
+
+  <div class="conversation-thread" *ngIf="selectedConversation" [class.show-on-mobile]="selectedConversation">
+    <div class="thread-header">
+      <button class="back-btn" (click)="closeConversation()">← Back</button>
+      <div>
+        <div class="thread-subject">{{ selectedConversation.subject }}</div>
+        <div class="thread-participant">
+          {{ selectedConversation.participantType }} — {{ selectedConversation.participantName || 'Unknown' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="thread-body">
+      <div class="bubble" *ngFor="let m of messages" [class.mine]="m.senderType === 'ADMIN'">
+        <div class="bubble-sender">{{ m.senderType === 'ADMIN' ? 'You (Admin)' : selectedConversation.participantName || m.senderType }}</div>
+        <div class="bubble-text">{{ m.messageText }}</div>
+        <div class="bubble-time">
+          {{ m.sentAt | date: 'MMM d, h:mm a' }}
+          <span class="receipt" *ngIf="m.senderType === 'ADMIN'">{{ m.read ? '✓✓ Read' : '✓ Sent' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="thread-reply">
+      <div class="reply-input-wrap">
+        <input
+          type="text"
+          placeholder="Type a reply…"
+          maxlength="250"
+          [(ngModel)]="replyText"
+          (keyup.enter)="sendReply()" />
+        <span class="char-count" [class.limit]="replyText.length >= 250">{{ replyText.length }}/250</span>
+      </div>
+      <button class="btn-send" [disabled]="!replyText.trim() || sending" (click)="sendReply()">Send</button>
+    </div>
+  </div>
+
+  <div class="conversation-thread empty" *ngIf="!selectedConversation && conversations.length > 0">
+    <div class="empty-state">Select a conversation to view messages.</div>
+  </div>
+</div>

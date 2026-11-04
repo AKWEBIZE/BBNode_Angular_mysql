@@ -1,0 +1,44 @@
+<div class="searchable-dropdown-wrapper" [class.open]="isOpen" [class.disabled]="disabled" [class.has-error]="error">
+  <div class="dropdown-label-wrapper">
+    <label class="dropdown-label" [class.required]="required">{{ label }}</label>
+  </div>
+  
+  <div class="dropdown-trigger" (click)="toggleDropdown()" tabindex="0">
+    <span class="selected-value" [class.placeholder]="!value">
+      {{ value ? getValueLabel() : placeholder }}
+    </span>
+    <span class="dropdown-icon">▼</span>
+  </div>
+
+  <div class="dropdown-panel" *ngIf="isOpen">
+    <div class="search-input-wrapper">
+      <span class="search-icon">🔍</span>
+      <input 
+        #searchInput
+        type="text" 
+        class="search-input" 
+        [placeholder]="searchPlaceholder" 
+        (input)="onSearch($event)" 
+        (click)="$event.stopPropagation()"
+        tabindex="0"
+      />
+    </div>
+
+    <ul class="dropdown-list">
+      <li 
+        class="option-item" 
+        *ngFor="let option of filteredOptions; let i = index"
+        [class.highlighted]="highlightedIndex === i"
+        [class.selected]="value === option || (valueKey && value && option[valueKey] === value) || (displayKey && value && option[displayKey] === getValueLabel())"
+        (click)="selectOption(option)">
+        <span [innerHTML]="getHighlightedText(getDisplayLabel(option))"></span>
+      </li>
+      
+      <li class="no-results" *ngIf="filteredOptions.length === 0">
+        No results found for '{{ searchQuery }}'
+      </li>
+    </ul>
+  </div>
+  
+  <div class="error-text" *ngIf="error">{{ error }}</div>
+</div>

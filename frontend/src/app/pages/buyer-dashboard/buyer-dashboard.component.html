@@ -1,0 +1,120 @@
+<div class="dash-content">
+  <div class="headline">
+    <div>
+      <h1>Welcome back, {{ buyerName }}! 👋</h1>
+      <div class="loc" *ngIf="buyerCompany || buyerCountry">
+        {{ buyerCompany }}<span *ngIf="buyerCompany && buyerCountry">&nbsp;•&nbsp;</span>{{ buyerCountry }}
+      </div>
+    </div>
+  </div>
+
+  <div class="banner">
+    <div>
+      <h2>Direct Sourcing. Premium Quality. Better Prices.</h2>
+      <p>From Indian farms to your business.</p>
+    </div>
+    <div class="ship">🚢</div>
+  </div>
+
+  <div class="stats" *ngIf="summary as s">
+    <div class="stat-card">
+      <div class="top"><div class="icon g1">🛒</div><div class="label">Active Orders</div></div>
+      <div class="value">{{ s.activeOrders }}</div>
+      <div class="delta up" *ngIf="s.activeOrdersDelta > 0">↗ {{ s.activeOrdersDelta }} new updates</div>
+    </div>
+    <div class="stat-card">
+      <div class="top"><div class="icon g2">📦</div><div class="label">Products Available</div></div>
+      <div class="value">{{ s.productsAvailable }}</div>
+      <div class="delta up">↗ across our catalog</div>
+    </div>
+    <div class="stat-card">
+      <div class="top"><div class="icon g3">♡</div><div class="label">Saved Products</div></div>
+      <div class="value">{{ s.savedProducts }}</div>
+      <div class="delta up" *ngIf="s.savedProductsDelta > 0">↗ {{ s.savedProductsDelta }} new added</div>
+    </div>
+    <div class="stat-card">
+      <div class="top"><div class="icon g4">🕘</div><div class="label">Recent Activity</div></div>
+      <div class="value">{{ s.recentActivityCount }}</div>
+      <div class="delta up">↗ in the last 7 days</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h3>Recommended For You</h3>
+      <a href="javascript:void(0)" (click)="navigateToExplore()">View All ›</a>
+    </div>
+    <div class="panel-body">
+      <div class="products-grid">
+        <div class="product-card" *ngFor="let product of recommendedProducts" (click)="viewProduct(product)">
+          <div class="product-thumb" [style.background]="display(product).bg">
+            <span class="tag" *ngIf="tagLabel(product)" [style.background]="tagColor(product)">{{ tagLabel(product) }}</span>
+            {{ display(product).icon }}
+          </div>
+          <div class="p-body">
+            <div class="nm">{{ product.productName }}</div>
+            <div class="loc">📍 {{ product.location || product.country }}</div>
+            <div class="price">{{ priceRange(product) }}</div>
+            <div class="moq">{{ moqLabel(product) }}</div>
+            <div class="p-actions">
+              <div class="heart" [class.saved]="isSaved(product)" (click)="toggleSave(product, $event)">
+                {{ isSaved(product) ? '♥' : '♡' }}
+              </div>
+              <button class="btn-outline" (click)="viewProduct(product); $event.stopPropagation()">View Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="empty-state" *ngIf="recommendedProducts.length === 0">No recommended products yet.</div>
+    </div>
+  </div>
+
+  <div class="lower-grid">
+    <div class="panel no-margin">
+      <div class="panel-head">
+        <h3>Market Highlights</h3>
+        <a href="javascript:void(0)" (click)="navigateToExplore()">View All ›</a>
+      </div>
+      <div class="panel-body">
+        <table *ngIf="marketHighlights.length > 0">
+          <thead>
+            <tr><th>Product</th><th>Trend</th><th>Price Trend (30D)</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let highlight of marketHighlights">
+              <td>{{ marketIcon(highlight) }} {{ highlight.productName }}</td>
+              <td [class.trend-up]="highlight.trendPercentage >= 0" [class.trend-down]="highlight.trendPercentage < 0">
+                {{ highlight.trendPercentage >= 0 ? '↑ +' : '↓ ' }}{{ highlight.trendPercentage }}%
+              </td>
+              <td>
+                <div class="sparkline">
+                  <div class="bar"
+                       *ngFor="let value of highlight.sparklineValues"
+                       [class.up]="highlight.trendPercentage >= 0"
+                       [class.down]="highlight.trendPercentage < 0"
+                       [style.height.%]="sparklineHeight(value, highlight.sparklineValues)"></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="empty-state" *ngIf="marketHighlights.length === 0">Market data will appear here once available.</div>
+        <div class="updated" *ngIf="marketHighlights.length > 0">Market data updated recently</div>
+      </div>
+    </div>
+
+    <div class="panel no-margin">
+      <div class="panel-head">
+        <h3>Quick Actions</h3>
+      </div>
+      <div class="panel-body">
+        <div class="quick-actions">
+          <div class="qa-item" *ngFor="let action of quickActions">
+            <div class="qic" [ngClass]="action.colorClass">{{ action.icon }}</div>
+            <div class="qt"><div class="h">{{ action.label }}</div><div class="d">{{ action.description }}</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

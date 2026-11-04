@@ -1,0 +1,162 @@
+<div class="watchlist-page">
+  <div class="main-col">
+    <div class="page-header">
+      <div class="title-row">
+        <span class="heart-icon">♡</span>
+        <h2>Saved / Wishlist</h2>
+      </div>
+      <p class="subtitle">Save products you like and request quotes when you're ready.</p>
+    </div>
+
+    <div class="tabs">
+      <button
+        *ngFor="let tab of categoryTabs"
+        class="tab"
+        [class.active]="activeCategory === tab.value"
+        (click)="onTabChange(tab.value)">
+        {{ tab.label }}
+      </button>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="sort-wrap">
+          <label>Sort by:</label>
+          <select [(ngModel)]="sortBy" (ngModelChange)="onSortChange($event)">
+            <option value="RECENT">Recently Saved</option>
+            <option value="PRICE_ASC">Price: Low to High</option>
+            <option value="PRICE_DESC">Price: High to Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <div class="view-toggle">
+          <button [class.active]="viewMode === 'grid'" (click)="toggleView('grid')">▦</button>
+          <button [class.active]="viewMode === 'list'" (click)="toggleView('list')">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-grid" [class.list]="viewMode === 'list'" *ngIf="pagedItems.length > 0">
+      <div class="product-card" *ngFor="let item of pagedItems">
+        <div class="card-media" [style.background]="thumb(item.productResponseBeans).bg">
+          <label class="compare-check">
+            <input
+              type="checkbox"
+              [checked]="isCompared(item.productResponseBeans.productId)"
+              (change)="toggleCompare(item.productResponseBeans.productId)" />
+          </label>
+          <button
+            *ngIf="!isRecentlyViewedTab"
+            class="heart-btn"
+            (click)="removeItem(item)">
+            ♥
+          </button>
+          <button
+            *ngIf="isRecentlyViewedTab"
+            class="heart-btn outline"
+            title="Save product"
+            (click)="saveFromRecentlyViewed(item)">
+            ♡
+          </button>
+          <span
+            class="tag"
+            *ngIf="tagLabel(item.productResponseBeans)"
+            [style.background]="tagColor(item.productResponseBeans)">
+            {{ tagLabel(item.productResponseBeans) }}
+          </span>
+          <span class="media-icon">{{ thumb(item.productResponseBeans).icon }}</span>
+        </div>
+        <div class="card-body">
+          <div class="p-name">{{ item.productResponseBeans.productName }}</div>
+          <div class="p-loc">📍 {{ item.productResponseBeans.location || item.productResponseBeans.country }}</div>
+          <div class="p-price">Price: {{ priceLabel(item.productResponseBeans) }}</div>
+          <div class="p-moq">{{ moqLabel(item.productResponseBeans) }}</div>
+          <div class="p-stock" [class.out]="!item.productResponseBeans.inStock">
+            {{ item.productResponseBeans.inStock ? 'In Stock' : 'Out of Stock' }}
+          </div>
+          <div class="card-actions">
+            <button
+              class="btn-compare-icon"
+              title="Compare"
+              [class.active]="isCompared(item.productResponseBeans.productId)"
+              (click)="toggleCompare(item.productResponseBeans.productId)">
+              ⚖
+            </button>
+            <button class="btn-quote" (click)="requestQuote(item)">Request Quote</button>
+            <button
+              *ngIf="!isRecentlyViewedTab"
+              class="btn-remove-icon"
+              title="Remove from saved"
+              (click)="removeItem(item)">
+              <i class="bi bi-trash"></i>
+            </button>
+            <button
+              *ngIf="isRecentlyViewedTab"
+              class="btn-remove-icon"
+              title="Remove from recently viewed"
+              (click)="removeFromRecentlyViewed(item)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="pagedItems.length === 0">{{ emptyMessage }}</div>
+
+    <div class="list-footer" *ngIf="filteredItems.length > 0">
+      <app-pagination
+        [currentPage]="currentPage"
+        [totalPages]="totalPages"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
+      <div class="results-count">Showing {{ rangeStart }}–{{ rangeEnd }} of {{ filteredItems.length }} products</div>
+    </div>
+  </div>
+
+  <aside class="side-col">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Compare Products ({{ compareSelection.size }})</div>
+        <a href="javascript:void(0)" *ngIf="compareSelection.size > 0" (click)="clearCompare()">Clear All</a>
+      </div>
+
+      <div class="compare-list" *ngIf="compareItems.length > 0">
+        <div class="compare-chip" *ngFor="let item of compareItems">
+          <div class="chip-thumb" [style.background]="thumb(item.productResponseBeans).bg">
+            {{ thumb(item.productResponseBeans).icon }}
+            <button class="chip-remove" (click)="removeFromCompare(item.productResponseBeans.productId)">✕</button>
+          </div>
+          <div class="chip-name">{{ item.productResponseBeans.productName }}</div>
+        </div>
+      </div>
+      <div class="compare-empty" *ngIf="compareItems.length === 0">
+        Select products using the ⚖ icon or checkbox to compare them.
+      </div>
+
+      <button class="btn-primary full" [disabled]="compareSelection.size < 2" (click)="compareNow()">
+        ⚖ Compare Now
+      </button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Why Compare?</div>
+      <div class="why-item">✓ Compare quality, price &amp; MOQ</div>
+      <div class="why-item">✓ Make better purchasing decisions</div>
+      <div class="why-item">✓ Find the best value for your business</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Bulk Actions</div>
+      <button class="btn-primary full" (click)="requestQuoteForAll()">✉ Request Quote for All ({{ allItems.length }})</button>
+      <button class="btn-danger full" (click)="removeAll()"><i class="bi bi-trash"></i> Remove All</button>
+    </div>
+
+    <div class="panel help-panel">
+      <div class="panel-title">Need Help?</div>
+      <p>Our team is here to help you find the best products for your business.</p>
+      <button class="btn-outline full" (click)="contactSupport()">🎧 Contact Support</button>
+    </div>
+  </aside>
+</div>

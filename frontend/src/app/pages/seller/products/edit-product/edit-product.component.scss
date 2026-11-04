@@ -1,0 +1,163 @@
+$primary-green: #1B5E20;
+$accent-yellow: #F9A825;
+$bg-color: #EDECE4;
+$card-border: #E0E0C8;
+$text-dark: #333333;
+$text-light: #757575;
+$error-red: #C62828;
+
+.add-product-container {
+  padding: 24px;
+  background-color: $bg-color;
+  min-height: calc(100vh - 60px);
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+
+  .breadcrumbs {
+    font-size: 13px;
+    margin-bottom: 12px;
+    a { color: $text-light; text-decoration: none; &:hover { text-decoration: underline; } }
+    span { font-weight: 600; color: $text-dark; }
+  }
+
+  .page-title { 
+    margin: 0 0 24px; font-size: 26px; font-weight: 700; color: $text-dark; 
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .status-pill {
+    font-size: 13px; padding: 4px 12px; border-radius: 20px; font-weight: 600;
+    text-transform: capitalize;
+    &.APPROVED { background-color: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
+    &.PENDING_APPROVAL { background-color: #FFF8E1; color: #F57F17; border: 1px solid #FFD54F; }
+    &.REJECTED { background-color: #FFEBEE; color: #C62828; border: 1px solid #EF9A9A; }
+    &.DRAFT { background-color: #eee; color: #666; border: 1px solid #ccc; }
+  }
+
+  .card {
+    background: #FFFFFF;
+    border: 1px solid $card-border;
+    border-radius: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    overflow: hidden;
+
+    .card-header {
+      background: $primary-green;
+      color: white;
+      padding: 16px 24px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-body { padding: 24px; }
+  }
+
+  .section {
+    margin-bottom: 32px;
+    border-bottom: 2px solid #E8F5E9;
+    padding-bottom: 24px;
+    &:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: $primary-green;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    label {
+      display: block; font-weight: 600; font-size: 13.5px; margin-bottom: 6px; color: $text-dark;
+      .required { color: $error-red; }
+      .optional { color: #999; font-weight: normal; font-size: 12px; }
+    }
+    input.locked-input {
+      background: #F5F5F0; cursor: not-allowed; color: #666; font-weight: 500;
+      border: 1px dashed #ccc;
+    }
+    select, textarea, input[type="text"], input[type="number"] {
+      width: 100%; border: 1.5px solid #D5D5C0; border-radius: 8px; padding: 10px 12px;
+      font-family: inherit; font-size: 13.5px; outline: none; transition: 0.2s;
+      &:focus { border-color: $primary-green; }
+      &.error { border-color: $error-red; }
+    }
+    .error-msg { color: $error-red; font-size: 11px; margin-top: 4px; }
+    .helper-text-sm { font-size: 12px; color: #999; margin-top: 6px; }
+  }
+
+  .chip-selected.locked {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 12px; background: #F5F5F0; border: 1px dashed #ccc;
+      border-radius: 8px; font-weight: 600; color: #666; cursor: not-allowed;
+  }
+
+  /* Flex utilities */
+  .row-flex { display: flex; gap: 16px; }
+  .flex-gap { display: flex; gap: 8px; }
+  .flex-1 { flex: 1; }
+  .flex-2 { flex: 2; }
+  .gap-lg { gap: 24px; }
+
+  /* Input with Append */
+  .input-with-append {
+    display: flex; border: 1.5px solid #D5D5C0; border-radius: 8px; overflow: hidden;
+    input { border: none !important; border-radius: 0 !important; }
+    .unit-append select { 
+      background: $primary-green; color: white; border: none; height: 100%;
+      border-radius: 0; padding: 0 12px; font-weight: 600; cursor:pointer;
+    }
+  }
+
+  /* Toggles */
+  .toggle-group {
+    display: flex; display: inline-flex; border-radius: 8px; overflow: hidden;
+    border: 1px solid $card-border;
+    button {
+      padding: 10px 24px; background: white; border: none; border-right: 1px solid $card-border;
+      cursor: pointer; font-weight: 600; color: $text-light; flex: 1; text-align: center;
+      &:last-child { border-right: none; }
+      &.active { background: $primary-green; color: white; }
+    }
+  }
+
+  /* Upload Cards */
+  .upload-card {
+    flex: 1; background: #FAFAF8; border-radius: 10px; padding: 20px;
+    border: 1px dashed $card-border;
+    .upload-zone {
+      text-align: center; cursor: pointer; border-radius: 8px; padding: 24px 12px;
+      transition: 0.2s; border: 1px solid transparent; background: white;
+      &:hover { border-color: $primary-green; }
+      &.error { border-color: $error-red; }
+
+      .up-content {
+        .up-icon { font-size: 32px; color: $primary-green; margin-bottom: 8px; }
+        p { margin: 0; font-size: 13px; color: $text-dark; }
+        strong { color: $primary-green; }
+        small { display: block; margin-top: 4px; color: #999; font-size: 11px; }
+      }
+
+      .preview-content {
+        position: relative; text-align: center;
+        img { max-width: 100%; max-height: 120px; border-radius: 6px; }
+        .btn-remove { position: absolute; top: -10px; right: 0px; background: $error-red; color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;}
+      }
+    }
+  }
+
+  /* Footer Actions */
+  .action-footer {
+    display: flex; justify-content: space-between; align-items: center; margin-top: 24px;
+    padding: 0 12px;
+    button { padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; }
+    .btn-secondary { background: white; border: 1.5px solid #ccc; color: $text-dark; }
+    .right-actions {
+      display: flex; gap: 16px;
+      .btn-primary-yellow { background: $accent-yellow; border: none; color: white; &:disabled { opacity: 0.7; cursor: not-allowed; } }
+    }
+  }
+}

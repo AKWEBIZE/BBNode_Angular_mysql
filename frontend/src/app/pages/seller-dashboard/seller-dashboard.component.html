@@ -1,0 +1,91 @@
+<div class="dashboard-content">
+  <div class="welcome-box">
+    <h2>Good Morning, {{ sellerName }}!</h2>
+    <div class="summary-cards">
+      <div class="card card-active">
+        <h3>{{ summary?.activeProducts || 0 }}</h3>
+        <p>Active Products</p>
+      </div>
+      <div class="card card-interest">
+        <h3>{{ summary?.buyersInterest || 0 }}</h3>
+        <p>Buyers Interest</p>
+      </div>
+      <div class="card card-earnings">
+        <h3 class="highlight">{{ summary?.earnings || '$0' }}</h3>
+        <p>Earnings</p>
+      </div>
+      <div class="card card-pending">
+        <h3>{{ summary?.pendingOrders || 0 }} <i class="bi bi-arrow-down-short text-success"></i></h3>
+        <p>Pending Orders</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-sections">
+    <div class="table-card card mt-4">
+      <div class="header-section">
+        <h3 class="section-title">Your Products</h3>
+        <button class="btn btn-outline-green" (click)="navigateToAddProduct()">+ Add Product</button>
+      </div>
+
+      <table *ngIf="products.length > 0" class="product-table">
+        <colgroup>
+          <col class="col-product">
+          <col class="col-variety">
+          <col class="col-buyers">
+          <col class="col-status">
+          <col class="col-quantity">
+          <col class="col-actions">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th>Variety</th>
+            <th>Buyers</th>
+            <th>Status</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products" class="product-row">
+            <td class="product-cell">
+              <div class="product-info">
+                <div class="icon-avatar">
+                   <span *ngIf="!product.product_image">📦</span>
+                   <img *ngIf="product.product_image" [src]="'data:image/jpeg;base64,' + product.product_image" class="thumb">
+                </div>
+                <div class="name-block">
+                  <span class="p-name" (click)="navigateToEdit(product)">{{product.productName}}</span>
+                  <span class="p-cat">{{product.category}}</span>
+                </div>
+              </div>
+            </td>
+            <td>{{getVarietyText(product)}}</td>
+            <td>10 Buyers</td>
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(getStatus(product))">
+                {{getStatus(product)}}
+              </span>
+            </td>
+            <td class="qty-text">{{getQuantityText(product)}}</td>
+            <td>
+              <button class="btn-outline-green btn-sm" (click)="navigateToEdit(product)">Edit &rsaquo;</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div *ngIf="products.length === 0" class="empty-state">
+        <div class="empty-icon">📦</div>
+        <h3>No products found.</h3>
+        <p>You haven't added any products yet.</p>
+      </div>
+
+      <div class="view-all" *ngIf="products.length > 0">
+        <a (click)="navigateToAllProducts()">View All &rsaquo;</a>
+      </div>
+    </div>
+  </div>
+</div>

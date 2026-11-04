@@ -1,0 +1,77 @@
+<div class="buyer-order-container" [class.has-panel]="selectedOrder">
+  <div class="orders-list">
+    <div class="page-header">
+      <h2>My Orders</h2>
+      <p class="subtitle">Track and manage all your orders in one place.</p>
+    </div>
+
+    <div class="tabs">
+      <button
+        *ngFor="let tab of tabs"
+        class="tab"
+        [class.active]="activeTab === tab.value"
+        (click)="onTabChange(tab.value)">
+        {{ tab.label }}
+      </button>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="toolbar-btn">All Time <span class="chev">⌄</span></button>
+        <button class="toolbar-btn"><span class="ic">▤</span> Filters</button>
+        <button class="toolbar-btn toolbar-refresh" title="Refresh" [disabled]="loading" (click)="refresh()">
+          <i class="bi bi-arrow-clockwise" [class.spinning]="loading"></i>
+        </button>
+      </div>
+      <div class="toolbar-right" *ngIf="filteredOrders.length > 0">
+        Showing {{ rangeStart }}–{{ rangeEnd }} of {{ filteredOrders.length }} orders
+      </div>
+    </div>
+
+    <div class="table-wrapper" *ngIf="pagedOrders.length > 0">
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Variety</th>
+            <th>Quantity</th>
+            <th>Quality</th>
+            <th>Expected Delivery</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th class="right">Amount</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            app-order-row
+            *ngFor="let order of pagedOrders"
+            [order]="order"
+            [uiStatus]="uiStatus(order)"
+            [amount]="amountFor(order)"
+            [selected]="selectedOrder?.orderId === order.orderId"
+            (rowClick)="onRowClick($event)">
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="empty-state" *ngIf="pagedOrders.length === 0">No orders found.</div>
+
+    <app-pagination
+      *ngIf="filteredOrders.length > 0"
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </div>
+
+  <app-order-details-panel
+    *ngIf="selectedOrder"
+    class="details-panel"
+    [order]="selectedOrder"
+    (close)="onClosePanel()">
+  </app-order-details-panel>
+</div>

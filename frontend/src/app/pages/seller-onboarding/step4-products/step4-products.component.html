@@ -1,0 +1,208 @@
+<div class="onboarding-content">
+  <h1 class="page-title">Product Pre-Harvest Details</h1>
+  <p class="page-subtitle">List your products before harvest so we can start showcasing them to buyers.</p>
+  <p class="page-subtitle" style="margin-top: -18px; font-size: 13px;">Upload clear images &amp; videos for better engagement.</p>
+
+  <!-- General Error -->
+  <div *ngIf="errors.general" class="general-error">
+    <span>⚠️</span> {{ errors.general }}
+  </div>
+
+  <!-- Product Blocks -->
+  <div *ngFor="let product of products; let i = index" class="product-block">
+    <div class="form-card">
+      <div class="card-header" (click)="toggleCollapse(i)" style="cursor: pointer;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="header-icon">📋</span>
+          Product Information {{ products.length > 1 ? '#' + (i + 1) : '' }}
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button *ngIf="products.length > 1" class="btn-remove" (click)="removeProduct(i); $event.stopPropagation()">✕</button>
+          <span class="collapse-icon">{{ product.collapsed ? '▼' : '▲' }}</span>
+        </div>
+      </div>
+
+      <div class="card-body" *ngIf="!product.collapsed">
+        <!-- Row 1: Category & Product -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product Category <span class="required">*</span></label>
+            <select [(ngModel)]="product.category" (ngModelChange)="onCategoryChange(product)"
+                    [class.error]="getProductErrors(i).category">
+              <option value="">Select Category</option>
+              <option *ngFor="let cat of categories" [value]="cat.key">{{ cat.label }}</option>
+            </select>
+            <div *ngIf="getProductErrors(i).category" class="error-msg">{{ getProductErrors(i).category }}</div>
+          </div>
+          <div class="form-group">
+            <label>Product <span class="required">*</span></label>
+            <select [(ngModel)]="product.product" (ngModelChange)="onProductChange(product)" [class.error]="getProductErrors(i).product" [disabled]="!product.category">
+              <option value="">Select Product</option>
+              <option *ngFor="let p of product.productsList" [value]="p.key">{{ p.label }}</option>
+            </select>
+            <div *ngIf="getProductErrors(i).product" class="error-msg">{{ getProductErrors(i).product }}</div>
+          </div>
+        </div>
+
+        <!-- Product Variety -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Product Variety <span class="required">*</span></label>
+          <select [(ngModel)]="product.variety" [class.error]="getProductErrors(i).variety" [disabled]="!product.product">
+            <option value="">Select Variety</option>
+            <option *ngFor="let v of product.varietiesList" [value]="v">{{ v }}</option>
+          </select>
+          <div *ngIf="getProductErrors(i).variety" class="error-msg">{{ getProductErrors(i).variety }}</div>
+        </div>
+
+        <!-- Product Description -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Product Description <span style="color: #999;">(optional)</span></label>
+          <textarea [(ngModel)]="product.description"
+                    placeholder="Juicy, vibrant Kashmiri apples known for their sweet flavor and crisp texture. Ideal for export due to their long shelf life and preferred by international buyers."
+                    rows="3"></textarea>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="two-col-layout">
+          <!-- LEFT: Product Details -->
+          <div class="col-left">
+            <h4 class="section-title">Product Details</h4>
+
+            <!-- Expected Harvest Month -->
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label>Expected Harvest Month <span class="required">*</span></label>
+              <div class="form-row" style="margin-bottom: 0;">
+                <div class="form-group" style="min-width: 100px;">
+                  <select [(ngModel)]="product.harvestYear" [class.error]="getProductErrors(i).harvestYear">
+                    <option value="">Year</option>
+                    <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+                  </select>
+                </div>
+                <div class="form-group" style="min-width: 120px;">
+                  <select [(ngModel)]="product.harvestMonth" [class.error]="getProductErrors(i).harvestMonth">
+                    <option value="">Month</option>
+                    <option *ngFor="let m of months" [value]="m">{{ m }}</option>
+                  </select>
+                </div>
+                <div class="form-group" style="min-width: 80px;">
+                  <select [(ngModel)]="product.harvestDay" [class.error]="getProductErrors(i).harvestDay">
+                    <option value="">Day</option>
+                    <option *ngFor="let d of days" [value]="d">{{ d }}</option>
+                  </select>
+                </div>
+              </div>
+              <div *ngIf="getProductErrors(i).harvestYear" class="error-msg">{{ getProductErrors(i).harvestYear }}</div>
+              <div *ngIf="getProductErrors(i).harvestMonth" class="error-msg">{{ getProductErrors(i).harvestMonth }}</div>
+              <div *ngIf="getProductErrors(i).harvestDay" class="error-msg">{{ getProductErrors(i).harvestDay }}</div>
+            </div>
+
+            <!-- Estimated Quantity -->
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label>Estimated Quantity <span class="required">*</span></label>
+              <div style="display: flex; gap: 8px;">
+                <input type="number" [(ngModel)]="product.quantity" placeholder="5000" style="flex: 1;"
+                       [class.error]="getProductErrors(i).quantity" />
+                <div class="unit-selector">
+                  <button class="unit-btn" [class.active]="product.unit === 'Kg'" (click)="selectUnit(product, 'Kg')">Kg</button>
+                  <button class="unit-btn" [class.active]="product.unit === 'Tonnes'" (click)="selectUnit(product, 'Tonnes')">Tonnes</button>
+                  <button class="unit-btn" [class.active]="product.unit === 'Quintal'" (click)="selectUnit(product, 'Quintal')">Quintal</button>
+                </div>
+              </div>
+              <div *ngIf="getProductErrors(i).quantity" class="error-msg">{{ getProductErrors(i).quantity }}</div>
+            </div>
+
+            <!-- Grade -->
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label>Grade <span class="required">*</span></label>
+              <select [(ngModel)]="product.grade" [class.error]="getProductErrors(i).grade">
+                <option value="">Select Grade</option>
+                <option *ngFor="let g of grades" [value]="g">{{ g }}</option>
+              </select>
+              <div *ngIf="getProductErrors(i).grade" class="error-msg">{{ getProductErrors(i).grade }}</div>
+            </div>
+
+            <!-- Packaging Type -->
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label>Packaging Type <span class="required">*</span></label>
+              <div class="toggle-group" style="max-width: 280px;">
+                <button class="toggle-btn" [class.active]="product.packaging === 'Loose'" (click)="selectPackaging(product, 'Loose')">
+                  <span *ngIf="product.packaging === 'Loose'">○ </span>Loose
+                </button>
+                <button class="toggle-btn" [class.active]="product.packaging === 'Box'" (click)="selectPackaging(product, 'Box')">
+                  <span *ngIf="product.packaging === 'Box'">✓ </span>Box
+                </button>
+                <button class="toggle-btn" [class.active]="product.packaging === 'Custom'" (click)="selectPackaging(product, 'Custom')">
+                  <span *ngIf="product.packaging === 'Custom'">○ </span>Custom
+                </button>
+              </div>
+              <p style="font-size: 12px; color: #999; margin-top: 6px;">Accurate details help us find better buyers.</p>
+            </div>
+          </div>
+
+          <!-- RIGHT: Media Uploads -->
+          <div class="col-right">
+            <!-- Product Video -->
+            <div class="media-section">
+              <label class="media-label">Product Video <span style="color: #999;">(optional)</span></label>
+              <div class="upload-zone" (click)="videoInput.click()">
+                <input #videoInput type="file" style="display: none;" accept="video/mp4,video/*"
+                       (change)="onVideoSelected($event, product)" />
+                <div *ngIf="!product.videoPreview">
+                  <div class="upload-icon">⬆️</div>
+                  <div class="upload-text"><strong>Drag & drop</strong> or <span class="browse-link">Browse</span></div>
+                </div>
+                <div *ngIf="product.videoPreview" class="file-preview">
+                  <div>🎬 {{ product.videoPreview }}</div>
+                  <button class="btn-change" (click)="removeVideo(product); $event.stopPropagation()">Remove</button>
+                </div>
+              </div>
+              <div class="file-info">MP4, Max Size: 50MB</div>
+              <div *ngIf="errors.video" class="error-msg">{{ errors.video }}</div>
+            </div>
+
+            <!-- Farm / Packing Images -->
+            <div class="media-section" style="margin-top: 20px;">
+              <label class="media-label">Optional: Farm / Packing Images</label>
+              <div class="upload-zone" (click)="imageInput.click()">
+                <input #imageInput type="file" style="display: none;" accept=".jpg,.jpeg,.png"
+                       (change)="onImageSelected($event, product)" />
+                <div *ngIf="!product.imagePreview">
+                  <div class="upload-icon">⬆️</div>
+                  <div class="upload-text"><strong>Drag & drop</strong> or <span class="browse-link">Browse</span></div>
+                </div>
+                <div *ngIf="product.imagePreview" class="file-preview">
+                  <img [src]="product.imagePreview" alt="Preview" style="max-width: 100px; max-height: 60px; border-radius: 6px;" />
+                  <button class="btn-change" (click)="removeImage(product); $event.stopPropagation()">Remove</button>
+                </div>
+              </div>
+              <div class="file-info">JPG, PNG Max Size: 15MB</div>
+              <div *ngIf="errors.image" class="error-msg">{{ errors.image }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Another Product -->
+  <a href="javascript:void(0)" class="add-product-link" (click)="addProduct()">
+    + Add Another Product
+  </a>
+
+  <!-- Trust Banner -->
+  <div class="trust-banner">
+    <div class="trust-icon">🛡️</div>
+    <div class="trust-text">
+      Bigbisort uses documents solely for export compliance — we handle all regulations and keep your information private and secure.
+    </div>
+    <span class="trust-arrow">›</span>
+  </div>
+
+  <!-- Save & Continue (inline) -->
+  <div style="text-align: center; margin-top: 24px;">
+    <button class="btn-continue-inline" [disabled]="!canContinue || isSubmitting" (click)="saveAndContinue()">
+      <span *ngIf="!isSubmitting">Save & Continue →</span>
+      <span *ngIf="isSubmitting">Saving...</span>
+    </button>
+  </div>
+</div>

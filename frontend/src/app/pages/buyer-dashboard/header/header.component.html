@@ -1,0 +1,25 @@
+<div class="header-wrapper">
+  <div class="header-content">
+    <!-- Left: Logo -->
+    <div class="logo">🟨 {{ appTitle }}</div>
+
+    <!-- Center: Search -->
+    <div class="search-area">
+      <input type="text" placeholder="Search..." />
+      <button>Search</button>
+    </div>
+
+    <!-- Right: User -->
+    <div class="user-area">
+      <span>{{ buyerName }}</span>
+      <div class="user-menu-wrapper">
+        <img class="user-avatar" src="https://www.svgrepo.com/show/506800/avatar.svg" alt="User" (click)="toggleUserMenu()" />
+        <div class="user-dropdown" *ngIf="showUserMenu">
+          <button class="logout-option" (click)="logout()">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
